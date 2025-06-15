@@ -1,7 +1,7 @@
 {
     "name": "symfony/ai-store",
     "type": "library",
-    "description": "PHP library for abstracting interaction with data stores in AI applications.",
+    "description": "Low-level abstraction for storing and retrieving documents in a vector store.",
     "keywords": [
         "ai",
         "mongodb",
