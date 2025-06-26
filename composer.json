@@ -30,7 +30,9 @@
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
+        "ext-pdo": "*",
         "codewithkyrian/chromadb-php": "^0.2.1 || ^0.3 || ^0.4",
+        "doctrine/dbal": "^3.3 || ^4.0",
         "mongodb/mongodb": "^1.21 || ^2.0",
         "phpstan/phpstan": "^2.0",
         "phpstan/phpstan-webmozart-assert": "^2.0",
@@ -38,7 +40,9 @@
         "probots-io/pinecone-php": "^1.0"
     },
     "suggest": {
+        "ext-pdo": "For using MariaDB as retrieval vector store.",
         "codewithkyrian/chromadb-php": "For using the ChromaDB as retrieval vector store.",
+        "doctrine/dbal": "For using MariaDB via Doctrine as retrieval vector store",
         "mongodb/mongodb": "For using MongoDB Atlas as retrieval vector store.",
         "probots-io/pinecone-php": "For using the Pinecone as retrieval vector store."
     },
