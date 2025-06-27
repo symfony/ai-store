@@ -37,6 +37,7 @@ used vector store::
 
 You can find more advanced usage in combination with an Agent using the store for RAG in the examples folder:
 
+* `Similarity Search with MariaDB (RAG)`_
 * `Similarity Search with MongoDB (RAG)`_
 * `Similarity Search with Pinecone (RAG)`_
 
@@ -44,9 +45,10 @@ Supported Stores
 ----------------
 
 * `Azure AI Search`_
-* `Chroma`_
-* `MongoDB Atlas`_
-* `Pinecone`_
+* `Chroma`_ (requires `codewithkyrian/chromadb-php` as additional dependency)
+* `MariaDB`_ (requires `ext-pdo`)
+* `MongoDB Atlas`_ (requires `mongodb/mongodb` as additional dependency)
+* `Pinecone`_ (requires `probots-io/pinecone-php` as additional dependency)
 
 .. note::
 
@@ -80,10 +82,12 @@ This leads to a store implementing two methods::
     }
 
 .. _`Retrieval Augmented Generation`: https://de.wikipedia.org/wiki/Retrieval-Augmented_Generation
+.. _`Similarity Search with MariaDB (RAG)`: https://github.com/symfony/ai/blob/main/examples/store/mariadb-similarity-search.php
 .. _`Similarity Search with MongoDB (RAG)`: https://github.com/symfony/ai/blob/main/examples/store/mongodb-similarity-search.php
 .. _`Similarity Search with Pinecone (RAG)`: https://github.com/symfony/ai/blob/main/examples/store/pinecone-similarity-search.php
 .. _`Azure AI Search`: https://azure.microsoft.com/products/ai-services/ai-search
 .. _`Chroma`: https://www.trychroma.com/
+.. _`MariaDB`: https://mariadb.org/projects/mariadb-vector/
 .. _`MongoDB Atlas`: https://www.mongodb.com/atlas
 .. _`Pinecone`: https://www.pinecone.io/
 .. _`GitHub`: https://github.com/symfony/ai/issues/16
