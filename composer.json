@@ -29,12 +29,9 @@
         "symfony/uid": "^6.4 || ^7.1",
         "webmozart/assert": "^1.11"
     },
-    "conflict": {
-        "mongodb/mongodb": "<1.21"
-    },
     "require-dev": {
         "codewithkyrian/chromadb-php": "^0.2.1 || ^0.3 || ^0.4",
-        "mongodb/mongodb": "^1.21",
+        "mongodb/mongodb": "^1.21 || ^2.0",
         "phpstan/phpstan": "^2.0",
         "phpstan/phpstan-webmozart-assert": "^2.0",
         "phpunit/phpunit": "^11.5",
