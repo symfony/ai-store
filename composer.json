@@ -49,6 +49,9 @@
     "config": {
         "sort-packages": true
     },
+    "conflict": {
+        "mongodb/mongodb": "<1.21"
+    },
     "extra": {
         "thanks": {
             "name": "symfony/ai",
