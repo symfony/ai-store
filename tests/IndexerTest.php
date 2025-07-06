@@ -20,7 +20,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\AI\Platform\Bridge\OpenAI\Embeddings;
 use Symfony\AI\Platform\Message\ToolCallMessage;
 use Symfony\AI\Platform\Platform;
-use Symfony\AI\Platform\Response\AsyncResponse;
+use Symfony\AI\Platform\Response\ResponsePromise;
 use Symfony\AI\Platform\Response\ToolCall;
 use Symfony\AI\Platform\Response\VectorResponse;
 use Symfony\AI\Platform\Vector\Vector;
@@ -42,7 +42,7 @@ use Symfony\Component\Uid\Uuid;
 #[UsesClass(ToolCall::class)]
 #[UsesClass(Embeddings::class)]
 #[UsesClass(Platform::class)]
-#[UsesClass(AsyncResponse::class)]
+#[UsesClass(ResponsePromise::class)]
 #[UsesClass(VectorResponse::class)]
 final class IndexerTest extends TestCase
 {
