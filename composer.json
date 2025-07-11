@@ -67,8 +67,5 @@
         "psr-4": {
             "Symfony\\AI\\Store\\Tests\\": "tests/"
         }
-    },
-    "repositories": [
-        {"type": "path", "url": "../platform"}
-    ]
+    }
 }
