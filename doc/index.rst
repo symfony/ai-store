@@ -41,6 +41,7 @@ You can find more advanced usage in combination with an Agent using the store fo
 * `Similarity Search with MongoDB (RAG)`_
 * `Similarity Search with Pinecone (RAG)`_
 * `Similarity Search with Meilisearch (RAG)`_
+* `Similarity Search with memory storage (RAG)`_
 
 Supported Stores
 ----------------
@@ -52,6 +53,7 @@ Supported Stores
 * `Pinecone`_ (requires `probots-io/pinecone-php` as additional dependency)
 * `Postgres`_ (requires `ext-pdo`)
 * `Meilisearch`_
+* `InMemory`_
 
 .. note::
 
@@ -89,6 +91,7 @@ This leads to a store implementing two methods::
 .. _`Similarity Search with MongoDB (RAG)`: https://github.com/symfony/ai/blob/main/examples/store/mongodb-similarity-search.php
 .. _`Similarity Search with Pinecone (RAG)`: https://github.com/symfony/ai/blob/main/examples/store/pinecone-similarity-search.php
 .. _`Similarity Search with Meilisearch (RAG)`: https://github.com/symfony/ai/blob/main/examples/store/meilisearch-similarity-search.php
+.. _`Similarity Search with memory storage (RAG)`: https://github.com/symfony/ai/blob/main/examples/store/memory-similarity-search.php
 .. _`Azure AI Search`: https://azure.microsoft.com/products/ai-services/ai-search
 .. _`Chroma`: https://www.trychroma.com/
 .. _`MariaDB`: https://mariadb.org/projects/mariadb-vector/
@@ -96,4 +99,5 @@ This leads to a store implementing two methods::
 .. _`Pinecone`: https://www.pinecone.io/
 .. _`Postgres`: https://www.postgresql.org/about/news/pgvector-070-released-2852/
 .. _`Meilisearch`: https://www.meilisearch.com/
+.. _`InMemory`: https://www.php.net/manual/en/language.types.array.php
 .. _`GitHub`: https://github.com/symfony/ai/issues/16
