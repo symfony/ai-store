@@ -39,13 +39,6 @@
         "phpunit/phpunit": "^11.5",
         "probots-io/pinecone-php": "^1.0"
     },
-    "suggest": {
-        "ext-pdo": "For using MariaDB as retrieval vector store.",
-        "codewithkyrian/chromadb-php": "For using the ChromaDB as retrieval vector store.",
-        "doctrine/dbal": "For using MariaDB via Doctrine as retrieval vector store",
-        "mongodb/mongodb": "For using MongoDB Atlas as retrieval vector store.",
-        "probots-io/pinecone-php": "For using the Pinecone as retrieval vector store."
-    },
     "config": {
         "sort-packages": true
     },
