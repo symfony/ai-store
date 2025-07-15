@@ -26,8 +26,7 @@
         "symfony/ai-platform": "@dev",
         "symfony/clock": "^6.4 || ^7.1",
         "symfony/http-client": "^6.4 || ^7.1",
-        "symfony/uid": "^6.4 || ^7.1",
-        "webmozart/assert": "^1.11"
+        "symfony/uid": "^6.4 || ^7.1"
     },
     "require-dev": {
         "ext-pdo": "*",
@@ -35,7 +34,6 @@
         "doctrine/dbal": "^3.3 || ^4.0",
         "mongodb/mongodb": "^1.21 || ^2.0",
         "phpstan/phpstan": "^2.0",
-        "phpstan/phpstan-webmozart-assert": "^2.0",
         "phpunit/phpunit": "^11.5",
         "probots-io/pinecone-php": "^1.0"
     },
