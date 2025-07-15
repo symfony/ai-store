@@ -56,7 +56,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Symfony\\AI\\Store\\Tests\\": "tests/"
+            "Symfony\\AI\\Store\\Tests\\": "tests/",
+            "Symfony\\AI\\PHPStan\\": "../../.phpstan/"
         }
     }
 }
