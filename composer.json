@@ -29,7 +29,6 @@
         "symfony/uid": "^6.4 || ^7.1"
     },
     "require-dev": {
-        "ext-pdo": "*",
         "codewithkyrian/chromadb-php": "^0.2.1 || ^0.3 || ^0.4",
         "doctrine/dbal": "^3.3 || ^4.0",
         "mongodb/mongodb": "^1.21 || ^2.0",
