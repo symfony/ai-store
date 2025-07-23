@@ -12,6 +12,7 @@
 namespace Symfony\AI\Store\Tests\Bridge\Qdrant;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
 use Symfony\AI\Store\Bridge\Qdrant\Store;
@@ -24,7 +25,8 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Store::class)]
 final class StoreTest extends TestCase
 {
-    public function testStoreCannotInitializeOnInvalidResponse(): void
+    #[Test]
+    public function storeCannotInitializeOnInvalidResponse(): void
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -48,7 +50,8 @@ final class StoreTest extends TestCase
         $store->initialize();
     }
 
-    public function testStoreCannotInitializeOnExistingCollection(): void
+    #[Test]
+    public function storeCannotInitializeOnExistingCollection(): void
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -74,7 +77,8 @@ final class StoreTest extends TestCase
         self::assertSame(1, $httpClient->getRequestsCount());
     }
 
-    public function testStoreCanInitialize(): void
+    #[Test]
+    public function storeCanInitialize(): void
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -100,7 +104,8 @@ final class StoreTest extends TestCase
         self::assertSame(2, $httpClient->getRequestsCount());
     }
 
-    public function testStoreCannotAddOnInvalidResponse(): void
+    #[Test]
+    public function storeCannotAddOnInvalidResponse(): void
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([], [
@@ -116,7 +121,8 @@ final class StoreTest extends TestCase
         $store->add(new VectorDocument(Uuid::v4(), new Vector([0.1, 0.2, 0.3])));
     }
 
-    public function testStoreCanAdd(): void
+    #[Test]
+    public function storeCanAdd(): void
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -138,7 +144,8 @@ final class StoreTest extends TestCase
         self::assertSame(1, $httpClient->getRequestsCount());
     }
 
-    public function testStoreCannotQueryOnInvalidResponse(): void
+    #[Test]
+    public function storeCannotQueryOnInvalidResponse(): void
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([], [
@@ -159,7 +166,8 @@ final class StoreTest extends TestCase
         $store->query(new Vector([0.1, 0.2, 0.3]));
     }
 
-    public function testStoreCanQuery(): void
+    #[Test]
+    public function storeCanQuery(): void
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([

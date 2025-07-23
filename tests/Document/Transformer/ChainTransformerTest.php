@@ -55,7 +55,8 @@ final class ChainTransformerTest extends TestCase
         self::assertSame('bar-A-B', $result[1]->content);
     }
 
-    public function testChainTransformerWithNoTransformersReturnsInput(): void
+    #[Test]
+    public function chainTransformerWithNoTransformersReturnsInput(): void
     {
         $chain = new ChainTransformer([]);
         $documents = [new TextDocument(Uuid::v4(), 'baz')];
