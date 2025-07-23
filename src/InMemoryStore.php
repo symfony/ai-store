@@ -20,7 +20,7 @@ use Symfony\AI\Store\Exception\InvalidArgumentException;
  */
 final class InMemoryStore implements VectorStoreInterface
 {
-    public const COSINE_SIMILARITY = 'cosine';
+    public const COSINE_DISTANCE = 'cosine';
     public const ANGULAR_DISTANCE = 'angular';
     public const EUCLIDEAN_DISTANCE = 'euclidean';
     public const MANHATTAN_DISTANCE = 'manhattan';
@@ -32,7 +32,7 @@ final class InMemoryStore implements VectorStoreInterface
     private array $documents = [];
 
     public function __construct(
-        private readonly string $similarity = self::COSINE_SIMILARITY,
+        private readonly string $distance = self::COSINE_DISTANCE,
     ) {
     }
 
@@ -48,13 +48,13 @@ final class InMemoryStore implements VectorStoreInterface
      */
     public function query(Vector $vector, array $options = [], ?float $minScore = null): array
     {
-        $strategy = match ($this->similarity) {
-            self::COSINE_SIMILARITY => $this->cosineSimilarity(...),
+        $strategy = match ($this->distance) {
+            self::COSINE_DISTANCE => $this->cosineDistance(...),
             self::ANGULAR_DISTANCE => $this->angularDistance(...),
             self::EUCLIDEAN_DISTANCE => $this->euclideanDistance(...),
             self::MANHATTAN_DISTANCE => $this->manhattanDistance(...),
             self::CHEBYSHEV_DISTANCE => $this->chebyshevDistance(...),
-            default => throw new InvalidArgumentException(\sprintf('Unsupported similarity strategy "%s"', $this->similarity)),
+            default => throw new InvalidArgumentException(\sprintf('Unsupported distance metric "%s"', $this->distance)),
         };
 
         $currentEmbeddings = array_map(
@@ -78,6 +78,11 @@ final class InMemoryStore implements VectorStoreInterface
             static fn (array $embedding): VectorDocument => $embedding['document'],
             $currentEmbeddings,
         );
+    }
+
+    private function cosineDistance(VectorDocument $embedding, Vector $against): float
+    {
+        return 1 - $this->cosineSimilarity($embedding, $against);
     }
 
     private function cosineSimilarity(VectorDocument $embedding, Vector $against): float

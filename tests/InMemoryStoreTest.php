@@ -23,7 +23,7 @@ use Symfony\Component\Uid\Uuid;
 final class InMemoryStoreTest extends TestCase
 {
     #[Test]
-    public function storeCanSearchUsingCosineSimilarity(): void
+    public function storeCanSearchUsingCosineDistance(): void
     {
         $store = new InMemoryStore();
         $store->add(
@@ -32,7 +32,9 @@ final class InMemoryStoreTest extends TestCase
             new VectorDocument(Uuid::v4(), new Vector([0.3, 0.7, 0.1])),
         );
 
-        self::assertCount(3, $store->query(new Vector([0.0, 0.1, 0.6])));
+        $result = $store->query(new Vector([0.0, 0.1, 0.6]));
+        self::assertCount(3, $result);
+        self::assertSame([0.1, 0.1, 0.5], $result[0]->vector->getData());
 
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5])),
@@ -40,11 +42,34 @@ final class InMemoryStoreTest extends TestCase
             new VectorDocument(Uuid::v4(), new Vector([0.3, 0.7, 0.1])),
         );
 
-        self::assertCount(6, $store->query(new Vector([0.0, 0.1, 0.6])));
+        $result = $store->query(new Vector([0.0, 0.1, 0.6]));
+        self::assertCount(6, $result);
+        self::assertSame([0.1, 0.1, 0.5], $result[0]->vector->getData());
     }
 
     #[Test]
-    public function storeCanSearchUsingCosineSimilarityWithMaxItems(): void
+    public function storeCanSearchUsingCosineDistanceAndReturnCorrectOrder(): void
+    {
+        $store = new InMemoryStore();
+        $store->add(
+            new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5])),
+            new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0])),
+            new VectorDocument(Uuid::v4(), new Vector([0.3, 0.7, 0.1])),
+            new VectorDocument(Uuid::v4(), new Vector([0.3, 0.1, 0.6])),
+            new VectorDocument(Uuid::v4(), new Vector([0.0, 0.1, 0.6])),
+        );
+
+        $result = $store->query(new Vector([0.0, 0.1, 0.6]));
+        self::assertCount(5, $result);
+        self::assertSame([0.0, 0.1, 0.6], $result[0]->vector->getData());
+        self::assertSame([0.1, 0.1, 0.5], $result[1]->vector->getData());
+        self::assertSame([0.3, 0.1, 0.6], $result[2]->vector->getData());
+        self::assertSame([0.3, 0.7, 0.1], $result[3]->vector->getData());
+        self::assertSame([0.7, -0.3, 0.0], $result[4]->vector->getData());
+    }
+
+    #[Test]
+    public function storeCanSearchUsingCosineDistanceWithMaxItems(): void
     {
         $store = new InMemoryStore();
         $store->add(
