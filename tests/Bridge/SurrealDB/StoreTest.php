@@ -92,7 +92,7 @@ final class StoreTest extends TestCase
 
         $store->initialize();
 
-        self::assertSame(2, $httpClient->getRequestsCount());
+        $this->assertSame(2, $httpClient->getRequestsCount());
     }
 
     #[Test]
@@ -214,7 +214,7 @@ final class StoreTest extends TestCase
 
         $store->add(new VectorDocument(Uuid::v4(), new Vector(array_fill(0, 1275, 0.1))));
 
-        self::assertSame(3, $httpClient->getRequestsCount());
+        $this->assertSame(3, $httpClient->getRequestsCount());
     }
 
     #[Test]
@@ -351,6 +351,6 @@ final class StoreTest extends TestCase
 
         $results = $store->query(new Vector(array_fill(0, 1275, 0.1)));
 
-        self::assertCount(2, $results);
+        $this->assertCount(2, $results);
     }
 }

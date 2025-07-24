@@ -56,23 +56,23 @@ final class IndexerTest extends TestCase
         $indexer = new Indexer($vectorizer, $store = new TestStore());
         $indexer->index($document);
 
-        self::assertCount(1, $store->documents);
-        self::assertInstanceOf(VectorDocument::class, $store->documents[0]);
-        self::assertSame($id, $store->documents[0]->id);
-        self::assertSame($vector, $store->documents[0]->vector);
+        $this->assertCount(1, $store->documents);
+        $this->assertInstanceOf(VectorDocument::class, $store->documents[0]);
+        $this->assertSame($id, $store->documents[0]->id);
+        $this->assertSame($vector, $store->documents[0]->vector);
     }
 
     #[Test]
     public function indexEmptyDocumentList(): void
     {
         $logger = self::createMock(LoggerInterface::class);
-        $logger->expects(self::once())->method('debug')->with('No documents to index');
+        $logger->expects($this->once())->method('debug')->with('No documents to index');
         $vectorizer = new Vectorizer(PlatformTestHandler::createPlatform(), new Embeddings());
 
         $indexer = new Indexer($vectorizer, $store = new TestStore(), $logger);
         $indexer->index([]);
 
-        self::assertSame([], $store->documents);
+        $this->assertSame([], $store->documents);
     }
 
     #[Test]
@@ -86,11 +86,11 @@ final class IndexerTest extends TestCase
         $indexer = new Indexer($vectorizer, $store = new TestStore());
         $indexer->index($document);
 
-        self::assertSame(1, $store->addCalls);
-        self::assertCount(1, $store->documents);
-        self::assertInstanceOf(VectorDocument::class, $store->documents[0]);
-        self::assertSame($id, $store->documents[0]->id);
-        self::assertSame($vector, $store->documents[0]->vector);
-        self::assertSame(['key' => 'value'], $store->documents[0]->metadata->getArrayCopy());
+        $this->assertSame(1, $store->addCalls);
+        $this->assertCount(1, $store->documents);
+        $this->assertInstanceOf(VectorDocument::class, $store->documents[0]);
+        $this->assertSame($id, $store->documents[0]->id);
+        $this->assertSame($vector, $store->documents[0]->vector);
+        $this->assertSame(['key' => 'value'], $store->documents[0]->metadata->getArrayCopy());
     }
 }

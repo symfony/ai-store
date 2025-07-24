@@ -51,8 +51,8 @@ final class ChainTransformerTest extends TestCase
 
         $result = iterator_to_array($chain->__invoke($documents));
 
-        self::assertSame('foo-A-B', $result[0]->content);
-        self::assertSame('bar-A-B', $result[1]->content);
+        $this->assertSame('foo-A-B', $result[0]->content);
+        $this->assertSame('bar-A-B', $result[1]->content);
     }
 
     #[Test]
@@ -63,6 +63,6 @@ final class ChainTransformerTest extends TestCase
 
         $result = iterator_to_array($chain->__invoke($documents));
 
-        self::assertSame('baz', $result[0]->content);
+        $this->assertSame('baz', $result[0]->content);
     }
 }

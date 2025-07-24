@@ -33,8 +33,8 @@ final class InMemoryStoreTest extends TestCase
         );
 
         $result = $store->query(new Vector([0.0, 0.1, 0.6]));
-        self::assertCount(3, $result);
-        self::assertSame([0.1, 0.1, 0.5], $result[0]->vector->getData());
+        $this->assertCount(3, $result);
+        $this->assertSame([0.1, 0.1, 0.5], $result[0]->vector->getData());
 
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5])),
@@ -43,8 +43,8 @@ final class InMemoryStoreTest extends TestCase
         );
 
         $result = $store->query(new Vector([0.0, 0.1, 0.6]));
-        self::assertCount(6, $result);
-        self::assertSame([0.1, 0.1, 0.5], $result[0]->vector->getData());
+        $this->assertCount(6, $result);
+        $this->assertSame([0.1, 0.1, 0.5], $result[0]->vector->getData());
     }
 
     #[Test]
@@ -60,12 +60,12 @@ final class InMemoryStoreTest extends TestCase
         );
 
         $result = $store->query(new Vector([0.0, 0.1, 0.6]));
-        self::assertCount(5, $result);
-        self::assertSame([0.0, 0.1, 0.6], $result[0]->vector->getData());
-        self::assertSame([0.1, 0.1, 0.5], $result[1]->vector->getData());
-        self::assertSame([0.3, 0.1, 0.6], $result[2]->vector->getData());
-        self::assertSame([0.3, 0.7, 0.1], $result[3]->vector->getData());
-        self::assertSame([0.7, -0.3, 0.0], $result[4]->vector->getData());
+        $this->assertCount(5, $result);
+        $this->assertSame([0.0, 0.1, 0.6], $result[0]->vector->getData());
+        $this->assertSame([0.1, 0.1, 0.5], $result[1]->vector->getData());
+        $this->assertSame([0.3, 0.1, 0.6], $result[2]->vector->getData());
+        $this->assertSame([0.3, 0.7, 0.1], $result[3]->vector->getData());
+        $this->assertSame([0.7, -0.3, 0.0], $result[4]->vector->getData());
     }
 
     #[Test]
@@ -78,7 +78,7 @@ final class InMemoryStoreTest extends TestCase
             new VectorDocument(Uuid::v4(), new Vector([0.3, 0.7, 0.1])),
         );
 
-        self::assertCount(1, $store->query(new Vector([0.0, 0.1, 0.6]), [
+        $this->assertCount(1, $store->query(new Vector([0.0, 0.1, 0.6]), [
             'maxItems' => 1,
         ]));
     }
@@ -94,8 +94,8 @@ final class InMemoryStoreTest extends TestCase
 
         $result = $store->query(new Vector([1.2, 2.3, 3.4]));
 
-        self::assertCount(2, $result);
-        self::assertSame([1.0, 2.0, 3.0], $result[0]->vector->getData());
+        $this->assertCount(2, $result);
+        $this->assertSame([1.0, 2.0, 3.0], $result[0]->vector->getData());
     }
 
     #[Test]
@@ -109,8 +109,8 @@ final class InMemoryStoreTest extends TestCase
 
         $result = $store->query(new Vector([1.2, 2.3, 3.4]));
 
-        self::assertCount(2, $result);
-        self::assertSame([1.0, 2.0, 3.0], $result[0]->vector->getData());
+        $this->assertCount(2, $result);
+        $this->assertSame([1.0, 2.0, 3.0], $result[0]->vector->getData());
     }
 
     #[Test]
@@ -124,8 +124,8 @@ final class InMemoryStoreTest extends TestCase
 
         $result = $store->query(new Vector([1.2, 2.3, 3.4]));
 
-        self::assertCount(2, $result);
-        self::assertSame([1.0, 2.0, 3.0], $result[0]->vector->getData());
+        $this->assertCount(2, $result);
+        $this->assertSame([1.0, 2.0, 3.0], $result[0]->vector->getData());
     }
 
     #[Test]
@@ -139,7 +139,7 @@ final class InMemoryStoreTest extends TestCase
 
         $result = $store->query(new Vector([1.2, 2.3, 3.4]));
 
-        self::assertCount(2, $result);
-        self::assertSame([1.0, 2.0, 3.0], $result[0]->vector->getData());
+        $this->assertCount(2, $result);
+        $this->assertSame([1.0, 2.0, 3.0], $result[0]->vector->getData());
     }
 }

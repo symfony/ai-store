@@ -37,14 +37,14 @@ final class TextSplitTransformerTest extends TestCase
 
         $chunks = iterator_to_array(($this->transformer)([$document]));
 
-        self::assertCount(1, $chunks);
-        self::assertSame('short text', $chunks[0]->content);
+        $this->assertCount(1, $chunks);
+        $this->assertSame('short text', $chunks[0]->content);
     }
 
     #[Test]
     public function textLength(): void
     {
-        self::assertSame(1500, mb_strlen($this->getLongText()));
+        $this->assertSame(1500, mb_strlen($this->getLongText()));
     }
 
     #[Test]
@@ -54,13 +54,13 @@ final class TextSplitTransformerTest extends TestCase
 
         $chunks = iterator_to_array(($this->transformer)([$document]));
 
-        self::assertCount(2, $chunks);
+        $this->assertCount(2, $chunks);
 
-        self::assertSame(1000, mb_strlen($chunks[0]->content));
-        self::assertSame(substr($this->getLongText(), 0, 1000), $chunks[0]->content);
+        $this->assertSame(1000, mb_strlen($chunks[0]->content));
+        $this->assertSame(substr($this->getLongText(), 0, 1000), $chunks[0]->content);
 
-        self::assertSame(700, mb_strlen($chunks[1]->content));
-        self::assertSame(substr($this->getLongText(), 800, 700), $chunks[1]->content);
+        $this->assertSame(700, mb_strlen($chunks[1]->content));
+        $this->assertSame(substr($this->getLongText(), 800, 700), $chunks[1]->content);
     }
 
     #[Test]
@@ -73,43 +73,43 @@ final class TextSplitTransformerTest extends TestCase
             TextSplitTransformer::OPTION_OVERLAP => 25,
         ]));
 
-        self::assertCount(12, $chunks);
+        $this->assertCount(12, $chunks);
 
-        self::assertSame(150, mb_strlen($chunks[0]->content));
-        self::assertSame(substr($this->getLongText(), 0, 150), $chunks[0]->content);
+        $this->assertSame(150, mb_strlen($chunks[0]->content));
+        $this->assertSame(substr($this->getLongText(), 0, 150), $chunks[0]->content);
 
-        self::assertSame(150, mb_strlen($chunks[1]->content));
-        self::assertSame(substr($this->getLongText(), 125, 150), $chunks[1]->content);
+        $this->assertSame(150, mb_strlen($chunks[1]->content));
+        $this->assertSame(substr($this->getLongText(), 125, 150), $chunks[1]->content);
 
-        self::assertSame(150, mb_strlen($chunks[2]->content));
-        self::assertSame(substr($this->getLongText(), 250, 150), $chunks[2]->content);
+        $this->assertSame(150, mb_strlen($chunks[2]->content));
+        $this->assertSame(substr($this->getLongText(), 250, 150), $chunks[2]->content);
 
-        self::assertSame(150, mb_strlen($chunks[3]->content));
-        self::assertSame(substr($this->getLongText(), 375, 150), $chunks[3]->content);
+        $this->assertSame(150, mb_strlen($chunks[3]->content));
+        $this->assertSame(substr($this->getLongText(), 375, 150), $chunks[3]->content);
 
-        self::assertSame(150, mb_strlen($chunks[4]->content));
-        self::assertSame(substr($this->getLongText(), 500, 150), $chunks[4]->content);
+        $this->assertSame(150, mb_strlen($chunks[4]->content));
+        $this->assertSame(substr($this->getLongText(), 500, 150), $chunks[4]->content);
 
-        self::assertSame(150, mb_strlen($chunks[5]->content));
-        self::assertSame(substr($this->getLongText(), 625, 150), $chunks[5]->content);
+        $this->assertSame(150, mb_strlen($chunks[5]->content));
+        $this->assertSame(substr($this->getLongText(), 625, 150), $chunks[5]->content);
 
-        self::assertSame(150, mb_strlen($chunks[6]->content));
-        self::assertSame(substr($this->getLongText(), 750, 150), $chunks[6]->content);
+        $this->assertSame(150, mb_strlen($chunks[6]->content));
+        $this->assertSame(substr($this->getLongText(), 750, 150), $chunks[6]->content);
 
-        self::assertSame(150, mb_strlen($chunks[7]->content));
-        self::assertSame(substr($this->getLongText(), 875, 150), $chunks[7]->content);
+        $this->assertSame(150, mb_strlen($chunks[7]->content));
+        $this->assertSame(substr($this->getLongText(), 875, 150), $chunks[7]->content);
 
-        self::assertSame(150, mb_strlen($chunks[8]->content));
-        self::assertSame(substr($this->getLongText(), 1000, 150), $chunks[8]->content);
+        $this->assertSame(150, mb_strlen($chunks[8]->content));
+        $this->assertSame(substr($this->getLongText(), 1000, 150), $chunks[8]->content);
 
-        self::assertSame(150, mb_strlen($chunks[9]->content));
-        self::assertSame(substr($this->getLongText(), 1125, 150), $chunks[9]->content);
+        $this->assertSame(150, mb_strlen($chunks[9]->content));
+        $this->assertSame(substr($this->getLongText(), 1125, 150), $chunks[9]->content);
 
-        self::assertSame(150, mb_strlen($chunks[10]->content));
-        self::assertSame(substr($this->getLongText(), 1250, 150), $chunks[10]->content);
+        $this->assertSame(150, mb_strlen($chunks[10]->content));
+        $this->assertSame(substr($this->getLongText(), 1250, 150), $chunks[10]->content);
 
-        self::assertSame(125, mb_strlen($chunks[11]->content));
-        self::assertSame(substr($this->getLongText(), 1375, 150), $chunks[11]->content);
+        $this->assertSame(125, mb_strlen($chunks[11]->content));
+        $this->assertSame(substr($this->getLongText(), 1375, 150), $chunks[11]->content);
     }
 
     #[Test]
@@ -121,9 +121,9 @@ final class TextSplitTransformerTest extends TestCase
             TextSplitTransformer::OPTION_OVERLAP => 0,
         ]));
 
-        self::assertCount(2, $chunks);
-        self::assertSame(substr($this->getLongText(), 0, 1000), $chunks[0]->content);
-        self::assertSame(substr($this->getLongText(), 1000, 500), $chunks[1]->content);
+        $this->assertCount(2, $chunks);
+        $this->assertSame(substr($this->getLongText(), 0, 1000), $chunks[0]->content);
+        $this->assertSame(substr($this->getLongText(), 1000, 500), $chunks[1]->content);
     }
 
     #[Test]
@@ -136,9 +136,9 @@ final class TextSplitTransformerTest extends TestCase
             TextSplitTransformer::OPTION_OVERLAP => 200,
         ]));
 
-        self::assertCount(2, $chunks);
-        self::assertSame($document->id, $chunks[0]->metadata['parent_id']);
-        self::assertSame($document->id, $chunks[1]->metadata['parent_id']);
+        $this->assertCount(2, $chunks);
+        $this->assertSame($document->id, $chunks[0]->metadata['parent_id']);
+        $this->assertSame($document->id, $chunks[1]->metadata['parent_id']);
     }
 
     #[Test]
@@ -151,11 +151,11 @@ final class TextSplitTransformerTest extends TestCase
 
         $chunks = iterator_to_array(($this->transformer)([$document]));
 
-        self::assertCount(2, $chunks);
-        self::assertSame('value', $chunks[0]->metadata['key']);
-        self::assertSame('bar', $chunks[0]->metadata['foo']);
-        self::assertSame('value', $chunks[1]->metadata['key']);
-        self::assertSame('bar', $chunks[1]->metadata['foo']);
+        $this->assertCount(2, $chunks);
+        $this->assertSame('value', $chunks[0]->metadata['key']);
+        $this->assertSame('bar', $chunks[0]->metadata['foo']);
+        $this->assertSame('value', $chunks[1]->metadata['key']);
+        $this->assertSame('bar', $chunks[1]->metadata['foo']);
     }
 
     #[Test]
@@ -165,8 +165,8 @@ final class TextSplitTransformerTest extends TestCase
 
         $chunks = iterator_to_array(($this->transformer)([$document]));
 
-        self::assertCount(1, $chunks);
-        self::assertSame('tiny', $chunks[0]->content);
+        $this->assertCount(1, $chunks);
+        $this->assertSame('tiny', $chunks[0]->content);
     }
 
     #[Test]

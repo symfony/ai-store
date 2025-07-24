@@ -39,11 +39,11 @@ final class TextFileLoaderTest extends TestCase
 
         $documents = iterator_to_array($loader(\dirname(__DIR__, 5).'/fixtures/lorem.txt'));
 
-        self::assertCount(1, $documents);
-        self::assertInstanceOf(TextDocument::class, $document = $documents[0]);
-        self::assertStringStartsWith('Lorem ipsum', $document->content);
-        self::assertStringEndsWith('nonummy id, met', $document->content);
-        self::assertSame(1500, \strlen($document->content));
+        $this->assertCount(1, $documents);
+        $this->assertInstanceOf(TextDocument::class, $document = $documents[0]);
+        $this->assertStringStartsWith('Lorem ipsum', $document->content);
+        $this->assertStringEndsWith('nonummy id, met', $document->content);
+        $this->assertSame(1500, \strlen($document->content));
     }
 
     #[Test]
@@ -54,8 +54,8 @@ final class TextFileLoaderTest extends TestCase
         $source = \dirname(__DIR__, 5).'/fixtures/lorem.txt';
         $documents = iterator_to_array($loader($source));
 
-        self::assertCount(1, $documents);
-        self::assertInstanceOf(TextDocument::class, $document = $documents[0]);
-        self::assertSame($source, $document->metadata['source']);
+        $this->assertCount(1, $documents);
+        $this->assertInstanceOf(TextDocument::class, $document = $documents[0]);
+        $this->assertSame($source, $document->metadata['source']);
     }
 }

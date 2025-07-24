@@ -85,7 +85,7 @@ final class StoreTest extends TestCase
 
         $store->initialize();
 
-        self::assertSame(2, $httpClient->getRequestsCount());
+        $this->assertSame(2, $httpClient->getRequestsCount());
     }
 
     #[Test]
@@ -139,7 +139,7 @@ final class StoreTest extends TestCase
 
         $store->add(new VectorDocument(Uuid::v4(), new Vector([0.1, 0.2, 0.3])));
 
-        self::assertSame(1, $httpClient->getRequestsCount());
+        $this->assertSame(1, $httpClient->getRequestsCount());
     }
 
     #[Test]
@@ -211,12 +211,12 @@ final class StoreTest extends TestCase
 
         $vectors = $store->query(new Vector([0.1, 0.2, 0.3]));
 
-        self::assertSame(1, $httpClient->getRequestsCount());
-        self::assertCount(2, $vectors);
-        self::assertInstanceOf(VectorDocument::class, $vectors[0]);
-        self::assertInstanceOf(VectorDocument::class, $vectors[1]);
-        self::assertSame(0.95, $vectors[0]->score);
-        self::assertSame(0.85, $vectors[1]->score);
+        $this->assertSame(1, $httpClient->getRequestsCount());
+        $this->assertCount(2, $vectors);
+        $this->assertInstanceOf(VectorDocument::class, $vectors[0]);
+        $this->assertInstanceOf(VectorDocument::class, $vectors[1]);
+        $this->assertSame(0.95, $vectors[0]->score);
+        $this->assertSame(0.85, $vectors[1]->score);
     }
 
     #[Test]
@@ -257,6 +257,6 @@ final class StoreTest extends TestCase
             'description' => 'A science fiction action film.',
         ];
 
-        self::assertSame($expected, $vectors[0]->metadata->getArrayCopy());
+        $this->assertSame($expected, $vectors[0]->metadata->getArrayCopy());
     }
 }
