@@ -12,7 +12,6 @@
 namespace Symfony\AI\Store\Tests\Document\Transformer;
 
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Store\Document\TextDocument;
 use Symfony\AI\Store\Document\Transformer\ChainTransformer;
@@ -22,8 +21,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(TransformerInterface::class)]
 final class ChainTransformerTest extends TestCase
 {
-    #[Test]
-    public function chainTransformerAppliesAllTransformersInOrder(): void
+    public function testChainTransformerAppliesAllTransformersInOrder(): void
     {
         $transformerA = new class implements TransformerInterface {
             public function __invoke(iterable $documents, array $options = []): iterable
@@ -55,8 +53,7 @@ final class ChainTransformerTest extends TestCase
         $this->assertSame('bar-A-B', $result[1]->content);
     }
 
-    #[Test]
-    public function chainTransformerWithNoTransformersReturnsInput(): void
+    public function testChainTransformerWithNoTransformersReturnsInput(): void
     {
         $chain = new ChainTransformer([]);
         $documents = [new TextDocument(Uuid::v4(), 'baz')];
