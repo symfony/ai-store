@@ -14,7 +14,6 @@ namespace Symfony\AI\Store\Tests\Bridge\ChromaDB;
 use Codewithkyrian\ChromaDB\Client;
 use Codewithkyrian\ChromaDB\Resources\CollectionResource;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
 use Symfony\AI\Store\Bridge\ChromaDB\Store;
@@ -25,8 +24,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Store::class)]
 final class StoreTest extends TestCase
 {
-    #[Test]
-    public function addDocumentsSuccessfully(): void
+    public function testAddDocumentsSuccessfully(): void
     {
         $collection = $this->createMock(CollectionResource::class);
         $client = $this->createMock(Client::class);
@@ -55,8 +53,7 @@ final class StoreTest extends TestCase
         $store->add($document1, $document2);
     }
 
-    #[Test]
-    public function addSingleDocument(): void
+    public function testAddSingleDocument(): void
     {
         $collection = $this->createMock(CollectionResource::class);
         $client = $this->createMock(Client::class);

@@ -12,7 +12,6 @@
 namespace Symfony\AI\Store\Tests\Bridge\Pinecone;
 
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Probots\Pinecone\Client;
 use Probots\Pinecone\Resources\Data\VectorResource;
@@ -27,8 +26,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Store::class)]
 final class StoreTest extends TestCase
 {
-    #[Test]
-    public function addSingleDocument(): void
+    public function testAddSingleDocument(): void
     {
         $vectorResource = $this->createMock(VectorResource::class);
         $dataResource = $this->createMock(DataResource::class);
@@ -63,8 +61,7 @@ final class StoreTest extends TestCase
         $store->add($document);
     }
 
-    #[Test]
-    public function addMultipleDocuments(): void
+    public function testAddMultipleDocuments(): void
     {
         $vectorResource = $this->createMock(VectorResource::class);
         $dataResource = $this->createMock(DataResource::class);
@@ -107,8 +104,7 @@ final class StoreTest extends TestCase
         $store->add($document1, $document2);
     }
 
-    #[Test]
-    public function addWithNamespace(): void
+    public function testAddWithNamespace(): void
     {
         $vectorResource = $this->createMock(VectorResource::class);
         $dataResource = $this->createMock(DataResource::class);
@@ -143,8 +139,7 @@ final class StoreTest extends TestCase
         $store->add($document);
     }
 
-    #[Test]
-    public function addWithEmptyDocuments(): void
+    public function testAddWithEmptyDocuments(): void
     {
         $client = $this->createMock(Client::class);
 
@@ -155,8 +150,7 @@ final class StoreTest extends TestCase
         $store->add();
     }
 
-    #[Test]
-    public function queryReturnsDocuments(): void
+    public function testQueryReturnsDocuments(): void
     {
         $vectorResource = $this->createMock(VectorResource::class);
         $dataResource = $this->createMock(DataResource::class);
@@ -217,8 +211,7 @@ final class StoreTest extends TestCase
         $this->assertSame('Second Document', $results[1]->metadata['title']);
     }
 
-    #[Test]
-    public function queryWithNamespaceAndFilter(): void
+    public function testQueryWithNamespaceAndFilter(): void
     {
         $vectorResource = $this->createMock(VectorResource::class);
         $dataResource = $this->createMock(DataResource::class);
@@ -255,8 +248,7 @@ final class StoreTest extends TestCase
         $this->assertCount(0, $results);
     }
 
-    #[Test]
-    public function queryWithCustomOptions(): void
+    public function testQueryWithCustomOptions(): void
     {
         $vectorResource = $this->createMock(VectorResource::class);
         $dataResource = $this->createMock(DataResource::class);
@@ -297,8 +289,7 @@ final class StoreTest extends TestCase
         $this->assertCount(0, $results);
     }
 
-    #[Test]
-    public function queryWithEmptyResults(): void
+    public function testQueryWithEmptyResults(): void
     {
         $vectorResource = $this->createMock(VectorResource::class);
         $dataResource = $this->createMock(DataResource::class);

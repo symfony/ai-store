@@ -13,7 +13,6 @@ namespace Symfony\AI\Store\Tests;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Medium;
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -46,8 +45,7 @@ use Symfony\Component\Uid\Uuid;
 #[UsesClass(VectorResult::class)]
 final class IndexerTest extends TestCase
 {
-    #[Test]
-    public function indexSingleDocument(): void
+    public function testIndexSingleDocument(): void
     {
         $document = new TextDocument($id = Uuid::v4(), 'Test content');
         $vector = new Vector([0.1, 0.2, 0.3]);
@@ -62,8 +60,7 @@ final class IndexerTest extends TestCase
         $this->assertSame($vector, $store->documents[0]->vector);
     }
 
-    #[Test]
-    public function indexEmptyDocumentList(): void
+    public function testIndexEmptyDocumentList(): void
     {
         $logger = self::createMock(LoggerInterface::class);
         $logger->expects($this->once())->method('debug')->with('No documents to index');
@@ -75,8 +72,7 @@ final class IndexerTest extends TestCase
         $this->assertSame([], $store->documents);
     }
 
-    #[Test]
-    public function indexDocumentWithMetadata(): void
+    public function testIndexDocumentWithMetadata(): void
     {
         $metadata = new Metadata(['key' => 'value']);
         $document = new TextDocument($id = Uuid::v4(), 'Test content', $metadata);

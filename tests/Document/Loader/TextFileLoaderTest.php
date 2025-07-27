@@ -12,7 +12,6 @@
 namespace Symfony\AI\Store\Tests\Document\Loader;
 
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Store\Document\Loader\TextFileLoader;
 use Symfony\AI\Store\Document\TextDocument;
@@ -21,8 +20,7 @@ use Symfony\AI\Store\Exception\RuntimeException;
 #[CoversClass(TextFileLoader::class)]
 final class TextFileLoaderTest extends TestCase
 {
-    #[Test]
-    public function loadWithInvalidSource(): void
+    public function testLoadWithInvalidSource(): void
     {
         $loader = new TextFileLoader();
 
@@ -32,8 +30,7 @@ final class TextFileLoaderTest extends TestCase
         iterator_to_array($loader('/invalid/source.txt'));
     }
 
-    #[Test]
-    public function loadWithValidSource(): void
+    public function testLoadWithValidSource(): void
     {
         $loader = new TextFileLoader();
 
@@ -46,8 +43,7 @@ final class TextFileLoaderTest extends TestCase
         $this->assertSame(1500, \strlen($document->content));
     }
 
-    #[Test]
-    public function sourceIsPresentInMetadata(): void
+    public function testSourceIsPresentInMetadata(): void
     {
         $loader = new TextFileLoader();
 

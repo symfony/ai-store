@@ -12,7 +12,6 @@
 namespace Symfony\AI\Store\Tests\Bridge\Meilisearch;
 
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
 use Symfony\AI\Store\Bridge\Meilisearch\Store;
@@ -25,8 +24,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Store::class)]
 final class StoreTest extends TestCase
 {
-    #[Test]
-    public function storeCannotInitializeOnInvalidResponse(): void
+    public function testStoreCannotInitializeOnInvalidResponse(): void
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -52,8 +50,7 @@ final class StoreTest extends TestCase
         $store->initialize();
     }
 
-    #[Test]
-    public function storeCanInitialize(): void
+    public function testStoreCanInitialize(): void
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -88,8 +85,7 @@ final class StoreTest extends TestCase
         $this->assertSame(2, $httpClient->getRequestsCount());
     }
 
-    #[Test]
-    public function storeCannotAddOnInvalidResponse(): void
+    public function testStoreCannotAddOnInvalidResponse(): void
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -115,8 +111,7 @@ final class StoreTest extends TestCase
         $store->add(new VectorDocument(Uuid::v4(), new Vector([0.1, 0.2, 0.3])));
     }
 
-    #[Test]
-    public function storeCanAdd(): void
+    public function testStoreCanAdd(): void
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -142,8 +137,7 @@ final class StoreTest extends TestCase
         $this->assertSame(1, $httpClient->getRequestsCount());
     }
 
-    #[Test]
-    public function storeCannotQueryOnInvalidResponse(): void
+    public function testStoreCannotQueryOnInvalidResponse(): void
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -169,8 +163,7 @@ final class StoreTest extends TestCase
         $store->query(new Vector([0.1, 0.2, 0.3]));
     }
 
-    #[Test]
-    public function storeCanQuery(): void
+    public function testStoreCanQuery(): void
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -219,8 +212,7 @@ final class StoreTest extends TestCase
         $this->assertSame(0.85, $vectors[1]->score);
     }
 
-    #[Test]
-    public function metadataWithoutIDRankingandVector(): void
+    public function testMetadataWithoutIDRankingandVector(): void
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([

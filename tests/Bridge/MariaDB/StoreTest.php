@@ -12,7 +12,6 @@
 namespace Symfony\AI\Store\Tests\Bridge\MariaDB;
 
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
 use Symfony\AI\Store\Bridge\MariaDB\Store;
@@ -22,8 +21,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Store::class)]
 final class StoreTest extends TestCase
 {
-    #[Test]
-    public function queryWithMinScore(): void
+    public function testQueryWithMinScore(): void
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);
@@ -75,8 +73,7 @@ final class StoreTest extends TestCase
         $this->assertSame(['title' => 'Test Document'], $results[0]->metadata->getArrayCopy());
     }
 
-    #[Test]
-    public function queryWithoutMinScore(): void
+    public function testQueryWithoutMinScore(): void
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);
@@ -123,8 +120,7 @@ final class StoreTest extends TestCase
         $this->assertSame(0.95, $results[0]->score);
     }
 
-    #[Test]
-    public function queryWithCustomLimit(): void
+    public function testQueryWithCustomLimit(): void
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);

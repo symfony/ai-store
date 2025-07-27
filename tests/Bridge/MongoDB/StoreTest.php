@@ -17,7 +17,6 @@ use MongoDB\Collection;
 use MongoDB\Driver\CursorInterface;
 use MongoDB\Driver\Exception\CommandException;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\AI\Platform\Vector\Vector;
@@ -30,8 +29,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Store::class)]
 final class StoreTest extends TestCase
 {
-    #[Test]
-    public function addSingleDocument(): void
+    public function testAddSingleDocument(): void
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
@@ -66,8 +64,7 @@ final class StoreTest extends TestCase
         $store->add($document);
     }
 
-    #[Test]
-    public function addMultipleDocuments(): void
+    public function testAddMultipleDocuments(): void
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
@@ -96,8 +93,7 @@ final class StoreTest extends TestCase
         $store->add($document1, $document2);
     }
 
-    #[Test]
-    public function addWithBulkWrite(): void
+    public function testAddWithBulkWrite(): void
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
@@ -149,8 +145,7 @@ final class StoreTest extends TestCase
         $store->add($document1, $document2);
     }
 
-    #[Test]
-    public function queryReturnsDocuments(): void
+    public function testQueryReturnsDocuments(): void
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
@@ -228,8 +223,7 @@ final class StoreTest extends TestCase
         $this->assertSame('Second Document', $documents[1]->metadata['title']);
     }
 
-    #[Test]
-    public function queryWithMinScore(): void
+    public function testQueryWithMinScore(): void
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
@@ -285,8 +279,7 @@ final class StoreTest extends TestCase
         $this->assertCount(0, $documents);
     }
 
-    #[Test]
-    public function queryWithOptions(): void
+    public function testQueryWithOptions(): void
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
@@ -342,8 +335,7 @@ final class StoreTest extends TestCase
         $this->assertCount(0, $documents);
     }
 
-    #[Test]
-    public function initializeCreatesIndex(): void
+    public function testInitializeCreatesIndex(): void
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
@@ -382,8 +374,7 @@ final class StoreTest extends TestCase
         $store->initialize();
     }
 
-    #[Test]
-    public function initializeWithOptions(): void
+    public function testInitializeWithOptions(): void
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
@@ -433,8 +424,7 @@ final class StoreTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function initializeWithInvalidOptions(): void
+    public function testInitializeWithInvalidOptions(): void
     {
         $client = $this->createMock(Client::class);
 
@@ -451,8 +441,7 @@ final class StoreTest extends TestCase
         $store->initialize(['invalid' => 'option']);
     }
 
-    #[Test]
-    public function initializeHandlesCommandException(): void
+    public function testInitializeHandlesCommandException(): void
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
@@ -485,8 +474,7 @@ final class StoreTest extends TestCase
         $store->initialize();
     }
 
-    #[Test]
-    public function queryWithCustomVectorFieldName(): void
+    public function testQueryWithCustomVectorFieldName(): void
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
