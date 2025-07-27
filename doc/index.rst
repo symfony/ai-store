@@ -38,26 +38,26 @@ used vector store::
 You can find more advanced usage in combination with an Agent using the store for RAG in the examples folder:
 
 * `Similarity Search with MariaDB (RAG)`_
+* `Similarity Search with Meilisearch (RAG)`_
+* `Similarity Search with memory storage (RAG)`_
 * `Similarity Search with MongoDB (RAG)`_
 * `Similarity Search with Pinecone (RAG)`_
-* `Similarity Search with Meilisearch (RAG)`_
-* `Similarity Search with SurrealDB (RAG)`_
-* `Similarity Search with memory storage (RAG)`_
 * `Similarity Search with Qdrant (RAG)`_
+* `Similarity Search with SurrealDB (RAG)`_
 
 Supported Stores
 ----------------
 
 * `Azure AI Search`_
 * `Chroma`_ (requires `codewithkyrian/chromadb-php` as additional dependency)
+* `InMemory`_
 * `MariaDB`_ (requires `ext-pdo`)
+* `Meilisearch`_
 * `MongoDB Atlas`_ (requires `mongodb/mongodb` as additional dependency)
 * `Pinecone`_ (requires `probots-io/pinecone-php` as additional dependency)
 * `Postgres`_ (requires `ext-pdo`)
-* `Meilisearch`_
-* `SurrealDB`_
-* `InMemory`_
 * `Qdrant`_
+* `SurrealDB`_
 
 .. note::
 
@@ -91,13 +91,13 @@ This leads to a store implementing two methods::
     }
 
 .. _`Retrieval Augmented Generation`: https://de.wikipedia.org/wiki/Retrieval-Augmented_Generation
-.. _`Similarity Search with MariaDB (RAG)`: https://github.com/symfony/ai/blob/main/examples/store/mariadb-similarity-search.php
-.. _`Similarity Search with MongoDB (RAG)`: https://github.com/symfony/ai/blob/main/examples/store/mongodb-similarity-search.php
-.. _`Similarity Search with Pinecone (RAG)`: https://github.com/symfony/ai/blob/main/examples/store/pinecone-similarity-search.php
-.. _`Similarity Search with Meilisearch (RAG)`: https://github.com/symfony/ai/blob/main/examples/store/meilisearch-similarity-search.php
-.. _`Similarity Search with SurrealDB (RAG)`: https://github.com/symfony/ai/blob/main/examples/store/surrealdb-similarity-search.php
-.. _`Similarity Search with memory storage (RAG)`: https://github.com/symfony/ai/blob/main/examples/store/memory-similarity-search.php
-.. _`Similarity Search with Qdrant (RAG)`: https://github.com/symfony/ai/blob/main/examples/store/qdrant-similarity-search.php
+.. _`Similarity Search with MariaDB (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/mariadb.php
+.. _`Similarity Search with MongoDB (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/mongodb.php
+.. _`Similarity Search with Pinecone (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/pinecone.php
+.. _`Similarity Search with Meilisearch (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/meilisearch.php
+.. _`Similarity Search with SurrealDB (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/surrealdb.php
+.. _`Similarity Search with memory storage (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/in-memory.php
+.. _`Similarity Search with Qdrant (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/qdrant.php
 .. _`Azure AI Search`: https://azure.microsoft.com/products/ai-services/ai-search
 .. _`Chroma`: https://www.trychroma.com/
 .. _`MariaDB`: https://mariadb.org/projects/mariadb-vector/
