@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Symfony\AI\Platform\Bridge\OpenAI\Embeddings;
+use Symfony\AI\Platform\Bridge\OpenAi\Embeddings;
 use Symfony\AI\Platform\Message\ToolCallMessage;
 use Symfony\AI\Platform\Platform;
 use Symfony\AI\Platform\Result\ResultPromise;
