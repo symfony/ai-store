@@ -21,7 +21,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Store::class)]
 final class StoreTest extends TestCase
 {
-    public function testQueryWithMinScore(): void
+    public function testQueryWithMinScore()
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);
@@ -73,7 +73,7 @@ final class StoreTest extends TestCase
         $this->assertSame(['title' => 'Test Document'], $results[0]->metadata->getArrayCopy());
     }
 
-    public function testQueryWithoutMinScore(): void
+    public function testQueryWithoutMinScore()
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);
@@ -120,7 +120,7 @@ final class StoreTest extends TestCase
         $this->assertSame(0.95, $results[0]->score);
     }
 
-    public function testQueryWithCustomLimit(): void
+    public function testQueryWithCustomLimit()
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);

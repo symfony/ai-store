@@ -24,7 +24,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Store::class)]
 final class StoreTest extends TestCase
 {
-    public function testAddDocumentsSuccessfully(): void
+    public function testAddDocumentsSuccessfully()
     {
         $collection = $this->createMock(CollectionResource::class);
         $client = $this->createMock(Client::class);
@@ -53,7 +53,7 @@ final class StoreTest extends TestCase
         $store->add($document1, $document2);
     }
 
-    public function testAddSingleDocument(): void
+    public function testAddSingleDocument()
     {
         $collection = $this->createMock(CollectionResource::class);
         $client = $this->createMock(Client::class);

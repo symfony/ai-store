@@ -29,7 +29,7 @@ final class TextSplitTransformerTest extends TestCase
         $this->transformer = new TextSplitTransformer();
     }
 
-    public function testSplitReturnsSingleChunkForShortText(): void
+    public function testSplitReturnsSingleChunkForShortText()
     {
         $document = new TextDocument(Uuid::v4(), 'short text');
 
@@ -39,12 +39,12 @@ final class TextSplitTransformerTest extends TestCase
         $this->assertSame('short text', $chunks[0]->content);
     }
 
-    public function testTextLength(): void
+    public function testTextLength()
     {
         $this->assertSame(1500, mb_strlen($this->getLongText()));
     }
 
-    public function testSplitSplitsLongTextWithOverlap(): void
+    public function testSplitSplitsLongTextWithOverlap()
     {
         $document = new TextDocument(Uuid::v4(), $this->getLongText());
 
@@ -59,7 +59,7 @@ final class TextSplitTransformerTest extends TestCase
         $this->assertSame(substr($this->getLongText(), 800, 700), $chunks[1]->content);
     }
 
-    public function testSplitWithCustomChunkSizeAndOverlap(): void
+    public function testSplitWithCustomChunkSizeAndOverlap()
     {
         $document = new TextDocument(Uuid::v4(), $this->getLongText());
 
@@ -107,7 +107,7 @@ final class TextSplitTransformerTest extends TestCase
         $this->assertSame(substr($this->getLongText(), 1375, 150), $chunks[11]->content);
     }
 
-    public function testSplitWithZeroOverlap(): void
+    public function testSplitWithZeroOverlap()
     {
         $document = new TextDocument(Uuid::v4(), $this->getLongText());
 
@@ -120,7 +120,7 @@ final class TextSplitTransformerTest extends TestCase
         $this->assertSame(substr($this->getLongText(), 1000, 500), $chunks[1]->content);
     }
 
-    public function testParentIdIsSetInMetadata(): void
+    public function testParentIdIsSetInMetadata()
     {
         $document = new TextDocument(Uuid::v4(), $this->getLongText());
 
@@ -134,7 +134,7 @@ final class TextSplitTransformerTest extends TestCase
         $this->assertSame($document->id, $chunks[1]->metadata['parent_id']);
     }
 
-    public function testMetadataIsInherited(): void
+    public function testMetadataIsInherited()
     {
         $document = new TextDocument(Uuid::v4(), $this->getLongText(), new Metadata([
             'key' => 'value',
@@ -150,7 +150,7 @@ final class TextSplitTransformerTest extends TestCase
         $this->assertSame('bar', $chunks[1]->metadata['foo']);
     }
 
-    public function testSplitWithChunkSizeLargerThanText(): void
+    public function testSplitWithChunkSizeLargerThanText()
     {
         $document = new TextDocument(Uuid::v4(), 'tiny');
 
@@ -160,7 +160,7 @@ final class TextSplitTransformerTest extends TestCase
         $this->assertSame('tiny', $chunks[0]->content);
     }
 
-    public function testSplitWithOverlapGreaterThanChunkSize(): void
+    public function testSplitWithOverlapGreaterThanChunkSize()
     {
         $document = new TextDocument(Uuid::v4(), 'Abcdefg', new Metadata([]));
         self::expectException(InvalidArgumentException::class);
@@ -172,7 +172,7 @@ final class TextSplitTransformerTest extends TestCase
         ]));
     }
 
-    public function testSplitWithNegativeOverlap(): void
+    public function testSplitWithNegativeOverlap()
     {
         $document = new TextDocument(Uuid::v4(), 'Abcdefg', new Metadata([]));
         self::expectException(InvalidArgumentException::class);

@@ -26,7 +26,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(SearchStore::class)]
 final class SearchStoreTest extends TestCase
 {
-    public function testAddDocumentsSuccessfully(): void
+    public function testAddDocumentsSuccessfully()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -54,7 +54,7 @@ final class SearchStoreTest extends TestCase
         $this->assertSame(1, $httpClient->getRequestsCount());
     }
 
-    public function testAddDocumentsWithMetadata(): void
+    public function testAddDocumentsWithMetadata()
     {
         $httpClient = new MockHttpClient([
             function (string $method, string $url, array $options): JsonMockResponse {
@@ -104,7 +104,7 @@ final class SearchStoreTest extends TestCase
         $this->assertSame(1, $httpClient->getRequestsCount());
     }
 
-    public function testAddDocumentsFailure(): void
+    public function testAddDocumentsFailure()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -135,7 +135,7 @@ final class SearchStoreTest extends TestCase
         $store->add($document);
     }
 
-    public function testQueryReturnsDocuments(): void
+    public function testQueryReturnsDocuments()
     {
         $uuid1 = Uuid::v4();
         $uuid2 = Uuid::v4();
@@ -180,7 +180,7 @@ final class SearchStoreTest extends TestCase
         $this->assertSame('Second Document', $results[1]->metadata['title']);
     }
 
-    public function testQueryWithCustomVectorFieldName(): void
+    public function testQueryWithCustomVectorFieldName()
     {
         $httpClient = new MockHttpClient([
             function (string $method, string $url, array $options): JsonMockResponse {
@@ -224,7 +224,7 @@ final class SearchStoreTest extends TestCase
         $this->assertInstanceOf(VectorDocument::class, $results[0]);
     }
 
-    public function testQueryFailure(): void
+    public function testQueryFailure()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -252,7 +252,7 @@ final class SearchStoreTest extends TestCase
         $store->query(new Vector([0.1, 0.2, 0.3]));
     }
 
-    public function testQueryWithNullVector(): void
+    public function testQueryWithNullVector()
     {
         $uuid = Uuid::v4();
 

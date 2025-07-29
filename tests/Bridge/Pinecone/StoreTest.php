@@ -26,7 +26,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Store::class)]
 final class StoreTest extends TestCase
 {
-    public function testAddSingleDocument(): void
+    public function testAddSingleDocument()
     {
         $vectorResource = $this->createMock(VectorResource::class);
         $dataResource = $this->createMock(DataResource::class);
@@ -61,7 +61,7 @@ final class StoreTest extends TestCase
         $store->add($document);
     }
 
-    public function testAddMultipleDocuments(): void
+    public function testAddMultipleDocuments()
     {
         $vectorResource = $this->createMock(VectorResource::class);
         $dataResource = $this->createMock(DataResource::class);
@@ -104,7 +104,7 @@ final class StoreTest extends TestCase
         $store->add($document1, $document2);
     }
 
-    public function testAddWithNamespace(): void
+    public function testAddWithNamespace()
     {
         $vectorResource = $this->createMock(VectorResource::class);
         $dataResource = $this->createMock(DataResource::class);
@@ -139,7 +139,7 @@ final class StoreTest extends TestCase
         $store->add($document);
     }
 
-    public function testAddWithEmptyDocuments(): void
+    public function testAddWithEmptyDocuments()
     {
         $client = $this->createMock(Client::class);
 
@@ -150,7 +150,7 @@ final class StoreTest extends TestCase
         $store->add();
     }
 
-    public function testQueryReturnsDocuments(): void
+    public function testQueryReturnsDocuments()
     {
         $vectorResource = $this->createMock(VectorResource::class);
         $dataResource = $this->createMock(DataResource::class);
@@ -211,7 +211,7 @@ final class StoreTest extends TestCase
         $this->assertSame('Second Document', $results[1]->metadata['title']);
     }
 
-    public function testQueryWithNamespaceAndFilter(): void
+    public function testQueryWithNamespaceAndFilter()
     {
         $vectorResource = $this->createMock(VectorResource::class);
         $dataResource = $this->createMock(DataResource::class);
@@ -248,7 +248,7 @@ final class StoreTest extends TestCase
         $this->assertCount(0, $results);
     }
 
-    public function testQueryWithCustomOptions(): void
+    public function testQueryWithCustomOptions()
     {
         $vectorResource = $this->createMock(VectorResource::class);
         $dataResource = $this->createMock(DataResource::class);
@@ -289,7 +289,7 @@ final class StoreTest extends TestCase
         $this->assertCount(0, $results);
     }
 
-    public function testQueryWithEmptyResults(): void
+    public function testQueryWithEmptyResults()
     {
         $vectorResource = $this->createMock(VectorResource::class);
         $dataResource = $this->createMock(DataResource::class);

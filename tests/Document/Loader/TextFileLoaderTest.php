@@ -20,7 +20,7 @@ use Symfony\AI\Store\Exception\RuntimeException;
 #[CoversClass(TextFileLoader::class)]
 final class TextFileLoaderTest extends TestCase
 {
-    public function testLoadWithInvalidSource(): void
+    public function testLoadWithInvalidSource()
     {
         $loader = new TextFileLoader();
 
@@ -30,7 +30,7 @@ final class TextFileLoaderTest extends TestCase
         iterator_to_array($loader('/invalid/source.txt'));
     }
 
-    public function testLoadWithValidSource(): void
+    public function testLoadWithValidSource()
     {
         $loader = new TextFileLoader();
 
@@ -43,7 +43,7 @@ final class TextFileLoaderTest extends TestCase
         $this->assertSame(1500, \strlen($document->content));
     }
 
-    public function testSourceIsPresentInMetadata(): void
+    public function testSourceIsPresentInMetadata()
     {
         $loader = new TextFileLoader();
 

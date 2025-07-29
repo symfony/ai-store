@@ -45,7 +45,7 @@ use Symfony\Component\Uid\Uuid;
 #[UsesClass(VectorResult::class)]
 final class IndexerTest extends TestCase
 {
-    public function testIndexSingleDocument(): void
+    public function testIndexSingleDocument()
     {
         $document = new TextDocument($id = Uuid::v4(), 'Test content');
         $vector = new Vector([0.1, 0.2, 0.3]);
@@ -60,7 +60,7 @@ final class IndexerTest extends TestCase
         $this->assertSame($vector, $store->documents[0]->vector);
     }
 
-    public function testIndexEmptyDocumentList(): void
+    public function testIndexEmptyDocumentList()
     {
         $logger = self::createMock(LoggerInterface::class);
         $logger->expects($this->once())->method('debug')->with('No documents to index');
@@ -72,7 +72,7 @@ final class IndexerTest extends TestCase
         $this->assertSame([], $store->documents);
     }
 
-    public function testIndexDocumentWithMetadata(): void
+    public function testIndexDocumentWithMetadata()
     {
         $metadata = new Metadata(['key' => 'value']);
         $document = new TextDocument($id = Uuid::v4(), 'Test content', $metadata);

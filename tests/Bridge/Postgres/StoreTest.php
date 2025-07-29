@@ -33,7 +33,7 @@ final class StoreTest extends TestCase
         return trim($normalized);
     }
 
-    public function testAddSingleDocument(): void
+    public function testAddSingleDocument()
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);
@@ -65,7 +65,7 @@ final class StoreTest extends TestCase
         $store->add($document);
     }
 
-    public function testAddMultipleDocuments(): void
+    public function testAddMultipleDocuments()
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);
@@ -105,7 +105,7 @@ final class StoreTest extends TestCase
         $store->add($document1, $document2);
     }
 
-    public function testQueryWithoutMinScore(): void
+    public function testQueryWithoutMinScore()
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);
@@ -152,7 +152,7 @@ final class StoreTest extends TestCase
         $this->assertSame(['title' => 'Test Document'], $results[0]->metadata->getArrayCopy());
     }
 
-    public function testQueryWithMinScore(): void
+    public function testQueryWithMinScore()
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);
@@ -189,7 +189,7 @@ final class StoreTest extends TestCase
         $this->assertCount(0, $results);
     }
 
-    public function testQueryWithCustomLimit(): void
+    public function testQueryWithCustomLimit()
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);
@@ -223,7 +223,7 @@ final class StoreTest extends TestCase
         $this->assertCount(0, $results);
     }
 
-    public function testQueryWithCustomVectorFieldName(): void
+    public function testQueryWithCustomVectorFieldName()
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);
@@ -255,7 +255,7 @@ final class StoreTest extends TestCase
         $this->assertCount(0, $results);
     }
 
-    public function testInitialize(): void
+    public function testInitialize()
     {
         $pdo = $this->createMock(\PDO::class);
 
@@ -283,7 +283,7 @@ final class StoreTest extends TestCase
         $store->initialize();
     }
 
-    public function testInitializeWithCustomVectorSize(): void
+    public function testInitializeWithCustomVectorSize()
     {
         $pdo = $this->createMock(\PDO::class);
 
@@ -306,7 +306,7 @@ final class StoreTest extends TestCase
         $store->initialize(['vector_size' => 768]);
     }
 
-    public function testFromPdo(): void
+    public function testFromPdo()
     {
         $pdo = $this->createMock(\PDO::class);
 
@@ -315,7 +315,7 @@ final class StoreTest extends TestCase
         $this->assertInstanceOf(Store::class, $store);
     }
 
-    public function testFromDbalWithPdoDriver(): void
+    public function testFromDbalWithPdoDriver()
     {
         $pdo = $this->createMock(\PDO::class);
         $connection = $this->createMock(Connection::class);
@@ -329,7 +329,7 @@ final class StoreTest extends TestCase
         $this->assertInstanceOf(Store::class, $store);
     }
 
-    public function testFromDbalWithNonPdoDriverThrowsException(): void
+    public function testFromDbalWithNonPdoDriverThrowsException()
     {
         $connection = $this->createMock(Connection::class);
 
@@ -343,7 +343,7 @@ final class StoreTest extends TestCase
         Store::fromDbal($connection, 'test_table');
     }
 
-    public function testQueryWithNullMetadata(): void
+    public function testQueryWithNullMetadata()
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);
