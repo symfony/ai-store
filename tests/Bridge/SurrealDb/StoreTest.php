@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Bridge\SurrealDB;
+namespace Bridge\SurrealDb;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
-use Symfony\AI\Store\Bridge\SurrealDB\Store;
+use Symfony\AI\Store\Bridge\SurrealDb\Store;
 use Symfony\AI\Store\Document\VectorDocument;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\MockHttpClient;
