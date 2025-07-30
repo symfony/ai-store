@@ -274,7 +274,7 @@ final class StoreTest extends TestCase
             'test-index',
         );
 
-        $documents = $store->query(new Vector([0.1, 0.2, 0.3]), [], 0.8);
+        $documents = $store->query(new Vector([0.1, 0.2, 0.3]), ['minScore' => 0.8]);
 
         $this->assertCount(0, $documents);
     }

@@ -85,7 +85,7 @@ This leads to a store implementing two methods::
             // Implementation to add a document to the store
         }
 
-        public function query(Vector $vector, array $options = [], ?float $minScore = null): array
+        public function query(Vector $vector, array $options = []): array
         {
             // Implementation to query the store for documents
             return [];

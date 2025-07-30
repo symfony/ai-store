@@ -106,7 +106,7 @@ final class StoreTest extends TestCase
         $store->add($document1, $document2);
     }
 
-    public function testQueryWithoutMinScore()
+    public function testQueryWithoutMaxScore()
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);
@@ -153,7 +153,7 @@ final class StoreTest extends TestCase
         $this->assertSame(['title' => 'Test Document'], $results[0]->metadata->getArrayCopy());
     }
 
-    public function testQueryChangedDistanceMethodWithoutMinScore()
+    public function testQueryChangedDistanceMethodWithoutMaxScore()
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);
@@ -200,7 +200,7 @@ final class StoreTest extends TestCase
         $this->assertSame(['title' => 'Test Document'], $results[0]->metadata->getArrayCopy());
     }
 
-    public function testQueryWithMinScore()
+    public function testQueryWithMaxScore()
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);
@@ -209,7 +209,7 @@ final class StoreTest extends TestCase
 
         $expectedSql = 'SELECT id, embedding AS embedding, metadata, (embedding <-> :embedding) AS score
              FROM embeddings_table
-             WHERE (embedding <-> :embedding) >= :minScore
+             WHERE (embedding <-> :embedding) <= :maxScore
              ORDER BY score ASC
              LIMIT 5';
 
@@ -224,7 +224,7 @@ final class StoreTest extends TestCase
             ->method('execute')
             ->with([
                 'embedding' => '[0.1,0.2,0.3]',
-                'minScore' => 0.8,
+                'maxScore' => 0.8,
             ]);
 
         $statement->expects($this->once())
@@ -232,12 +232,12 @@ final class StoreTest extends TestCase
             ->with(\PDO::FETCH_ASSOC)
             ->willReturn([]);
 
-        $results = $store->query(new Vector([0.1, 0.2, 0.3]), [], 0.8);
+        $results = $store->query(new Vector([0.1, 0.2, 0.3]), ['maxScore' => 0.8]);
 
         $this->assertCount(0, $results);
     }
 
-    public function testQueryWithMinScoreAndDifferentDistance()
+    public function testQueryWithMaxScoreAndDifferentDistance()
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);
@@ -246,7 +246,7 @@ final class StoreTest extends TestCase
 
         $expectedSql = 'SELECT id, embedding AS embedding, metadata, (embedding <=> :embedding) AS score
              FROM embeddings_table
-             WHERE (embedding <=> :embedding) >= :minScore
+             WHERE (embedding <=> :embedding) <= :maxScore
              ORDER BY score ASC
              LIMIT 5';
 
@@ -261,7 +261,7 @@ final class StoreTest extends TestCase
             ->method('execute')
             ->with([
                 'embedding' => '[0.1,0.2,0.3]',
-                'minScore' => 0.8,
+                'maxScore' => 0.8,
             ]);
 
         $statement->expects($this->once())
@@ -269,7 +269,7 @@ final class StoreTest extends TestCase
             ->with(\PDO::FETCH_ASSOC)
             ->willReturn([]);
 
-        $results = $store->query(new Vector([0.1, 0.2, 0.3]), [], 0.8);
+        $results = $store->query(new Vector([0.1, 0.2, 0.3]), ['maxScore' => 0.8]);
 
         $this->assertCount(0, $results);
     }

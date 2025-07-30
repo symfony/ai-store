@@ -24,5 +24,5 @@ interface VectorStoreInterface extends StoreInterface
      *
      * @return VectorDocument[]
      */
-    public function query(Vector $vector, array $options = [], ?float $minScore = null): array;
+    public function query(Vector $vector, array $options = []): array;
 }

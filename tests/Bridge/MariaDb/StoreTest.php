@@ -21,18 +21,18 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Store::class)]
 final class StoreTest extends TestCase
 {
-    public function testQueryWithMinScore()
+    public function testQueryWithMaxScore()
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);
 
         $store = new Store($pdo, 'embeddings_table', 'embedding_index', 'embedding');
 
-        // Expected SQL query with minScore
+        // Expected SQL query with max score
         $expectedQuery = <<<'SQL'
             SELECT id, VEC_ToText(embedding) embedding, metadata, VEC_DISTANCE_EUCLIDEAN(embedding, VEC_FromText(:embedding)) AS score
             FROM embeddings_table
-            WHERE VEC_DISTANCE_EUCLIDEAN(embedding, VEC_FromText(:embedding)) >= :minScore
+            WHERE VEC_DISTANCE_EUCLIDEAN(embedding, VEC_FromText(:embedding)) <= :maxScore
             ORDER BY score ASC
             LIMIT 5
             SQL;
@@ -44,13 +44,13 @@ final class StoreTest extends TestCase
 
         $uuid = Uuid::v4();
         $vectorData = [0.1, 0.2, 0.3];
-        $minScore = 0.8;
+        $maxScore = 0.8;
 
         $statement->expects($this->once())
             ->method('execute')
             ->with([
                 'embedding' => json_encode($vectorData),
-                'minScore' => $minScore,
+                'maxScore' => $maxScore,
             ]);
 
         $statement->expects($this->once())
@@ -65,7 +65,7 @@ final class StoreTest extends TestCase
                 ],
             ]);
 
-        $results = $store->query(new Vector($vectorData), [], $minScore);
+        $results = $store->query(new Vector($vectorData), ['maxScore' => $maxScore]);
 
         $this->assertCount(1, $results);
         $this->assertInstanceOf(VectorDocument::class, $results[0]);
@@ -73,14 +73,14 @@ final class StoreTest extends TestCase
         $this->assertSame(['title' => 'Test Document'], $results[0]->metadata->getArrayCopy());
     }
 
-    public function testQueryWithoutMinScore()
+    public function testQueryWithoutMaxScore()
     {
         $pdo = $this->createMock(\PDO::class);
         $statement = $this->createMock(\PDOStatement::class);
 
         $store = new Store($pdo, 'embeddings_table', 'embedding_index', 'embedding');
 
-        // Expected SQL query without minScore
+        // Expected SQL query without maxScore
         $expectedQuery = <<<'SQL'
             SELECT id, VEC_ToText(embedding) embedding, metadata, VEC_DISTANCE_EUCLIDEAN(embedding, VEC_FromText(:embedding)) AS score
             FROM embeddings_table

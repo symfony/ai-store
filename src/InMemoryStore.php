@@ -46,7 +46,7 @@ final class InMemoryStore implements VectorStoreInterface
      *     maxItems?: positive-int
      * } $options If maxItems is provided, only the top N results will be returned
      */
-    public function query(Vector $vector, array $options = [], ?float $minScore = null): array
+    public function query(Vector $vector, array $options = []): array
     {
         $strategy = match ($this->distance) {
             self::COSINE_DISTANCE => $this->cosineDistance(...),
