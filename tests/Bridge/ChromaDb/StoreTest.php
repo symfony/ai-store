@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\AI\Store\Tests\Bridge\ChromaDB;
+namespace Symfony\AI\Store\Tests\Bridge\ChromaDb;
 
 use Codewithkyrian\ChromaDB\Client;
 use Codewithkyrian\ChromaDB\Resources\CollectionResource;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
-use Symfony\AI\Store\Bridge\ChromaDB\Store;
+use Symfony\AI\Store\Bridge\ChromaDb\Store;
 use Symfony\AI\Store\Document\Metadata;
 use Symfony\AI\Store\Document\VectorDocument;
 use Symfony\Component\Uid\Uuid;
