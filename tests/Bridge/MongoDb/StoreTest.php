@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\AI\Store\Tests\Bridge\MongoDB;
+namespace Symfony\AI\Store\Tests\Bridge\MongoDb;
 
 use MongoDB\BSON\Binary;
 use MongoDB\Client;
@@ -20,7 +20,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\AI\Platform\Vector\Vector;
-use Symfony\AI\Store\Bridge\MongoDB\Store;
+use Symfony\AI\Store\Bridge\MongoDb\Store;
 use Symfony\AI\Store\Document\Metadata;
 use Symfony\AI\Store\Document\VectorDocument;
 use Symfony\AI\Store\Exception\InvalidArgumentException;
