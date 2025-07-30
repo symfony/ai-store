@@ -21,7 +21,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(TransformerInterface::class)]
 final class ChainTransformerTest extends TestCase
 {
-    public function testChainTransformerAppliesAllTransformersInOrder(): void
+    public function testChainTransformerAppliesAllTransformersInOrder()
     {
         $transformerA = new class implements TransformerInterface {
             public function __invoke(iterable $documents, array $options = []): iterable
@@ -53,7 +53,7 @@ final class ChainTransformerTest extends TestCase
         $this->assertSame('bar-A-B', $result[1]->content);
     }
 
-    public function testChainTransformerWithNoTransformersReturnsInput(): void
+    public function testChainTransformerWithNoTransformersReturnsInput()
     {
         $chain = new ChainTransformer([]);
         $documents = [new TextDocument(Uuid::v4(), 'baz')];

@@ -29,7 +29,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Store::class)]
 final class StoreTest extends TestCase
 {
-    public function testAddSingleDocument(): void
+    public function testAddSingleDocument()
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
@@ -64,7 +64,7 @@ final class StoreTest extends TestCase
         $store->add($document);
     }
 
-    public function testAddMultipleDocuments(): void
+    public function testAddMultipleDocuments()
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
@@ -93,7 +93,7 @@ final class StoreTest extends TestCase
         $store->add($document1, $document2);
     }
 
-    public function testAddWithBulkWrite(): void
+    public function testAddWithBulkWrite()
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
@@ -145,7 +145,7 @@ final class StoreTest extends TestCase
         $store->add($document1, $document2);
     }
 
-    public function testQueryReturnsDocuments(): void
+    public function testQueryReturnsDocuments()
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
@@ -223,7 +223,7 @@ final class StoreTest extends TestCase
         $this->assertSame('Second Document', $documents[1]->metadata['title']);
     }
 
-    public function testQueryWithMinScore(): void
+    public function testQueryWithMinScore()
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
@@ -279,7 +279,7 @@ final class StoreTest extends TestCase
         $this->assertCount(0, $documents);
     }
 
-    public function testQueryWithOptions(): void
+    public function testQueryWithOptions()
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
@@ -335,7 +335,7 @@ final class StoreTest extends TestCase
         $this->assertCount(0, $documents);
     }
 
-    public function testInitializeCreatesIndex(): void
+    public function testInitializeCreatesIndex()
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
@@ -374,7 +374,7 @@ final class StoreTest extends TestCase
         $store->initialize();
     }
 
-    public function testInitializeWithOptions(): void
+    public function testInitializeWithOptions()
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
@@ -424,7 +424,7 @@ final class StoreTest extends TestCase
         ]);
     }
 
-    public function testInitializeWithInvalidOptions(): void
+    public function testInitializeWithInvalidOptions()
     {
         $client = $this->createMock(Client::class);
 
@@ -441,7 +441,7 @@ final class StoreTest extends TestCase
         $store->initialize(['invalid' => 'option']);
     }
 
-    public function testInitializeHandlesCommandException(): void
+    public function testInitializeHandlesCommandException()
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);
@@ -474,7 +474,7 @@ final class StoreTest extends TestCase
         $store->initialize();
     }
 
-    public function testQueryWithCustomVectorFieldName(): void
+    public function testQueryWithCustomVectorFieldName()
     {
         $collection = $this->createMock(Collection::class);
         $client = $this->createMock(Client::class);

@@ -21,7 +21,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(InMemoryStore::class)]
 final class InMemoryStoreTest extends TestCase
 {
-    public function testStoreCanSearchUsingCosineDistance(): void
+    public function testStoreCanSearchUsingCosineDistance()
     {
         $store = new InMemoryStore();
         $store->add(
@@ -45,7 +45,7 @@ final class InMemoryStoreTest extends TestCase
         $this->assertSame([0.1, 0.1, 0.5], $result[0]->vector->getData());
     }
 
-    public function testStoreCanSearchUsingCosineDistanceAndReturnCorrectOrder(): void
+    public function testStoreCanSearchUsingCosineDistanceAndReturnCorrectOrder()
     {
         $store = new InMemoryStore();
         $store->add(
@@ -65,7 +65,7 @@ final class InMemoryStoreTest extends TestCase
         $this->assertSame([0.7, -0.3, 0.0], $result[4]->vector->getData());
     }
 
-    public function testStoreCanSearchUsingCosineDistanceWithMaxItems(): void
+    public function testStoreCanSearchUsingCosineDistanceWithMaxItems()
     {
         $store = new InMemoryStore();
         $store->add(
@@ -79,7 +79,7 @@ final class InMemoryStoreTest extends TestCase
         ]));
     }
 
-    public function testStoreCanSearchUsingAngularDistance(): void
+    public function testStoreCanSearchUsingAngularDistance()
     {
         $store = new InMemoryStore(InMemoryStore::ANGULAR_DISTANCE);
         $store->add(
@@ -93,7 +93,7 @@ final class InMemoryStoreTest extends TestCase
         $this->assertSame([1.0, 2.0, 3.0], $result[0]->vector->getData());
     }
 
-    public function testStoreCanSearchUsingEuclideanDistance(): void
+    public function testStoreCanSearchUsingEuclideanDistance()
     {
         $store = new InMemoryStore(InMemoryStore::EUCLIDEAN_DISTANCE);
         $store->add(
@@ -107,7 +107,7 @@ final class InMemoryStoreTest extends TestCase
         $this->assertSame([1.0, 2.0, 3.0], $result[0]->vector->getData());
     }
 
-    public function testStoreCanSearchUsingManhattanDistance(): void
+    public function testStoreCanSearchUsingManhattanDistance()
     {
         $store = new InMemoryStore(InMemoryStore::MANHATTAN_DISTANCE);
         $store->add(
@@ -121,7 +121,7 @@ final class InMemoryStoreTest extends TestCase
         $this->assertSame([1.0, 2.0, 3.0], $result[0]->vector->getData());
     }
 
-    public function testStoreCanSearchUsingChebyshevDistance(): void
+    public function testStoreCanSearchUsingChebyshevDistance()
     {
         $store = new InMemoryStore(InMemoryStore::CHEBYSHEV_DISTANCE);
         $store->add(
