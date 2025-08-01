@@ -461,4 +461,135 @@ final class StoreTest extends TestCase
         $this->assertCount(1, $results);
         $this->assertSame([], $results[0]->metadata->getArrayCopy());
     }
+
+    public function testQueryWithCustomWhereExpression()
+    {
+        $pdo = $this->createMock(\PDO::class);
+        $statement = $this->createMock(\PDOStatement::class);
+
+        $store = new Store($pdo, 'embeddings_table', 'embedding');
+
+        $expectedSql = 'SELECT id, embedding AS embedding, metadata, (embedding <-> :embedding) AS score
+             FROM embeddings_table
+             WHERE metadata->>\'category\' = \'products\'
+             ORDER BY score ASC
+             LIMIT 5';
+
+        $pdo->expects($this->once())
+            ->method('prepare')
+            ->with($this->callback(function ($sql) use ($expectedSql) {
+                return $this->normalizeQuery($sql) === $this->normalizeQuery($expectedSql);
+            }))
+            ->willReturn($statement);
+
+        $statement->expects($this->once())
+            ->method('execute')
+            ->with(['embedding' => '[0.1,0.2,0.3]']);
+
+        $statement->expects($this->once())
+            ->method('fetchAll')
+            ->with(\PDO::FETCH_ASSOC)
+            ->willReturn([]);
+
+        $results = $store->query(new Vector([0.1, 0.2, 0.3]), ['where' => 'metadata->>\'category\' = \'products\'']);
+
+        $this->assertCount(0, $results);
+    }
+
+    public function testQueryWithCustomWhereExpressionAndMaxScore()
+    {
+        $pdo = $this->createMock(\PDO::class);
+        $statement = $this->createMock(\PDOStatement::class);
+
+        $store = new Store($pdo, 'embeddings_table', 'embedding');
+
+        $expectedSql = 'SELECT id, embedding AS embedding, metadata, (embedding <-> :embedding) AS score
+             FROM embeddings_table
+             WHERE (embedding <-> :embedding) <= :maxScore AND (metadata->>\'active\' = \'true\')
+             ORDER BY score ASC
+             LIMIT 5';
+
+        $pdo->expects($this->once())
+            ->method('prepare')
+            ->with($this->callback(function ($sql) use ($expectedSql) {
+                return $this->normalizeQuery($sql) === $this->normalizeQuery($expectedSql);
+            }))
+            ->willReturn($statement);
+
+        $statement->expects($this->once())
+            ->method('execute')
+            ->with([
+                'embedding' => '[0.1,0.2,0.3]',
+                'maxScore' => 0.5,
+            ]);
+
+        $statement->expects($this->once())
+            ->method('fetchAll')
+            ->with(\PDO::FETCH_ASSOC)
+            ->willReturn([]);
+
+        $results = $store->query(new Vector([0.1, 0.2, 0.3]), [
+            'maxScore' => 0.5,
+            'where' => 'metadata->>\'active\' = \'true\'',
+        ]);
+
+        $this->assertCount(0, $results);
+    }
+
+    public function testQueryWithCustomWhereExpressionAndParams()
+    {
+        $pdo = $this->createMock(\PDO::class);
+        $statement = $this->createMock(\PDOStatement::class);
+
+        $store = new Store($pdo, 'embeddings_table', 'embedding');
+
+        $expectedSql = 'SELECT id, embedding AS embedding, metadata, (embedding <-> :embedding) AS score
+             FROM embeddings_table
+             WHERE metadata->>\'crawlId\' = :crawlId AND id != :currentId
+             ORDER BY score ASC
+             LIMIT 5';
+
+        $pdo->expects($this->once())
+            ->method('prepare')
+            ->with($this->callback(function ($sql) use ($expectedSql) {
+                return $this->normalizeQuery($sql) === $this->normalizeQuery($expectedSql);
+            }))
+            ->willReturn($statement);
+
+        $uuid = Uuid::v4();
+        $crawlId = '396af6fe-0dfd-47ed-b222-3dbcced3f38e';
+
+        $statement->expects($this->once())
+            ->method('execute')
+            ->with([
+                'embedding' => '[0.1,0.2,0.3]',
+                'crawlId' => $crawlId,
+                'currentId' => $uuid->toRfc4122(),
+            ]);
+
+        $statement->expects($this->once())
+            ->method('fetchAll')
+            ->with(\PDO::FETCH_ASSOC)
+            ->willReturn([
+                [
+                    'id' => Uuid::v4()->toRfc4122(),
+                    'embedding' => '[0.4,0.5,0.6]',
+                    'metadata' => json_encode(['crawlId' => $crawlId, 'url' => 'https://example.com']),
+                    'score' => 0.85,
+                ],
+            ]);
+
+        $results = $store->query(new Vector([0.1, 0.2, 0.3]), [
+            'where' => 'metadata->>\'crawlId\' = :crawlId AND id != :currentId',
+            'params' => [
+                'crawlId' => $crawlId,
+                'currentId' => $uuid->toRfc4122(),
+            ],
+        ]);
+
+        $this->assertCount(1, $results);
+        $this->assertSame(0.85, $results[0]->score);
+        $this->assertSame($crawlId, $results[0]->metadata['crawlId']);
+        $this->assertSame('https://example.com', $results[0]->metadata['url']);
+    }
 }
