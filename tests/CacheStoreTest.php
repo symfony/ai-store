@@ -15,20 +15,21 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
+use Symfony\AI\Store\CacheStore;
 use Symfony\AI\Store\DistanceCalculator;
 use Symfony\AI\Store\DistanceStrategy;
 use Symfony\AI\Store\Document\VectorDocument;
-use Symfony\AI\Store\InMemoryStore;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(InMemoryStore::class)]
+#[CoversClass(CacheStore::class)]
 #[UsesClass(VectorDocument::class)]
 #[UsesClass(Vector::class)]
-final class InMemoryStoreTest extends TestCase
+final class CacheStoreTest extends TestCase
 {
     public function testStoreCanSearchUsingCosineDistance()
     {
-        $store = new InMemoryStore();
+        $store = new CacheStore(new ArrayAdapter());
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0])),
@@ -52,7 +53,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanSearchUsingCosineDistanceAndReturnCorrectOrder()
     {
-        $store = new InMemoryStore();
+        $store = new CacheStore(new ArrayAdapter());
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0])),
@@ -72,7 +73,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanSearchUsingCosineDistanceWithMaxItems()
     {
-        $store = new InMemoryStore();
+        $store = new CacheStore(new ArrayAdapter());
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0])),
@@ -86,7 +87,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanSearchUsingAngularDistance()
     {
-        $store = new InMemoryStore(new DistanceCalculator(DistanceStrategy::ANGULAR_DISTANCE));
+        $store = new CacheStore(new ArrayAdapter(), new DistanceCalculator(DistanceStrategy::ANGULAR_DISTANCE));
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([1.0, 2.0, 3.0])),
             new VectorDocument(Uuid::v4(), new Vector([1.0, 5.0, 7.0])),
@@ -100,7 +101,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanSearchUsingEuclideanDistance()
     {
-        $store = new InMemoryStore(new DistanceCalculator(DistanceStrategy::EUCLIDEAN_DISTANCE));
+        $store = new CacheStore(new ArrayAdapter(), new DistanceCalculator(DistanceStrategy::EUCLIDEAN_DISTANCE));
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([1.0, 5.0, 7.0])),
             new VectorDocument(Uuid::v4(), new Vector([1.0, 2.0, 3.0])),
@@ -114,7 +115,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanSearchUsingManhattanDistance()
     {
-        $store = new InMemoryStore(new DistanceCalculator(DistanceStrategy::MANHATTAN_DISTANCE));
+        $store = new CacheStore(new ArrayAdapter(), new DistanceCalculator(DistanceStrategy::MANHATTAN_DISTANCE));
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([1.0, 2.0, 3.0])),
             new VectorDocument(Uuid::v4(), new Vector([1.0, 5.0, 7.0])),
@@ -128,7 +129,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanSearchUsingChebyshevDistance()
     {
-        $store = new InMemoryStore(new DistanceCalculator(DistanceStrategy::CHEBYSHEV_DISTANCE));
+        $store = new CacheStore(new ArrayAdapter(), new DistanceCalculator(DistanceStrategy::CHEBYSHEV_DISTANCE));
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([1.0, 2.0, 3.0])),
             new VectorDocument(Uuid::v4(), new Vector([1.0, 5.0, 7.0])),

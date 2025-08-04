@@ -28,7 +28,7 @@ CHANGELOG
    - Orchestrates document processing pipeline
    - Accepts TextDocuments, vectorizes and stores in chunks
    - Configurable batch processing
- * Add `InMemoryStore` implementation with multiple distance algorithms:
+ * Add `InMemoryStore` and `CacheStore` implementations with multiple distance algorithms:
    - Cosine similarity
    - Angular distance
    - Euclidean distance
