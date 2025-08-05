@@ -39,12 +39,12 @@ You can find more advanced usage in combination with an Agent using the store fo
 
 * `Similarity Search with MariaDB (RAG)`_
 * `Similarity Search with Meilisearch (RAG)`_
-* `Similarity Search with memory storage (RAG)`_
 * `Similarity Search with MongoDB (RAG)`_
+* `Similarity Search with Neo4j (RAG)`_
 * `Similarity Search with Pinecone (RAG)`_
 * `Similarity Search with Qdrant (RAG)`_
 * `Similarity Search with SurrealDB (RAG)`_
-* `Similarity Search with Neo4j (RAG)`_
+* `Similarity Search with memory storage (RAG)`_
 
 Supported Stores
 ----------------
@@ -55,11 +55,11 @@ Supported Stores
 * `MariaDB`_ (requires `ext-pdo`)
 * `Meilisearch`_
 * `MongoDB Atlas`_ (requires `mongodb/mongodb` as additional dependency)
+* `Neo4j`_
 * `Pinecone`_ (requires `probots-io/pinecone-php` as additional dependency)
 * `Postgres`_ (requires `ext-pdo`)
 * `Qdrant`_
 * `SurrealDB`_
-* `Neo4j`_
 
 .. note::
 
