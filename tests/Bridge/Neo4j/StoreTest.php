@@ -34,9 +34,9 @@ final class StoreTest extends TestCase
 
         $store = new Store($httpClient, 'http://localhost:7474', 'symfony', 'symfony', 'symfony', 'symfony', 'symfony');
 
-        self::expectException(ClientException::class);
-        self::expectExceptionMessage('HTTP 400 returned for "http://localhost:7474/db/symfony/query/v2".');
-        self::expectExceptionCode(400);
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:7474/db/symfony/query/v2".');
+        $this->expectExceptionCode(400);
         $store->initialize();
     }
 

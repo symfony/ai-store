@@ -42,9 +42,9 @@ final class StoreTest extends TestCase
 
         $store = new Store($httpClient, 'http://localhost:6333', 'test', 'test');
 
-        self::expectException(ClientException::class);
-        self::expectExceptionMessage('HTTP 400 returned for "http://localhost:6333/collections/test".');
-        self::expectExceptionCode(400);
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:6333/collections/test".');
+        $this->expectExceptionCode(400);
         $store->initialize();
     }
 
@@ -110,9 +110,9 @@ final class StoreTest extends TestCase
 
         $store = new Store($httpClient, 'http://localhost:6333', 'test', 'test');
 
-        self::expectException(ClientException::class);
-        self::expectExceptionMessage('HTTP 400 returned for "http://localhost:6333/collections/test/points".');
-        self::expectExceptionCode(400);
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:6333/collections/test/points".');
+        $this->expectExceptionCode(400);
         $store->add(new VectorDocument(Uuid::v4(), new Vector([0.1, 0.2, 0.3])));
     }
 
@@ -153,9 +153,9 @@ final class StoreTest extends TestCase
             'test',
         );
 
-        self::expectException(ClientException::class);
-        self::expectExceptionMessage('HTTP 400 returned for "http://localhost:6333/collections/test/points/query".');
-        self::expectExceptionCode(400);
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:6333/collections/test/points/query".');
+        $this->expectExceptionCode(400);
         $store->query(new Vector([0.1, 0.2, 0.3]));
     }
 

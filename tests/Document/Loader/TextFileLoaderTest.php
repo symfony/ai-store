@@ -24,8 +24,8 @@ final class TextFileLoaderTest extends TestCase
     {
         $loader = new TextFileLoader();
 
-        self::expectException(RuntimeException::class);
-        self::expectExceptionMessage('File "/invalid/source.txt" does not exist.');
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('File "/invalid/source.txt" does not exist.');
 
         iterator_to_array($loader('/invalid/source.txt'));
     }

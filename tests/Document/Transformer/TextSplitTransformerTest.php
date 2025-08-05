@@ -163,8 +163,8 @@ final class TextSplitTransformerTest extends TestCase
     public function testSplitWithOverlapGreaterThanChunkSize()
     {
         $document = new TextDocument(Uuid::v4(), 'Abcdefg', new Metadata([]));
-        self::expectException(InvalidArgumentException::class);
-        self::expectExceptionMessage('Overlap must be non-negative and less than chunk size.');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Overlap must be non-negative and less than chunk size.');
 
         iterator_to_array(($this->transformer)([$document], [
             TextSplitTransformer::OPTION_CHUNK_SIZE => 10,
@@ -175,8 +175,8 @@ final class TextSplitTransformerTest extends TestCase
     public function testSplitWithNegativeOverlap()
     {
         $document = new TextDocument(Uuid::v4(), 'Abcdefg', new Metadata([]));
-        self::expectException(InvalidArgumentException::class);
-        self::expectExceptionMessage('Overlap must be non-negative and less than chunk size.');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Overlap must be non-negative and less than chunk size.');
 
         iterator_to_array(($this->transformer)([$document], [
             TextSplitTransformer::OPTION_CHUNK_SIZE => 10,

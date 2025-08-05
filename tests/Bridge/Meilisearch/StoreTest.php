@@ -44,9 +44,9 @@ final class StoreTest extends TestCase
             'test',
         );
 
-        self::expectException(ClientException::class);
-        self::expectExceptionMessage('HTTP 400 returned for "http://localhost:7700/indexes".');
-        self::expectExceptionCode(400);
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:7700/indexes".');
+        $this->expectExceptionCode(400);
         $store->initialize();
     }
 
@@ -105,9 +105,9 @@ final class StoreTest extends TestCase
             'test',
         );
 
-        self::expectException(ClientException::class);
-        self::expectExceptionMessage('HTTP 400 returned for "http://localhost:7700/indexes/test/documents".');
-        self::expectExceptionCode(400);
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:7700/indexes/test/documents".');
+        $this->expectExceptionCode(400);
         $store->add(new VectorDocument(Uuid::v4(), new Vector([0.1, 0.2, 0.3])));
     }
 
@@ -157,9 +157,9 @@ final class StoreTest extends TestCase
             'test',
         );
 
-        self::expectException(ClientException::class);
-        self::expectExceptionMessage('HTTP 400 returned for "http://localhost:7700/indexes/test/search".');
-        self::expectExceptionCode(400);
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:7700/indexes/test/search".');
+        $this->expectExceptionCode(400);
         $store->query(new Vector([0.1, 0.2, 0.3]));
     }
 

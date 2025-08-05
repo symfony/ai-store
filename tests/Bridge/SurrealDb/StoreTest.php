@@ -34,9 +34,9 @@ final class StoreTest extends TestCase
 
         $store = new Store($httpClient, 'http://localhost:8000', 'test', 'test', 'test', 'test');
 
-        self::expectException(ClientException::class);
-        self::expectExceptionMessage('HTTP 400 returned for "http://localhost:8000/signin".');
-        self::expectExceptionCode(400);
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:8000/signin".');
+        $this->expectExceptionCode(400);
         $store->initialize();
     }
 
@@ -57,9 +57,9 @@ final class StoreTest extends TestCase
 
         $store = new Store($httpClient, 'http://localhost:8000', 'test', 'test', 'test', 'test');
 
-        self::expectException(ClientException::class);
-        self::expectExceptionMessage('HTTP 400 returned for "http://localhost:8000/sql".');
-        self::expectExceptionCode(400);
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:8000/sql".');
+        $this->expectExceptionCode(400);
         $store->initialize();
     }
 
@@ -118,9 +118,9 @@ final class StoreTest extends TestCase
         $store = new Store($httpClient, 'http://localhost:8000', 'test', 'test', 'test', 'test', 'test');
         $store->initialize();
 
-        self::expectException(ClientException::class);
-        self::expectExceptionMessage('HTTP 400 returned for "http://localhost:8000/key/test".');
-        self::expectExceptionCode(400);
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:8000/key/test".');
+        $this->expectExceptionCode(400);
         $store->add(new VectorDocument(Uuid::v4(), new Vector([0.1, 0.2, 0.3])));
     }
 
@@ -151,9 +151,9 @@ final class StoreTest extends TestCase
         $store = new Store($httpClient, 'http://localhost:8000', 'test', 'test', 'test', 'test', 'test');
         $store->initialize();
 
-        self::expectException(ClientException::class);
-        self::expectExceptionMessage('HTTP 400 returned for "http://localhost:8000/key/test".');
-        self::expectExceptionCode(400);
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:8000/key/test".');
+        $this->expectExceptionCode(400);
         $store->add(new VectorDocument(Uuid::v4(), new Vector(array_fill(0, 1275, 0.1))));
     }
 
@@ -263,9 +263,9 @@ final class StoreTest extends TestCase
 
         $store->add(new VectorDocument(Uuid::v4(), new Vector(array_fill(0, 1275, 0.1))));
 
-        self::expectException(ClientException::class);
-        self::expectExceptionMessage('HTTP 400 returned for "http://localhost:8000/sql".');
-        self::expectExceptionCode(400);
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:8000/sql".');
+        $this->expectExceptionCode(400);
         $store->query(new Vector(array_fill(0, 1275, 0.1)));
     }
 
