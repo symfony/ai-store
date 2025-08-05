@@ -24,7 +24,7 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Store::class)]
 final class StoreTest extends TestCase
 {
-    public function testStoreCannotInitializeOnInvalidResponse(): void
+    public function testStoreCannotInitializeOnInvalidResponse()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([], [
@@ -40,7 +40,7 @@ final class StoreTest extends TestCase
         $store->initialize();
     }
 
-    public function testStoreCanInitialize(): void
+    public function testStoreCanInitialize()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -85,7 +85,7 @@ final class StoreTest extends TestCase
         $this->assertSame(2, $httpClient->getRequestsCount());
     }
 
-    public function testStoreCanAdd(): void
+    public function testStoreCanAdd()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -164,7 +164,7 @@ final class StoreTest extends TestCase
         $this->assertSame(3, $httpClient->getRequestsCount());
     }
 
-    public function testStoreCanQuery(): void
+    public function testStoreCanQuery()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
