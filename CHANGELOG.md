@@ -37,6 +37,7 @@ CHANGELOG
  * Add store bridge implementations:
    - Azure AI Search
    - ChromaDB
+   - ClickHouse
    - MariaDB
    - Meilisearch
    - MongoDB
