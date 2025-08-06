@@ -35,16 +35,16 @@ CHANGELOG
    - Manhattan distance
    - Chebyshev distance
  * Add store bridge implementations:
-   - PostgreSQL with pgvector extension
-   - MariaDB
-   - MongoDB
    - Azure AI Search
-   - Meilisearch
    - ChromaDB
+   - MariaDB
+   - Meilisearch
+   - MongoDB
+   - Neo4j
    - Pinecone
+   - PostgreSQL with pgvector extension
    - Qdrant
    - SurrealDB
-   - Neo4j
    - Typesense
  * Add Retrieval Augmented Generation (RAG) support:
    - Document embedding storage
