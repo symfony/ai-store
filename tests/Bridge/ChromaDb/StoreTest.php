@@ -14,6 +14,7 @@ namespace Symfony\AI\Store\Tests\Bridge\ChromaDb;
 use Codewithkyrian\ChromaDB\Client;
 use Codewithkyrian\ChromaDB\Resources\CollectionResource;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
 use Symfony\AI\Store\Bridge\ChromaDb\Store;
@@ -24,8 +25,21 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Store::class)]
 final class StoreTest extends TestCase
 {
-    public function testAddDocumentsSuccessfully()
-    {
+    /**
+     * @param array<VectorDocument>       $documents
+     * @param array<string>               $expectedIds
+     * @param array<array<float>>         $expectedVectors
+     * @param array<array<string, mixed>> $expectedMetadata
+     * @param array<string>               $expectedOriginalDocuments
+     */
+    #[DataProvider('addDocumentsProvider')]
+    public function testAddDocumentsSuccessfully(
+        array $documents,
+        array $expectedIds,
+        array $expectedVectors,
+        array $expectedMetadata,
+        array $expectedOriginalDocuments,
+    ): void {
         $collection = $this->createMock(CollectionResource::class);
         $client = $this->createMock(Client::class);
 
@@ -34,49 +48,88 @@ final class StoreTest extends TestCase
             ->with('test-collection')
             ->willReturn($collection);
 
-        $uuid1 = Uuid::v4();
-        $uuid2 = Uuid::v4();
-
         $collection->expects($this->once())
             ->method('add')
-            ->with(
-                [(string) $uuid1, (string) $uuid2],
-                [[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]],
-                [[], ['title' => 'Test Document']],
-            );
+            ->with($expectedIds, $expectedVectors, $expectedMetadata, $expectedOriginalDocuments);
 
         $store = new Store($client, 'test-collection');
 
-        $document1 = new VectorDocument($uuid1, new Vector([0.1, 0.2, 0.3]));
-        $document2 = new VectorDocument($uuid2, new Vector([0.4, 0.5, 0.6]), new Metadata(['title' => 'Test Document']));
-
-        $store->add($document1, $document2);
+        $store->add(...$documents);
     }
 
-    public function testAddSingleDocument()
+    /**
+     * @return \Iterator<string, array{
+     *     documents: array<VectorDocument>,
+     *     expectedIds: array<string>,
+     *     expectedVectors: array<array<float>>,
+     *     expectedMetadata: array<array<string, mixed>>,
+     *     expectedOriginalDocuments: array<string>
+     * }>
+     */
+    public static function addDocumentsProvider(): \Iterator
     {
-        $collection = $this->createMock(CollectionResource::class);
-        $client = $this->createMock(Client::class);
+        yield 'multiple documents with and without metadata' => [
+            'documents' => [
+                new VectorDocument(
+                    Uuid::fromString('01234567-89ab-cdef-0123-456789abcdef'),
+                    new Vector([0.1, 0.2, 0.3]),
+                ),
+                new VectorDocument(
+                    Uuid::fromString('fedcba98-7654-3210-fedc-ba9876543210'),
+                    new Vector([0.4, 0.5, 0.6]),
+                    new Metadata(['title' => 'Test Document']),
+                ),
+            ],
+            'expectedIds' => ['01234567-89ab-cdef-0123-456789abcdef', 'fedcba98-7654-3210-fedc-ba9876543210'],
+            'expectedVectors' => [[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]],
+            'expectedMetadata' => [[], ['title' => 'Test Document']],
+            'expectedOriginalDocuments' => ['', ''],
+        ];
 
-        $client->expects($this->once())
-            ->method('getOrCreateCollection')
-            ->with('test-collection')
-            ->willReturn($collection);
+        yield 'single document with metadata' => [
+            'documents' => [
+                new VectorDocument(
+                    Uuid::fromString('01234567-89ab-cdef-0123-456789abcdef'),
+                    new Vector([0.1, 0.2, 0.3]),
+                    new Metadata(['title' => 'Test Document', 'category' => 'test']),
+                ),
+            ],
+            'expectedIds' => ['01234567-89ab-cdef-0123-456789abcdef'],
+            'expectedVectors' => [[0.1, 0.2, 0.3]],
+            'expectedMetadata' => [['title' => 'Test Document', 'category' => 'test']],
+            'expectedOriginalDocuments' => [''],
+        ];
 
-        $uuid = Uuid::v4();
+        yield 'documents with text content' => [
+            'documents' => [
+                new VectorDocument(
+                    Uuid::fromString('01234567-89ab-cdef-0123-456789abcdef'),
+                    new Vector([0.1, 0.2, 0.3]),
+                    new Metadata(['_text' => 'This is the content of document 1', 'title' => 'Document 1'])),
+                new VectorDocument(
+                    Uuid::fromString('fedcba98-7654-3210-fedc-ba9876543210'),
+                    new Vector([0.4, 0.5, 0.6]),
+                    new Metadata(['_text' => 'This is the content of document 2', 'title' => 'Document 2', 'category' => 'test']),
+                ),
+            ],
+            'expectedIds' => ['01234567-89ab-cdef-0123-456789abcdef', 'fedcba98-7654-3210-fedc-ba9876543210'],
+            'expectedVectors' => [[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]],
+            'expectedMetadata' => [['title' => 'Document 1'], ['title' => 'Document 2', 'category' => 'test']],
+            'expectedOriginalDocuments' => ['This is the content of document 1', 'This is the content of document 2'],
+        ];
 
-        $collection->expects($this->once())
-            ->method('add')
-            ->with(
-                [(string) $uuid],
-                [[0.1, 0.2, 0.3]],
-                [['title' => 'Test Document', 'category' => 'test']],
-            );
-
-        $store = new Store($client, 'test-collection');
-
-        $document = new VectorDocument($uuid, new Vector([0.1, 0.2, 0.3]), new Metadata(['title' => 'Test Document', 'category' => 'test']));
-
-        $store->add($document);
+        yield 'document with null text' => [
+            'documents' => [
+                new VectorDocument(
+                    Uuid::fromString('01234567-89ab-cdef-0123-456789abcdef'),
+                    new Vector([0.1, 0.2, 0.3]),
+                    new Metadata(['_text' => null, 'title' => 'Test Document']),
+                ),
+            ],
+            'expectedIds' => ['01234567-89ab-cdef-0123-456789abcdef'],
+            'expectedVectors' => [[0.1, 0.2, 0.3]],
+            'expectedMetadata' => [['title' => 'Test Document']],
+            'expectedOriginalDocuments' => [''],
+        ];
     }
 }

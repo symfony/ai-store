@@ -130,8 +130,8 @@ final class TextSplitTransformerTest extends TestCase
         ]));
 
         $this->assertCount(2, $chunks);
-        $this->assertSame($document->id, $chunks[0]->metadata['parent_id']);
-        $this->assertSame($document->id, $chunks[1]->metadata['parent_id']);
+        $this->assertSame($document->id, $chunks[0]->metadata['_parent_id']);
+        $this->assertSame($document->id, $chunks[1]->metadata['_parent_id']);
     }
 
     public function testMetadataIsInherited()

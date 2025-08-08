@@ -57,8 +57,8 @@ final readonly class TextSplitTransformer implements TransformerInterface
                 $chunkText = mb_substr($text, $start, $end - $start);
 
                 yield new TextDocument(Uuid::v4(), $chunkText, new Metadata([
-                    'parent_id' => $document->id,
-                    'text' => $chunkText,
+                    Metadata::KEY_PARENT_ID => $document->id,
+                    Metadata::KEY_TEXT => $chunkText,
                     ...$document->metadata,
                 ]));
 
