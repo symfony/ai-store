@@ -43,9 +43,9 @@ You can find more advanced usage in combination with an Agent using the store fo
 * `Similarity Search with MongoDB (RAG)`_
 * `Similarity Search with Neo4j (RAG)`_
 * `Similarity Search with Pinecone (RAG)`_
-* `Similarity Search with PSR-6 Cache (RAG)`_
 * `Similarity Search with Qdrant (RAG)`_
 * `Similarity Search with SurrealDB (RAG)`_
+* `Similarity Search with Symfony Cache (RAG)`_
 * `Similarity Search with Typesense (RAG)`_
 
 .. note::
@@ -66,9 +66,9 @@ Supported Stores
 * `Neo4j`_
 * `Pinecone`_ (requires `probots-io/pinecone-php` as additional dependency)
 * `Postgres`_ (requires `ext-pdo`)
-* `PSR-6 Cache`_
 * `Qdrant`_
 * `SurrealDB`_
+* `Symfony Cache`_
 * `Typesense`_
 
 .. note::
@@ -106,7 +106,7 @@ This leads to a store implementing two methods::
 .. _`Similarity Search with memory storage (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/in-memory.php
 .. _`Similarity Search with Neo4j (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/neo4j.php
 .. _`Similarity Search with Pinecone (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/pinecone.php
-.. _`Similarity Search with PSR-6 Cache (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/cache.php
+.. _`Similarity Search with Symfony Cache (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/cache.php
 .. _`Similarity Search with Qdrant (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/qdrant.php
 .. _`Similarity Search with SurrealDB (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/surrealdb.php
 .. _`Similarity Search with Typesense (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/typesense.php
@@ -123,4 +123,4 @@ This leads to a store implementing two methods::
 .. _`Neo4j`: https://neo4j.com/
 .. _`Typesense`: https://typesense.org/
 .. _`GitHub`: https://github.com/symfony/ai/issues/16
-.. _`PSR-6 Cache`: https://www.php-fig.org/psr/psr-6/
+.. _`Symfony Cache`: https://symfony.com/doc/current/components/cache.html
