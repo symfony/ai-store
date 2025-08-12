@@ -25,15 +25,6 @@ use Symfony\Component\Uid\Uuid;
 #[CoversClass(Store::class)]
 final class StoreTest extends TestCase
 {
-    private function normalizeQuery(string $query): string
-    {
-        // Remove extra spaces, tabs and newlines
-        $normalized = preg_replace('/\s+/', ' ', $query);
-
-        // Trim the result
-        return trim($normalized);
-    }
-
     public function testAddSingleDocument()
     {
         $pdo = $this->createMock(\PDO::class);
@@ -591,5 +582,14 @@ final class StoreTest extends TestCase
         $this->assertSame(0.85, $results[0]->score);
         $this->assertSame($crawlId, $results[0]->metadata['crawlId']);
         $this->assertSame('https://example.com', $results[0]->metadata['url']);
+    }
+
+    private function normalizeQuery(string $query): string
+    {
+        // Remove extra spaces, tabs and newlines
+        $normalized = preg_replace('/\s+/', ' ', $query);
+
+        // Trim the result
+        return trim($normalized);
     }
 }
