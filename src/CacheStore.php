@@ -22,7 +22,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 /**
  * @author Guillaume Loulier <personal@guillaumeloulier.fr>
  */
-final readonly class CacheStore implements VectorStoreInterface
+final readonly class CacheStore implements StoreInterface
 {
     public function __construct(
         private CacheInterface&CacheItemPoolInterface $cache,

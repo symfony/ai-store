@@ -17,7 +17,7 @@ use Symfony\AI\Store\Document\VectorDocument;
 /**
  * @author Guillaume Loulier <personal@guillaumeloulier.fr>
  */
-final class InMemoryStore implements VectorStoreInterface
+final class InMemoryStore implements StoreInterface
 {
     /**
      * @var VectorDocument[]

@@ -11,7 +11,9 @@
 
 namespace Symfony\AI\Store\Tests\Double;
 
+use Symfony\AI\Platform\Vector\Vector;
 use Symfony\AI\Store\Document\VectorDocument;
+use Symfony\AI\Store\Exception\RuntimeException;
 use Symfony\AI\Store\StoreInterface;
 
 final class TestStore implements StoreInterface
@@ -27,5 +29,10 @@ final class TestStore implements StoreInterface
     {
         ++$this->addCalls;
         $this->documents = array_merge($this->documents, $documents);
+    }
+
+    public function query(Vector $vector, array $options = []): array
+    {
+        throw new RuntimeException('Not yet implemented.');
     }
 }

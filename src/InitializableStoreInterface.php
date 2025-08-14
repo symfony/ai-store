@@ -14,7 +14,7 @@ namespace Symfony\AI\Store;
 /**
  * @author Oskar Stark <oskarstark@googlemail.com>
  */
-interface InitializableStoreInterface extends StoreInterface
+interface InitializableStoreInterface
 {
     /**
      * @param array<mixed> $options

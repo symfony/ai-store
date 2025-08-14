@@ -11,6 +11,7 @@
 
 namespace Symfony\AI\Store;
 
+use Symfony\AI\Platform\Vector\Vector;
 use Symfony\AI\Store\Document\VectorDocument;
 
 /**
@@ -19,4 +20,11 @@ use Symfony\AI\Store\Document\VectorDocument;
 interface StoreInterface
 {
     public function add(VectorDocument ...$documents): void;
+
+    /**
+     * @param array<string, mixed> $options
+     *
+     * @return VectorDocument[]
+     */
+    public function query(Vector $vector, array $options = []): array;
 }

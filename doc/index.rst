@@ -78,17 +78,14 @@ Supported Stores
 Implementing a Bridge
 ---------------------
 
-The main extension points of the Store component are
-
-* ``Symfony\AI\Store\StoreInterface`` - Takes care of adding documents to the store.
-* ``Symfony\AI\Store\VectorStoreInterface`` - Takes care of querying the store for documents.
+The main extension points of the Store component is the ``Symfony\AI\Store\StoreInterface``, that defines the methods
+for adding vectorized documents to the store, and querying the store for documents with a vector.
 
 This leads to a store implementing two methods::
 
     use Symfony\AI\Store\StoreInterface;
-    use Symfony\AI\Store\VectorStoreInterface;
 
-    class MyStore implements StoreInterface, VectorStoreInterface
+    class MyStore implements StoreInterface
     {
         public function add(VectorDocument ...$documents): void
         {
@@ -98,7 +95,7 @@ This leads to a store implementing two methods::
         public function query(Vector $vector, array $options = []): array
         {
             // Implementation to query the store for documents
-            return [];
+            return $documents;
         }
     }
 
