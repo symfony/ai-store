@@ -48,6 +48,7 @@ You can find more advanced usage in combination with an Agent using the store fo
 * `Similarity Search with SurrealDB (RAG)`_
 * `Similarity Search with Symfony Cache (RAG)`_
 * `Similarity Search with Typesense (RAG)`_
+* `Similarity Search with Weaviate (RAG)`_
 
 .. note::
 
@@ -72,6 +73,7 @@ Supported Stores
 * `SurrealDB`_
 * `Symfony Cache`_
 * `Typesense`_
+* `Weaviate`_
 
 .. note::
 
@@ -113,6 +115,7 @@ This leads to a store implementing two methods::
 .. _`Similarity Search with Qdrant (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/qdrant.php
 .. _`Similarity Search with SurrealDB (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/surrealdb.php
 .. _`Similarity Search with Typesense (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/typesense.php
+.. _`Similarity Search with Weaviate (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/weaviate.php
 .. _`Azure AI Search`: https://azure.microsoft.com/products/ai-services/ai-search
 .. _`Chroma`: https://www.trychroma.com/
 .. _`MariaDB`: https://mariadb.org/projects/mariadb-vector/
@@ -128,3 +131,4 @@ This leads to a store implementing two methods::
 .. _`Typesense`: https://typesense.org/
 .. _`GitHub`: https://github.com/symfony/ai/issues/16
 .. _`Symfony Cache`: https://symfony.com/doc/current/components/cache.html
+.. _`Weaviate`: https://weaviate.io/
