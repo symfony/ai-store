@@ -13,6 +13,7 @@ namespace Symfony\AI\Store\Tests\Bridge\Postgres;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
 use Symfony\AI\Store\Bridge\Postgres\Distance;
@@ -23,6 +24,8 @@ use Symfony\AI\Store\Exception\InvalidArgumentException;
 use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(Store::class)]
+#[UsesClass(VectorDocument::class)]
+#[UsesClass(Vector::class)]
 final class StoreTest extends TestCase
 {
     public function testAddSingleDocument()
@@ -356,7 +359,24 @@ final class StoreTest extends TestCase
                 return 0;
             });
 
-        $store->initialize();
+        $store->setup();
+    }
+
+    public function testDrop()
+    {
+        $pdo = $this->createMock(\PDO::class);
+
+        $store = new Store($pdo, 'embeddings_table', 'embedding');
+
+        $pdo->expects($this->once())
+            ->method('exec')
+            ->willReturnCallback(function (string $sql): int {
+                $this->assertSame('DROP TABLE IF EXISTS embeddings_table', $sql);
+
+                return 0;
+            });
+
+        $store->drop();
     }
 
     public function testInitializeWithCustomVectorSize()
@@ -379,7 +399,7 @@ final class StoreTest extends TestCase
                 return 0;
             });
 
-        $store->initialize(['vector_size' => 768]);
+        $store->setup(['vector_size' => 768]);
     }
 
     public function testFromPdo()

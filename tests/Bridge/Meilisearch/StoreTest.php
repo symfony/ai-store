@@ -27,7 +27,7 @@ use Symfony\Component\Uid\Uuid;
 #[UsesClass(Vector::class)]
 final class StoreTest extends TestCase
 {
-    public function testStoreCannotInitializeOnInvalidResponse()
+    public function testStoreCannotSetupOnInvalidResponse()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -38,22 +38,22 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 400,
             ]),
-        ], 'http://localhost:7700');
+        ], 'http://127.0.0.1:7700');
 
         $store = new Store(
             $httpClient,
-            'http://localhost:7700',
+            'http://127.0.0.1:7700',
             'test',
             'test',
         );
 
         $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:7700/indexes".');
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:7700/indexes".');
         $this->expectExceptionCode(400);
-        $store->initialize();
+        $store->setup();
     }
 
-    public function testStoreCanInitialize()
+    public function testStoreCannotSetup()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -74,18 +74,44 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 202,
             ]),
-        ], 'http://localhost:7700');
+        ], 'http://127.0.0.1:7700');
 
         $store = new Store(
             $httpClient,
-            'http://localhost:7700',
+            'http://127.0.0.1:7700',
             'test',
             'test',
         );
 
-        $store->initialize();
+        $store->setup();
 
         $this->assertSame(2, $httpClient->getRequestsCount());
+    }
+
+    public function testStoreCannotDropOnInvalidResponse()
+    {
+        $httpClient = new MockHttpClient([
+            new JsonMockResponse([
+                'message' => 'error',
+                'code' => 'index_not_found',
+                'type' => 'invalid_request',
+                'link' => 'https://docs.meilisearch.com/errors#index_not_found',
+            ], [
+                'http_code' => 400,
+            ]),
+        ], 'http://127.0.0.1:7700');
+
+        $store = new Store(
+            $httpClient,
+            'http://127.0.0.1:7700',
+            'test',
+            'test',
+        );
+
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:7700/indexes/test".');
+        $this->expectExceptionCode(400);
+        $store->drop();
     }
 
     public function testStoreCannotAddOnInvalidResponse()
@@ -99,17 +125,17 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 400,
             ]),
-        ], 'http://localhost:7700');
+        ], 'http://127.0.0.1:7700');
 
         $store = new Store(
             $httpClient,
-            'http://localhost:7700',
+            'http://127.0.0.1:7700',
             'test',
             'test',
         );
 
         $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:7700/indexes/test/documents".');
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:7700/indexes/test/documents".');
         $this->expectExceptionCode(400);
         $store->add(new VectorDocument(Uuid::v4(), new Vector([0.1, 0.2, 0.3])));
     }
@@ -126,11 +152,11 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 202,
             ]),
-        ], 'http://localhost:7700');
+        ], 'http://127.0.0.1:7700');
 
         $store = new Store(
             $httpClient,
-            'http://localhost:7700',
+            'http://127.0.0.1:7700',
             'test',
             'test',
         );
@@ -151,17 +177,17 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 400,
             ]),
-        ], 'http://localhost:7700');
+        ], 'http://127.0.0.1:7700');
 
         $store = new Store(
             $httpClient,
-            'http://localhost:7700',
+            'http://127.0.0.1:7700',
             'test',
             'test',
         );
 
         $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:7700/indexes/test/search".');
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:7700/indexes/test/search".');
         $this->expectExceptionCode(400);
         $store->query(new Vector([0.1, 0.2, 0.3]));
     }
@@ -195,11 +221,11 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 200,
             ]),
-        ], 'http://localhost:7700');
+        ], 'http://127.0.0.1:7700');
 
         $store = new Store(
             $httpClient,
-            'http://localhost:7700',
+            'http://127.0.0.1:7700',
             'test',
             'test',
             embeddingsDimension: 3,
@@ -236,11 +262,11 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 200,
             ]),
-        ], 'http://localhost:7700');
+        ], 'http://127.0.0.1:7700');
 
         $store = new Store(
             $httpClient,
-            'http://localhost:7700',
+            'http://127.0.0.1:7700',
             'test',
             'test',
             embeddingsDimension: 3,

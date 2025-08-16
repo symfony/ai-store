@@ -26,6 +26,33 @@ use Symfony\Component\Uid\Uuid;
 #[UsesClass(Vector::class)]
 final class InMemoryStoreTest extends TestCase
 {
+    public function testStoreCannotSetup()
+    {
+        $store = new InMemoryStore();
+        $store->setup();
+
+        $result = $store->query(new Vector([0.0, 0.1, 0.6]));
+        $this->assertCount(0, $result);
+    }
+
+    public function testStoreCanDrop()
+    {
+        $store = new InMemoryStore();
+        $store->add(
+            new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5])),
+            new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0])),
+            new VectorDocument(Uuid::v4(), new Vector([0.3, 0.7, 0.1])),
+        );
+
+        $result = $store->query(new Vector([0.0, 0.1, 0.6]));
+        $this->assertCount(3, $result);
+
+        $store->drop();
+
+        $result = $store->query(new Vector([0.0, 0.1, 0.6]));
+        $this->assertCount(0, $result);
+    }
+
     public function testStoreCanSearchUsingCosineDistance()
     {
         $store = new InMemoryStore();

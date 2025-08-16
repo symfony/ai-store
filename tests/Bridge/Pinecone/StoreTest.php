@@ -12,6 +12,7 @@
 namespace Symfony\AI\Store\Tests\Bridge\Pinecone;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Probots\Pinecone\Client;
 use Probots\Pinecone\Resources\Data\VectorResource;
@@ -24,6 +25,8 @@ use Symfony\AI\Store\Document\VectorDocument;
 use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(Store::class)]
+#[UsesClass(VectorDocument::class)]
+#[UsesClass(Vector::class)]
 final class StoreTest extends TestCase
 {
     public function testAddSingleDocument()

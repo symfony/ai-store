@@ -27,7 +27,7 @@ use Symfony\Component\Uid\Uuid;
 #[UsesClass(Vector::class)]
 final class StoreTest extends TestCase
 {
-    public function testStoreCannotInitializeOnExistingCollection()
+    public function testStoreCannotSetupOnExistingCollection()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -35,22 +35,22 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 400,
             ]),
-        ], 'http://localhost:8108');
+        ], 'http://127.0.0.1:8108');
 
         $store = new Store(
             $httpClient,
-            'http://localhost:8108',
+            'http://127.0.0.1:8108',
             'test',
             'test',
         );
 
         $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:8108/collections".');
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:8108/collections".');
         $this->expectExceptionCode(400);
-        $store->initialize();
+        $store->setup();
     }
 
-    public function testStoreCanInitialize()
+    public function testStoreCannotSetup()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -59,16 +59,57 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 200,
             ]),
-        ], 'http://localhost:8108');
+        ], 'http://127.0.0.1:8108');
 
         $store = new Store(
             $httpClient,
-            'http://localhost:8108',
+            'http://127.0.0.1:8108',
             'test',
             'test',
         );
 
-        $store->initialize();
+        $store->setup();
+
+        $this->assertSame(1, $httpClient->getRequestsCount());
+    }
+
+    public function testStoreCannotDropOnUndefinedCollection()
+    {
+        $httpClient = new MockHttpClient([
+            new JsonMockResponse([], [
+                'http_code' => 404,
+            ]),
+        ], 'http://127.0.0.1:8108');
+
+        $store = new Store(
+            $httpClient,
+            'http://127.0.0.1:8108',
+            'test',
+            'test',
+        );
+
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('HTTP 404 returned for "http://127.0.0.1:8108/collections/test".');
+        $this->expectExceptionCode(404);
+        $store->drop();
+    }
+
+    public function testStoreCanDropOnExistingCollection()
+    {
+        $httpClient = new MockHttpClient([
+            new JsonMockResponse([], [
+                'http_code' => 200,
+            ]),
+        ], 'http://127.0.0.1:8108');
+
+        $store = new Store(
+            $httpClient,
+            'http://127.0.0.1:8108',
+            'test',
+            'test',
+        );
+
+        $store->drop();
 
         $this->assertSame(1, $httpClient->getRequestsCount());
     }
@@ -79,17 +120,17 @@ final class StoreTest extends TestCase
             new JsonMockResponse([], [
                 'http_code' => 400,
             ]),
-        ], 'http://localhost:8108');
+        ], 'http://127.0.0.1:8108');
 
         $store = new Store(
             $httpClient,
-            'http://localhost:8108',
+            'http://127.0.0.1:8108',
             'test',
             'test',
         );
 
         $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:8108/collections/test/documents".');
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:8108/collections/test/documents".');
         $this->expectExceptionCode(400);
         $store->add(new VectorDocument(Uuid::v4(), new Vector([0.1, 0.2, 0.3])));
     }
@@ -100,11 +141,11 @@ final class StoreTest extends TestCase
             new JsonMockResponse([], [
                 'http_code' => 200,
             ]),
-        ], 'http://localhost:8108');
+        ], 'http://127.0.0.1:8108');
 
         $store = new Store(
             $httpClient,
-            'http://localhost:8108',
+            'http://127.0.0.1:8108',
             'test',
             'test',
         );
@@ -120,17 +161,17 @@ final class StoreTest extends TestCase
             new JsonMockResponse([], [
                 'http_code' => 400,
             ]),
-        ], 'http://localhost:8108');
+        ], 'http://127.0.0.1:8108');
 
         $store = new Store(
             $httpClient,
-            'http://localhost:8108',
+            'http://127.0.0.1:8108',
             'test',
             'test',
         );
 
         $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:8108/multi_search".');
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:8108/multi_search".');
         $this->expectExceptionCode(400);
         $store->query(new Vector([0.1, 0.2, 0.3]));
     }
@@ -164,11 +205,11 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 200,
             ]),
-        ], 'http://localhost:8108');
+        ], 'http://127.0.0.1:8108');
 
         $store = new Store(
             $httpClient,
-            'http://localhost:8108',
+            'http://127.0.0.1:8108',
             'test',
             'test',
         );

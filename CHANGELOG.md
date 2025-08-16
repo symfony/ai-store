@@ -6,7 +6,7 @@ CHANGELOG
 
  * Add core store interfaces:
    - `StoreInterface` for storing and querying document stores
-   - `InitializableStoreInterface` for stores requiring initialization
+   - `ManagedStoreInterface` for stores, which can be initialized or dropped
  * Add document types:
    - `TextDocument` for raw text with UUID, content, and metadata
    - `VectorDocument` for vectorized documents with embeddings and similarity scores

@@ -27,7 +27,7 @@ use Symfony\Component\Uid\Uuid;
 #[UsesClass(Vector::class)]
 final class StoreTest extends TestCase
 {
-    public function testStoreCannotInitializeOnInvalidResponse()
+    public function testStoreCannotSetupOnInvalidResponse()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([], [
@@ -46,12 +46,12 @@ final class StoreTest extends TestCase
         $this->expectException(ClientException::class);
         $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:19530/v2/vectordb/databases/create".');
         $this->expectExceptionCode(400);
-        $store->initialize([
+        $store->setup([
             'forceDatabaseCreation' => true,
         ]);
     }
 
-    public function testStoreCanInitialize()
+    public function testStoreCanSetup()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -76,11 +76,57 @@ final class StoreTest extends TestCase
             'test',
         );
 
-        $store->initialize([
+        $store->setup([
             'forceDatabaseCreation' => true,
         ]);
 
         $this->assertSame(2, $httpClient->getRequestsCount());
+    }
+
+    public function testStoreCannotDropOnInvalidResponse()
+    {
+        $httpClient = new MockHttpClient([
+            new JsonMockResponse([], [
+                'http_code' => 400,
+            ]),
+        ], 'http://127.0.0.1:19530');
+
+        $store = new Store(
+            $httpClient,
+            'http://127.0.0.1:19530',
+            'test',
+            'test',
+            'test',
+        );
+
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:19530/v2/vectordb/databases/drop".');
+        $this->expectExceptionCode(400);
+        $store->drop();
+    }
+
+    public function testStoreCanDrop()
+    {
+        $httpClient = new MockHttpClient([
+            new JsonMockResponse([
+                'code' => 0,
+                'data' => [],
+            ], [
+                'http_code' => 200,
+            ]),
+        ], 'http://127.0.0.1:19530');
+
+        $store = new Store(
+            $httpClient,
+            'http://127.0.0.1:19530',
+            'test',
+            'test',
+            'test',
+        );
+
+        $store->drop();
+
+        $this->assertSame(1, $httpClient->getRequestsCount());
     }
 
     public function testStoreCannotAddOnInvalidResponse()

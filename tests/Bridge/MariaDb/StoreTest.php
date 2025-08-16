@@ -12,6 +12,7 @@
 namespace Symfony\AI\Store\Tests\Bridge\MariaDb;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
 use Symfony\AI\Store\Bridge\MariaDb\Store;
@@ -19,6 +20,8 @@ use Symfony\AI\Store\Document\VectorDocument;
 use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(Store::class)]
+#[UsesClass(VectorDocument::class)]
+#[UsesClass(Vector::class)]
 final class StoreTest extends TestCase
 {
     public function testQueryWithMaxScore()
@@ -155,5 +158,19 @@ final class StoreTest extends TestCase
         $results = $store->query(new Vector($vectorData), ['limit' => 10]);
 
         $this->assertCount(0, $results);
+    }
+
+    public function testItCanDrop()
+    {
+        $pdo = $this->createMock(\PDO::class);
+
+        $store = new Store($pdo, 'embeddings_table', 'embedding_index', 'embedding');
+
+        $pdo->expects($this->once())
+            ->method('exec')
+            ->with('DROP TABLE IF EXISTS embeddings_table')
+            ->willReturn(1);
+
+        $store->drop();
     }
 }

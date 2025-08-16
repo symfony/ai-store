@@ -12,6 +12,7 @@
 namespace Symfony\AI\Store\Tests\Bridge\Qdrant;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
 use Symfony\AI\Store\Bridge\Qdrant\Store;
@@ -22,9 +23,11 @@ use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(Store::class)]
+#[UsesClass(VectorDocument::class)]
+#[UsesClass(Vector::class)]
 final class StoreTest extends TestCase
 {
-    public function testStoreCannotInitializeOnInvalidResponse()
+    public function testStoreCannotSetupOnInvalidResponse()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -38,17 +41,17 @@ final class StoreTest extends TestCase
             new JsonMockResponse([], [
                 'http_code' => 400,
             ]),
-        ], 'http://localhost:6333');
+        ], 'http://127.0.0.1:6333');
 
-        $store = new Store($httpClient, 'http://localhost:6333', 'test', 'test');
+        $store = new Store($httpClient, 'http://127.0.0.1:6333', 'test', 'test');
 
         $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:6333/collections/test".');
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:6333/collections/test".');
         $this->expectExceptionCode(400);
-        $store->initialize();
+        $store->setup();
     }
 
-    public function testStoreCannotInitializeOnExistingCollection()
+    public function testStoreCanSetupOnExistingCollection()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -65,16 +68,52 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 200,
             ]),
-        ], 'http://localhost:6333');
+        ], 'http://127.0.0.1:6333');
 
-        $store = new Store($httpClient, 'http://localhost:6333', 'test', 'test');
+        $store = new Store($httpClient, 'http://127.0.0.1:6333', 'test', 'test');
 
-        $store->initialize();
+        $store->setup();
 
         $this->assertSame(1, $httpClient->getRequestsCount());
     }
 
-    public function testStoreCanInitialize()
+    public function testStoreCannotDropOnInvalidResponse()
+    {
+        $httpClient = new MockHttpClient([
+            new JsonMockResponse([], [
+                'http_code' => 400,
+            ]),
+        ], 'http://127.0.0.1:6333');
+
+        $store = new Store($httpClient, 'http://127.0.0.1:6333', 'test', 'test');
+
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:6333/collections/test".');
+        $this->expectExceptionCode(400);
+        $store->drop();
+    }
+
+    public function testStoreCanDropOnExistingCollection()
+    {
+        $httpClient = new MockHttpClient([
+            new JsonMockResponse([
+                'status' => 'ok',
+                'result' => [
+                    'exists' => true,
+                ],
+            ], [
+                'http_code' => 200,
+            ]),
+        ], 'http://127.0.0.1:6333');
+
+        $store = new Store($httpClient, 'http://127.0.0.1:6333', 'test', 'test');
+
+        $store->drop();
+
+        $this->assertSame(1, $httpClient->getRequestsCount());
+    }
+
+    public function testStoreCannotSetup()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -91,11 +130,11 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 200,
             ]),
-        ], 'http://localhost:6333');
+        ], 'http://127.0.0.1:6333');
 
-        $store = new Store($httpClient, 'http://localhost:6333', 'test', 'test');
+        $store = new Store($httpClient, 'http://127.0.0.1:6333', 'test', 'test');
 
-        $store->initialize();
+        $store->setup();
 
         $this->assertSame(2, $httpClient->getRequestsCount());
     }
@@ -106,12 +145,12 @@ final class StoreTest extends TestCase
             new JsonMockResponse([], [
                 'http_code' => 400,
             ]),
-        ], 'http://localhost:6333');
+        ], 'http://127.0.0.1:6333');
 
-        $store = new Store($httpClient, 'http://localhost:6333', 'test', 'test');
+        $store = new Store($httpClient, 'http://127.0.0.1:6333', 'test', 'test');
 
         $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:6333/collections/test/points".');
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:6333/collections/test/points".');
         $this->expectExceptionCode(400);
         $store->add(new VectorDocument(Uuid::v4(), new Vector([0.1, 0.2, 0.3])));
     }
@@ -129,9 +168,9 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 200,
             ]),
-        ], 'http://localhost:6333');
+        ], 'http://127.0.0.1:6333');
 
-        $store = new Store($httpClient, 'http://localhost:6333', 'test', 'test');
+        $store = new Store($httpClient, 'http://127.0.0.1:6333', 'test', 'test');
 
         $store->add(new VectorDocument(Uuid::v4(), new Vector([0.1, 0.2, 0.3])));
 
@@ -144,17 +183,17 @@ final class StoreTest extends TestCase
             new JsonMockResponse([], [
                 'http_code' => 400,
             ]),
-        ], 'http://localhost:6333');
+        ], 'http://127.0.0.1:6333');
 
         $store = new Store(
             $httpClient,
-            'http://localhost:6333',
+            'http://127.0.0.1:6333',
             'test',
             'test',
         );
 
         $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:6333/collections/test/points/query".');
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:6333/collections/test/points/query".');
         $this->expectExceptionCode(400);
         $store->query(new Vector([0.1, 0.2, 0.3]));
     }
@@ -180,9 +219,9 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 200,
             ]),
-        ], 'http://localhost:6333');
+        ], 'http://127.0.0.1:6333');
 
-        $store = new Store($httpClient, 'http://localhost:6333', 'test', 'test');
+        $store = new Store($httpClient, 'http://127.0.0.1:6333', 'test', 'test');
 
         $results = $store->query(new Vector([0.1, 0.2, 0.3]));
 

@@ -17,6 +17,7 @@ use MongoDB\Collection;
 use MongoDB\Driver\CursorInterface;
 use MongoDB\Driver\Exception\CommandException;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\AI\Platform\Vector\Vector;
@@ -27,6 +28,8 @@ use Symfony\AI\Store\Exception\InvalidArgumentException;
 use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(Store::class)]
+#[UsesClass(VectorDocument::class)]
+#[UsesClass(Vector::class)]
 final class StoreTest extends TestCase
 {
     public function testAddSingleDocument()
@@ -371,7 +374,7 @@ final class StoreTest extends TestCase
             'test-index',
         );
 
-        $store->initialize();
+        $store->setup();
     }
 
     public function testInitializeWithOptions()
@@ -414,7 +417,7 @@ final class StoreTest extends TestCase
             'test-index',
         );
 
-        $store->initialize([
+        $store->setup([
             'fields' => [
                 [
                     'path' => 'title',
@@ -438,7 +441,7 @@ final class StoreTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The only supported option is "fields"');
 
-        $store->initialize(['invalid' => 'option']);
+        $store->setup(['invalid' => 'option']);
     }
 
     public function testInitializeHandlesCommandException()
@@ -471,7 +474,30 @@ final class StoreTest extends TestCase
             $logger,
         );
 
-        $store->initialize();
+        $store->setup();
+    }
+
+    public function testItCanDropCollection()
+    {
+        $collection = $this->createMock(Collection::class);
+        $client = $this->createMock(Client::class);
+
+        $client->expects($this->once())
+            ->method('getCollection')
+            ->with('test-db', 'test-collection')
+            ->willReturn($collection);
+
+        $collection->expects($this->once())
+            ->method('drop');
+
+        $store = new Store(
+            $client,
+            'test-db',
+            'test-collection',
+            'test-index',
+        );
+
+        $store->drop();
     }
 
     public function testQueryWithCustomVectorFieldName()

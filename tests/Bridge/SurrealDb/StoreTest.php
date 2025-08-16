@@ -12,6 +12,7 @@
 namespace Symfony\AI\Store\Tests\Bridge\SurrealDb;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
 use Symfony\AI\Store\Bridge\SurrealDb\Store;
@@ -22,25 +23,27 @@ use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(Store::class)]
+#[UsesClass(VectorDocument::class)]
+#[UsesClass(Vector::class)]
 final class StoreTest extends TestCase
 {
-    public function testStoreCannotInitializeOnInvalidResponse()
+    public function testStoreCannotSetupOnInvalidResponse()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([], [
                 'http_code' => 400,
             ]),
-        ], 'http://localhost:8000');
+        ], 'http://127.0.0.1:8000');
 
-        $store = new Store($httpClient, 'http://localhost:8000', 'test', 'test', 'test', 'test');
+        $store = new Store($httpClient, 'http://127.0.0.1:8000', 'test', 'test', 'test', 'test');
 
         $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:8000/signin".');
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:8000/signin".');
         $this->expectExceptionCode(400);
-        $store->initialize();
+        $store->setup();
     }
 
-    public function testStoreCannotInitializeOnValidAuthenticationResponse()
+    public function testStoreCannotSetupOnValidAuthenticationResponse()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -53,17 +56,17 @@ final class StoreTest extends TestCase
             new JsonMockResponse([], [
                 'http_code' => 400,
             ]),
-        ], 'http://localhost:8000');
+        ], 'http://127.0.0.1:8000');
 
-        $store = new Store($httpClient, 'http://localhost:8000', 'test', 'test', 'test', 'test');
+        $store = new Store($httpClient, 'http://127.0.0.1:8000', 'test', 'test', 'test', 'test');
 
         $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:8000/sql".');
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:8000/sql".');
         $this->expectExceptionCode(400);
-        $store->initialize();
+        $store->setup();
     }
 
-    public function testStoreCannotInitializeOnValidAuthenticationAndIndexResponse()
+    public function testStoreCanSetupOnValidAuthenticationAndIndexResponse()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -82,13 +85,61 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 200,
             ]),
-        ], 'http://localhost:8000');
+        ], 'http://127.0.0.1:8000');
 
-        $store = new Store($httpClient, 'http://localhost:8000', 'test', 'test', 'test', 'test');
+        $store = new Store($httpClient, 'http://127.0.0.1:8000', 'test', 'test', 'test', 'test');
 
-        $store->initialize();
+        $store->setup();
 
         $this->assertSame(2, $httpClient->getRequestsCount());
+    }
+
+    public function testStoreCannotDropOnInvalidResponse()
+    {
+        $httpClient = new MockHttpClient([
+            new JsonMockResponse([], [
+                'http_code' => 400,
+            ]),
+        ], 'http://127.0.0.1:8000');
+
+        $store = new Store($httpClient, 'http://127.0.0.1:8000', 'test', 'test', 'test', 'test', 'test');
+
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:8000/key/test".');
+        $this->expectExceptionCode(400);
+        $store->drop();
+    }
+
+    public function testStoreCanDrop()
+    {
+        $httpClient = new MockHttpClient([
+            new JsonMockResponse([
+                'code' => 200,
+                'details' => 'Authentication succeeded.',
+                'token' => 'bar',
+            ], [
+                'http_code' => 200,
+            ]),
+            new JsonMockResponse([
+                [
+                    'result' => 'DEFINE INDEX test_vectors ON movies FIELDS _vectors MTREE DIMENSION 1275 DIST cosine TYPE F32',
+                    'status' => 'OK',
+                    'time' => '263.208µs',
+                ],
+            ], [
+                'http_code' => 200,
+            ]),
+            new JsonMockResponse([], [
+                'http_code' => 200,
+            ]),
+        ], 'http://127.0.0.1:8000');
+
+        $store = new Store($httpClient, 'http://127.0.0.1:8000', 'test', 'test', 'test', 'test');
+
+        $store->setup();
+        $store->drop();
+
+        $this->assertSame(3, $httpClient->getRequestsCount());
     }
 
     public function testStoreCannotAddOnInvalidResponse()
@@ -113,13 +164,13 @@ final class StoreTest extends TestCase
             new JsonMockResponse([], [
                 'http_code' => 400,
             ]),
-        ], 'http://localhost:8000');
+        ], 'http://127.0.0.1:8000');
 
-        $store = new Store($httpClient, 'http://localhost:8000', 'test', 'test', 'test', 'test', 'test');
-        $store->initialize();
+        $store = new Store($httpClient, 'http://127.0.0.1:8000', 'test', 'test', 'test', 'test', 'test');
+        $store->setup();
 
         $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:8000/key/test".');
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:8000/key/test".');
         $this->expectExceptionCode(400);
         $store->add(new VectorDocument(Uuid::v4(), new Vector([0.1, 0.2, 0.3])));
     }
@@ -146,13 +197,13 @@ final class StoreTest extends TestCase
             new JsonMockResponse([], [
                 'http_code' => 400,
             ]),
-        ], 'http://localhost:8000');
+        ], 'http://127.0.0.1:8000');
 
-        $store = new Store($httpClient, 'http://localhost:8000', 'test', 'test', 'test', 'test', 'test');
-        $store->initialize();
+        $store = new Store($httpClient, 'http://127.0.0.1:8000', 'test', 'test', 'test', 'test', 'test');
+        $store->setup();
 
         $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:8000/key/test".');
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:8000/key/test".');
         $this->expectExceptionCode(400);
         $store->add(new VectorDocument(Uuid::v4(), new Vector(array_fill(0, 1275, 0.1))));
     }
@@ -200,10 +251,10 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 200,
             ]),
-        ], 'http://localhost:8000');
+        ], 'http://127.0.0.1:8000');
 
-        $store = new Store($httpClient, 'http://localhost:8000', 'test', 'test', 'test', 'test', 'test');
-        $store->initialize();
+        $store = new Store($httpClient, 'http://127.0.0.1:8000', 'test', 'test', 'test', 'test', 'test');
+        $store->setup();
 
         $store->add(new VectorDocument(Uuid::v4(), new Vector(array_fill(0, 1275, 0.1))));
 
@@ -256,15 +307,15 @@ final class StoreTest extends TestCase
             new JsonMockResponse([], [
                 'http_code' => 400,
             ]),
-        ], 'http://localhost:8000');
+        ], 'http://127.0.0.1:8000');
 
-        $store = new Store($httpClient, 'http://localhost:8000', 'test', 'test', 'test', 'test', 'test');
-        $store->initialize();
+        $store = new Store($httpClient, 'http://127.0.0.1:8000', 'test', 'test', 'test', 'test', 'test');
+        $store->setup();
 
         $store->add(new VectorDocument(Uuid::v4(), new Vector(array_fill(0, 1275, 0.1))));
 
         $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:8000/sql".');
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:8000/sql".');
         $this->expectExceptionCode(400);
         $store->query(new Vector(array_fill(0, 1275, 0.1)));
     }
@@ -334,9 +385,9 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 200,
             ]),
-        ], 'http://localhost:8000');
+        ], 'http://127.0.0.1:8000');
 
-        $store = new Store($httpClient, 'http://localhost:8000', 'test', 'test', 'test', 'test', 'test');
+        $store = new Store($httpClient, 'http://127.0.0.1:8000', 'test', 'test', 'test', 'test', 'test');
 
         $store->add(new VectorDocument(Uuid::v4(), new Vector(array_fill(0, 1275, 0.1))));
 

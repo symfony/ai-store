@@ -12,6 +12,7 @@
 namespace Symfony\AI\Store\Tests\Bridge\Neo4j;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
 use Symfony\AI\Store\Bridge\Neo4j\Store;
@@ -22,25 +23,27 @@ use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(Store::class)]
+#[UsesClass(VectorDocument::class)]
+#[UsesClass(Vector::class)]
 final class StoreTest extends TestCase
 {
-    public function testStoreCannotInitializeOnInvalidResponse()
+    public function testStoreCannotSetupOnInvalidResponse()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([], [
                 'http_code' => 400,
             ]),
-        ], 'http://localhost:7474');
+        ], 'http://127.0.0.1:7474');
 
-        $store = new Store($httpClient, 'http://localhost:7474', 'symfony', 'symfony', 'symfony', 'symfony', 'symfony');
+        $store = new Store($httpClient, 'http://127.0.0.1:7474', 'symfony', 'symfony', 'symfony', 'symfony', 'symfony');
 
         $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('HTTP 400 returned for "http://localhost:7474/db/symfony/query/v2".');
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:7474/db/symfony/query/v2".');
         $this->expectExceptionCode(400);
-        $store->initialize();
+        $store->setup();
     }
 
-    public function testStoreCanInitialize()
+    public function testStoreCannotSetup()
     {
         $httpClient = new MockHttpClient([
             new JsonMockResponse([
@@ -75,14 +78,45 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 202,
             ]),
-        ], 'http://localhost:7474');
+        ], 'http://127.0.0.1:7474');
 
-        $store = new Store($httpClient, 'http://localhost:7474', 'symfony', 'symfony', 'symfony', 'symfony', 'symfony');
+        $store = new Store($httpClient, 'http://127.0.0.1:7474', 'symfony', 'symfony', 'symfony', 'symfony', 'symfony');
 
-        $store->initialize();
-        $store->initialize();
+        $store->setup();
+        $store->setup();
 
         $this->assertSame(2, $httpClient->getRequestsCount());
+    }
+
+    public function testStoreCannotDropOnInvalidResponse()
+    {
+        $httpClient = new MockHttpClient([
+            new JsonMockResponse([], [
+                'http_code' => 400,
+            ]),
+        ], 'http://127.0.0.1:7474');
+
+        $store = new Store($httpClient, 'http://127.0.0.1:7474', 'symfony', 'symfony', 'symfony', 'symfony', 'symfony');
+
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:7474/db/symfony/query/v2".');
+        $this->expectExceptionCode(400);
+        $store->drop();
+    }
+
+    public function testStoreCanDrop()
+    {
+        $httpClient = new MockHttpClient([
+            new JsonMockResponse([], [
+                'http_code' => 200,
+            ]),
+        ], 'http://127.0.0.1:7474');
+
+        $store = new Store($httpClient, 'http://127.0.0.1:7474', 'symfony', 'symfony', 'symfony', 'symfony', 'symfony');
+
+        $store->drop();
+
+        $this->assertSame(1, $httpClient->getRequestsCount());
     }
 
     public function testStoreCanAdd()
@@ -153,11 +187,11 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 200,
             ]),
-        ], 'http://localhost:7474');
+        ], 'http://127.0.0.1:7474');
 
-        $store = new Store($httpClient, 'http://localhost:7474', 'symfony', 'symfony', 'symfony', 'symfony', 'symfony');
+        $store = new Store($httpClient, 'http://127.0.0.1:7474', 'symfony', 'symfony', 'symfony', 'symfony', 'symfony');
 
-        $store->initialize();
+        $store->setup();
         $store->add(new VectorDocument(Uuid::v4(), new Vector([0.1, 0.2, 0.3])));
         $store->add(new VectorDocument(Uuid::v4(), new Vector([0.1, 0.2, 0.3])));
 
@@ -252,11 +286,11 @@ final class StoreTest extends TestCase
             ], [
                 'http_code' => 200,
             ]),
-        ], 'http://localhost:7474');
+        ], 'http://127.0.0.1:7474');
 
-        $store = new Store($httpClient, 'http://localhost:7474', 'symfony', 'symfony', 'symfony', 'symfony', 'symfony');
+        $store = new Store($httpClient, 'http://127.0.0.1:7474', 'symfony', 'symfony', 'symfony', 'symfony', 'symfony');
 
-        $store->initialize();
+        $store->setup();
         $store->add(new VectorDocument(Uuid::v4(), new Vector([0.1, 0.2, 0.3])));
 
         $results = $store->query(new Vector([0.1, 0.2, 0.3]));

@@ -14,10 +14,12 @@ namespace Symfony\AI\Store;
 /**
  * @author Oskar Stark <oskarstark@googlemail.com>
  */
-interface InitializableStoreInterface
+interface ManagedStoreInterface
 {
     /**
      * @param array<mixed> $options
      */
-    public function initialize(array $options = []): void;
+    public function setup(array $options = []): void;
+
+    public function drop(): void;
 }

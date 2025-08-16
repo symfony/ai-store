@@ -12,6 +12,7 @@
 namespace Symfony\AI\Store\Tests\Bridge\ClickHouse;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
 use Symfony\AI\Store\Bridge\ClickHouse\Store;
@@ -23,6 +24,8 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(Store::class)]
+#[UsesClass(VectorDocument::class)]
+#[UsesClass(Vector::class)]
 final class StoreTest extends TestCase
 {
     public function testInitialize()
@@ -51,7 +54,7 @@ final class StoreTest extends TestCase
 
         $store = new Store($httpClient, 'test_db', 'test_table');
 
-        $store->initialize();
+        $store->setup();
 
         $this->assertCount(1, $expectedRequests);
     }
