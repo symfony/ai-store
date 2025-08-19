@@ -52,6 +52,7 @@ final class TextFileLoaderTest extends TestCase
 
         $this->assertCount(1, $documents);
         $this->assertInstanceOf(TextDocument::class, $document = $documents[0]);
-        $this->assertSame($source, $document->metadata['source']);
+        $this->assertSame($source, $document->metadata['_source']);
+        $this->assertSame($source, $document->metadata->getSource());
     }
 }

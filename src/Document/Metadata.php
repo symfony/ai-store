@@ -18,4 +18,58 @@ namespace Symfony\AI\Store\Document;
  */
 final class Metadata extends \ArrayObject
 {
+    public const KEY_PARENT_ID = '_parent_id';
+    public const KEY_TEXT = '_text';
+    public const KEY_SOURCE = '_source';
+
+    public function hasParentId(): bool
+    {
+        return $this->offsetExists(self::KEY_PARENT_ID);
+    }
+
+    public function getParentId(): int|string|null
+    {
+        return $this->offsetExists(self::KEY_PARENT_ID)
+            ? $this->offsetGet(self::KEY_PARENT_ID)
+            : null;
+    }
+
+    public function setParentId(int|string $parentId): void
+    {
+        $this->offsetSet(self::KEY_PARENT_ID, $parentId);
+    }
+
+    public function hasText(): bool
+    {
+        return $this->offsetExists(self::KEY_TEXT);
+    }
+
+    public function setText(string $text): void
+    {
+        $this->offsetSet(self::KEY_TEXT, $text);
+    }
+
+    public function getText(): ?string
+    {
+        return $this->offsetExists(self::KEY_TEXT)
+            ? $this->offsetGet(self::KEY_TEXT)
+            : null;
+    }
+
+    public function hasSource(): bool
+    {
+        return $this->offsetExists(self::KEY_SOURCE);
+    }
+
+    public function getSource(): ?string
+    {
+        return $this->offsetExists(self::KEY_SOURCE)
+            ? $this->offsetGet(self::KEY_SOURCE)
+            : null;
+    }
+
+    public function setSource(string $source): void
+    {
+        $this->offsetSet(self::KEY_SOURCE, $source);
+    }
 }

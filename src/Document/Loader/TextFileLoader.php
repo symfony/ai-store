@@ -35,7 +35,7 @@ final readonly class TextFileLoader implements LoaderInterface
         }
 
         yield new TextDocument(Uuid::v4(), trim($content), new Metadata([
-            'source' => $source,
+            Metadata::KEY_SOURCE => $source,
         ]));
     }
 }
