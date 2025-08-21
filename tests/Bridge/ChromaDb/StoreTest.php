@@ -108,7 +108,8 @@ final class StoreTest extends TestCase
                 new VectorDocument(
                     Uuid::fromString('01234567-89ab-cdef-0123-456789abcdef'),
                     new Vector([0.1, 0.2, 0.3]),
-                    new Metadata(['_text' => 'This is the content of document 1', 'title' => 'Document 1'])),
+                    new Metadata(['_text' => 'This is the content of document 1', 'title' => 'Document 1'])
+                ),
                 new VectorDocument(
                     Uuid::fromString('fedcba98-7654-3210-fedc-ba9876543210'),
                     new Vector([0.4, 0.5, 0.6]),
