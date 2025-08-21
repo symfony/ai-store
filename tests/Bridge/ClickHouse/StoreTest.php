@@ -127,7 +127,7 @@ final class StoreTest extends TestCase
         $store = new Store($httpClient, 'test_db', 'test_table');
 
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Could not insert data into ClickHouse. Http status code: 500. Response: Internal Server Error.');
+        $this->expectExceptionMessage('Could not insert data into ClickHouse. Http status code: 500. Response: "Internal Server Error".');
 
         $store->add($document);
     }
