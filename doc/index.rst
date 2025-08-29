@@ -37,6 +37,7 @@ used vector store::
 
 You can find more advanced usage in combination with an Agent using the store for RAG in the examples folder:
 
+* `Similarity Search with Cloudflare (RAG)`_
 * `Similarity Search with MariaDB (RAG)`_
 * `Similarity Search with Meilisearch (RAG)`_
 * `Similarity Search with memory storage (RAG)`_
@@ -61,6 +62,7 @@ Supported Stores
 
 * `Azure AI Search`_
 * `Chroma`_ (requires `codewithkyrian/chromadb-php` as additional dependency)
+* `Cloudflare`_
 * `InMemory`_
 * `MariaDB`_ (requires `ext-pdo`)
 * `Meilisearch`_
@@ -104,6 +106,7 @@ This leads to a store implementing two methods::
     }
 
 .. _`Retrieval Augmented Generation`: https://de.wikipedia.org/wiki/Retrieval-Augmented_Generation
+.. _`Similarity Search with Cloudflare (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/cloudflare.php
 .. _`Similarity Search with MariaDB (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/mariadb-gemini.php
 .. _`Similarity Search with Meilisearch (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/meilisearch.php
 .. _`Similarity Search with memory storage (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/in-memory.php
@@ -118,6 +121,7 @@ This leads to a store implementing two methods::
 .. _`Similarity Search with Weaviate (RAG)`: https://github.com/symfony/ai/blob/main/examples/rag/weaviate.php
 .. _`Azure AI Search`: https://azure.microsoft.com/products/ai-services/ai-search
 .. _`Chroma`: https://www.trychroma.com/
+.. _`Cloudflare`: https://developers.cloudflare.com/vectorize/
 .. _`MariaDB`: https://mariadb.org/projects/mariadb-vector/
 .. _`Pinecone`: https://www.pinecone.io/
 .. _`Postgres`: https://www.postgresql.org/about/news/pgvector-070-released-2852/
