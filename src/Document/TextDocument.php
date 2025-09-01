@@ -24,6 +24,8 @@ final readonly class TextDocument
         public string $content,
         public Metadata $metadata = new Metadata(),
     ) {
-        '' !== trim($this->content) || throw new InvalidArgumentException('The content shall not be an empty string.');
+        if ('' === trim($this->content)) {
+            throw new InvalidArgumentException('The content shall not be an empty string.');
+        }
     }
 }
