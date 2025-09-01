@@ -97,6 +97,13 @@ final class StoreTest extends TestCase
     public function testStoreCannotDropOnInvalidResponse()
     {
         $httpClient = new MockHttpClient([
+            new JsonMockResponse([
+                'code' => 200,
+                'details' => 'Authentication succeeded.',
+                'token' => 'bar',
+            ], [
+                'http_code' => 200,
+            ]),
             new JsonMockResponse([], [
                 'http_code' => 400,
             ]),
@@ -126,6 +133,13 @@ final class StoreTest extends TestCase
                     'status' => 'OK',
                     'time' => '263.208µs',
                 ],
+            ], [
+                'http_code' => 200,
+            ]),
+            new JsonMockResponse([
+                'code' => 200,
+                'details' => 'Authentication succeeded.',
+                'token' => 'bar',
             ], [
                 'http_code' => 200,
             ]),
