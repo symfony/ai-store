@@ -37,6 +37,7 @@ CHANGELOG
    - Azure AI Search
    - ChromaDB
    - ClickHouse
+   - Cloudflare
    - MariaDB
    - Meilisearch
    - MongoDB
