@@ -4,15 +4,20 @@
     "description": "Low-level abstraction for storing and retrieving documents in a vector store.",
     "keywords": [
         "ai",
-        "mongodb",
-        "pinecone",
+        "azure",
         "chromadb",
+        "clickhouse",
         "mariadb",
-        "postgres",
         "meilisearch",
-        "surrealdb",
+        "milvus",
+        "mongodb",
+        "neo4j",
+        "pinecone",
+        "postgres",
         "qdrant",
-        "neo4j"
+        "surrealdb",
+        "typesense",
+        "weaviate"
     ],
     "license": "MIT",
     "authors": [
