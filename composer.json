@@ -1,7 +1,8 @@
 {
     "name": "symfony/ai-store",
-    "type": "library",
     "description": "Low-level abstraction for storing and retrieving documents in a vector store.",
+    "license": "MIT",
+    "type": "library",
     "keywords": [
         "ai",
         "azure",
@@ -20,7 +21,6 @@
         "typesense",
         "weaviate"
     ],
-    "license": "MIT",
     "authors": [
         {
             "name": "Christopher Hertel",
@@ -49,17 +49,8 @@
         "probots-io/pinecone-php": "^1.0",
         "symfony/cache": "^7.3"
     },
-    "config": {
-        "sort-packages": true
-    },
     "conflict": {
         "mongodb/mongodb": "<1.21"
-    },
-    "extra": {
-        "thanks": {
-            "name": "symfony/ai",
-            "url": "https://github.com/symfony/ai"
-        }
     },
     "autoload": {
         "psr-4": {
@@ -68,8 +59,17 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Symfony\\AI\\Store\\Tests\\": "tests/",
-            "Symfony\\AI\\PHPStan\\": "../../.phpstan/"
+            "Symfony\\AI\\PHPStan\\": "../../.phpstan/",
+            "Symfony\\AI\\Store\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "thanks": {
+            "name": "symfony/ai",
+            "url": "https://github.com/symfony/ai"
         }
     }
 }
