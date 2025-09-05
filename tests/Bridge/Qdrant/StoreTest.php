@@ -228,4 +228,49 @@ final class StoreTest extends TestCase
         $this->assertSame(1, $httpClient->getRequestsCount());
         $this->assertCount(2, $results);
     }
+
+    public function testStoreCanQueryWithFilters()
+    {
+        $httpClient = new MockHttpClient([
+            new JsonMockResponse([
+                'result' => [
+                    'points' => [
+                        [
+                            'id' => Uuid::v4()->toRfc4122(),
+                            'vector' => [0.1, 0.2, 0.3],
+                            'payload' => ['foo' => 'bar'],
+                        ],
+                        [
+                            'id' => Uuid::v4()->toRfc4122(),
+                            'vector' => [0.2, 0.1, 0.3],
+                            'payload' => ['foo' => ['bar', 'baz']],
+                        ],
+                    ],
+                ],
+            ], [
+                'http_code' => 200,
+            ]),
+        ], 'http://127.0.0.1:6333');
+
+        $store = new Store($httpClient, 'http://127.0.0.1:6333', 'test', 'test');
+
+        $results = $store->query(new Vector([0.1, 0.2, 0.3]), [
+            'filter' => [
+                'must' => [
+                    ['key' => 'foo', 'match' => ['value' => 'bar']],
+                ],
+            ],
+        ]);
+
+        $this->assertSame(1, $httpClient->getRequestsCount());
+        $this->assertCount(2, $results);
+
+        foreach ($results as $result) {
+            $this->assertArrayHasKey('foo', $result->metadata);
+            $this->assertTrue(
+                'bar' === $result->metadata['foo'] || (\is_array($result->metadata['foo']) && \in_array('bar', $result->metadata['foo'], true)),
+                "Value should be 'bar' or an array containing 'bar'"
+            );
+        }
+    }
 }
