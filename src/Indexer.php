@@ -21,7 +21,7 @@ use Symfony\AI\Store\Document\VectorizerInterface;
  *
  * @author Christopher Hertel <mail@christopher-hertel.de>
  */
-final readonly class Indexer
+final readonly class Indexer implements IndexerInterface
 {
     public function __construct(
         private VectorizerInterface $vectorizer,
