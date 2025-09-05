@@ -14,7 +14,7 @@ namespace Symfony\AI\Store;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\AI\Store\Document\TextDocument;
-use Symfony\AI\Store\Document\Vectorizer;
+use Symfony\AI\Store\Document\VectorizerInterface;
 
 /**
  * Converts a collection of TextDocuments into VectorDocuments and pushes them to a store implementation.
@@ -24,7 +24,7 @@ use Symfony\AI\Store\Document\Vectorizer;
 final readonly class Indexer
 {
     public function __construct(
-        private Vectorizer $vectorizer,
+        private VectorizerInterface $vectorizer,
         private StoreInterface $store,
         private LoggerInterface $logger = new NullLogger(),
     ) {

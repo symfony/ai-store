@@ -19,7 +19,7 @@ use Symfony\AI\Platform\PlatformInterface;
  * The Vectorizer encapsulates the logic to convert a collection of TextDocuments into VectorDocuments. It checks for
  * the model's capabilities to handle batch processing or handles it with HttpClient's concurrency feature.
  */
-final readonly class Vectorizer
+final readonly class Vectorizer implements VectorizerInterface
 {
     public function __construct(
         private PlatformInterface $platform,
