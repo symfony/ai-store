@@ -12,7 +12,7 @@
 namespace Symfony\AI\Store\Document;
 
 /**
- * Interface for converting TextDocuments into VectorDocuments.
+ * Interface for converting a collection of TextDocuments into VectorDocuments.
  *
  * @author Oskar Stark <oskarstark@googlemail.com>
  */

@@ -15,10 +15,6 @@ use Symfony\AI\Platform\Capability;
 use Symfony\AI\Platform\Model;
 use Symfony\AI\Platform\PlatformInterface;
 
-/**
- * The Vectorizer encapsulates the logic to convert a collection of TextDocuments into VectorDocuments. It checks for
- * the model's capabilities to handle batch processing or handles it with HttpClient's concurrency feature.
- */
 final readonly class Vectorizer implements VectorizerInterface
 {
     public function __construct(
@@ -27,11 +23,6 @@ final readonly class Vectorizer implements VectorizerInterface
     ) {
     }
 
-    /**
-     * @param TextDocument[] $documents
-     *
-     * @return VectorDocument[]
-     */
     public function vectorizeDocuments(array $documents): array
     {
         if ($this->model->supports(Capability::INPUT_MULTIPLE)) {
