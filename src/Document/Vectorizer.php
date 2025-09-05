@@ -23,7 +23,7 @@ final readonly class Vectorizer implements VectorizerInterface
     ) {
     }
 
-    public function vectorizeDocuments(array $documents): array
+    public function __invoke(array $documents): array
     {
         if ($this->model->supports(Capability::INPUT_MULTIPLE)) {
             $result = $this->platform->invoke($this->model, array_map(fn (TextDocument $document) => $document->content, $documents));

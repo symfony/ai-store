@@ -45,13 +45,13 @@ final readonly class Indexer implements IndexerInterface
             ++$counter;
 
             if ($chunkSize === \count($chunk)) {
-                $this->store->add(...$this->vectorizer->vectorizeDocuments($chunk));
+                $this->store->add(...($this->vectorizer)($chunk));
                 $chunk = [];
             }
         }
 
         if (\count($chunk) > 0) {
-            $this->store->add(...$this->vectorizer->vectorizeDocuments($chunk));
+            $this->store->add(...($this->vectorizer)($chunk));
         }
 
         $this->logger->debug(0 === $counter ? 'No documents to index' : \sprintf('Indexed %d documents', $counter));
