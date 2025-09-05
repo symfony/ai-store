@@ -11,6 +11,8 @@
 
 namespace Symfony\AI\Store\Document;
 
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\AI\Platform\Capability;
 use Symfony\AI\Platform\Model;
 use Symfony\AI\Platform\PlatformInterface;
@@ -20,18 +22,26 @@ final readonly class Vectorizer implements VectorizerInterface
     public function __construct(
         private PlatformInterface $platform,
         private Model $model,
+        private LoggerInterface $logger = new NullLogger(),
     ) {
     }
 
     public function __invoke(array $documents): array
     {
+        $documentCount = \count($documents);
+        $this->logger->info('Starting vectorization process', ['document_count' => $documentCount]);
+
         if ($this->model->supports(Capability::INPUT_MULTIPLE)) {
+            $this->logger->debug('Using batch vectorization with model that supports multiple inputs');
             $result = $this->platform->invoke($this->model, array_map(fn (TextDocument $document) => $document->content, $documents));
 
             $vectors = $result->asVectors();
+            $this->logger->debug('Batch vectorization completed', ['vector_count' => \count($vectors)]);
         } else {
+            $this->logger->debug('Using sequential vectorization for model without multiple input support');
             $results = [];
-            foreach ($documents as $document) {
+            foreach ($documents as $i => $document) {
+                $this->logger->debug('Vectorizing document', ['document_index' => $i, 'document_id' => $document->id]);
                 $results[] = $this->platform->invoke($this->model, $document->content);
             }
 
@@ -39,12 +49,18 @@ final readonly class Vectorizer implements VectorizerInterface
             foreach ($results as $result) {
                 $vectors = array_merge($vectors, $result->asVectors());
             }
+            $this->logger->debug('Sequential vectorization completed', ['vector_count' => \count($vectors)]);
         }
 
         $vectorDocuments = [];
         foreach ($documents as $i => $document) {
             $vectorDocuments[] = new VectorDocument($document->id, $vectors[$i], $document->metadata);
         }
+
+        $this->logger->info('Vectorization process completed', [
+            'document_count' => $documentCount,
+            'vector_document_count' => \count($vectorDocuments),
+        ]);
 
         return $vectorDocuments;
     }
