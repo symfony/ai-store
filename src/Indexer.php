@@ -17,8 +17,6 @@ use Symfony\AI\Store\Document\TextDocument;
 use Symfony\AI\Store\Document\VectorizerInterface;
 
 /**
- * Converts a collection of TextDocuments into VectorDocuments and pushes them to a store implementation.
- *
  * @author Christopher Hertel <mail@christopher-hertel.de>
  */
 final readonly class Indexer implements IndexerInterface
