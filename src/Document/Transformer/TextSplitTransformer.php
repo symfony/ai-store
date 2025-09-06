@@ -32,7 +32,7 @@ final readonly class TextSplitTransformer implements TransformerInterface
     /**
      * @param array{chunk_size?: int, overlap?: int} $options
      */
-    public function __invoke(iterable $documents, array $options = []): iterable
+    public function transform(iterable $documents, array $options = []): iterable
     {
         $chunkSize = $options[self::OPTION_CHUNK_SIZE] ?? 1000;
         $overlap = $options[self::OPTION_OVERLAP] ?? 200;

@@ -24,7 +24,7 @@ final class ChainTransformerTest extends TestCase
     public function testChainTransformerAppliesAllTransformersInOrder()
     {
         $transformerA = new class implements TransformerInterface {
-            public function __invoke(iterable $documents, array $options = []): iterable
+            public function transform(iterable $documents, array $options = []): iterable
             {
                 foreach ($documents as $document) {
                     yield new TextDocument($document->id, $document->content.'-A');
@@ -33,7 +33,7 @@ final class ChainTransformerTest extends TestCase
         };
 
         $transformerB = new class implements TransformerInterface {
-            public function __invoke(iterable $documents, array $options = []): iterable
+            public function transform(iterable $documents, array $options = []): iterable
             {
                 foreach ($documents as $document) {
                     yield new TextDocument($document->id, $document->content.'-B');
@@ -47,7 +47,7 @@ final class ChainTransformerTest extends TestCase
             new TextDocument(Uuid::v4(), 'bar'),
         ];
 
-        $result = iterator_to_array($chain->__invoke($documents));
+        $result = iterator_to_array($chain->transform($documents));
 
         $this->assertSame('foo-A-B', $result[0]->content);
         $this->assertSame('bar-A-B', $result[1]->content);
@@ -58,7 +58,7 @@ final class ChainTransformerTest extends TestCase
         $chain = new ChainTransformer([]);
         $documents = [new TextDocument(Uuid::v4(), 'baz')];
 
-        $result = iterator_to_array($chain->__invoke($documents));
+        $result = iterator_to_array($chain->transform($documents));
 
         $this->assertSame('baz', $result[0]->content);
     }

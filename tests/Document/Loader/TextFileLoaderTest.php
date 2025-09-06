@@ -27,14 +27,14 @@ final class TextFileLoaderTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('File "/invalid/source.txt" does not exist.');
 
-        iterator_to_array($loader('/invalid/source.txt'));
+        iterator_to_array($loader->load('/invalid/source.txt'));
     }
 
     public function testLoadWithValidSource()
     {
         $loader = new TextFileLoader();
 
-        $documents = iterator_to_array($loader(\dirname(__DIR__, 5).'/fixtures/lorem.txt'));
+        $documents = iterator_to_array($loader->load(\dirname(__DIR__, 5).'/fixtures/lorem.txt'));
 
         $this->assertCount(1, $documents);
         $this->assertInstanceOf(TextDocument::class, $document = $documents[0]);
@@ -48,7 +48,7 @@ final class TextFileLoaderTest extends TestCase
         $loader = new TextFileLoader();
 
         $source = \dirname(__DIR__, 5).'/fixtures/lorem.txt';
-        $documents = iterator_to_array($loader($source));
+        $documents = iterator_to_array($loader->load($source));
 
         $this->assertCount(1, $documents);
         $this->assertInstanceOf(TextDocument::class, $document = $documents[0]);

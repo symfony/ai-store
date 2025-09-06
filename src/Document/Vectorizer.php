@@ -26,7 +26,7 @@ final readonly class Vectorizer implements VectorizerInterface
     ) {
     }
 
-    public function __invoke(array $documents): array
+    public function vectorize(array $documents): array
     {
         $documentCount = \count($documents);
         $this->logger->info('Starting vectorization process', ['document_count' => $documentCount]);

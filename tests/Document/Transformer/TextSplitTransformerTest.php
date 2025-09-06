@@ -33,7 +33,7 @@ final class TextSplitTransformerTest extends TestCase
     {
         $document = new TextDocument(Uuid::v4(), 'short text');
 
-        $chunks = iterator_to_array(($this->transformer)([$document]));
+        $chunks = iterator_to_array($this->transformer->transform([$document]));
 
         $this->assertCount(1, $chunks);
         $this->assertSame('short text', $chunks[0]->content);
@@ -48,7 +48,7 @@ final class TextSplitTransformerTest extends TestCase
     {
         $document = new TextDocument(Uuid::v4(), $this->getLongText());
 
-        $chunks = iterator_to_array(($this->transformer)([$document]));
+        $chunks = iterator_to_array($this->transformer->transform([$document]));
 
         $this->assertCount(2, $chunks);
 
@@ -63,7 +63,7 @@ final class TextSplitTransformerTest extends TestCase
     {
         $document = new TextDocument(Uuid::v4(), $this->getLongText());
 
-        $chunks = iterator_to_array(($this->transformer)([$document], [
+        $chunks = iterator_to_array($this->transformer->transform([$document], [
             TextSplitTransformer::OPTION_CHUNK_SIZE => 150,
             TextSplitTransformer::OPTION_OVERLAP => 25,
         ]));
@@ -111,7 +111,7 @@ final class TextSplitTransformerTest extends TestCase
     {
         $document = new TextDocument(Uuid::v4(), $this->getLongText());
 
-        $chunks = iterator_to_array(($this->transformer)([$document], [
+        $chunks = iterator_to_array($this->transformer->transform([$document], [
             TextSplitTransformer::OPTION_OVERLAP => 0,
         ]));
 
@@ -124,7 +124,7 @@ final class TextSplitTransformerTest extends TestCase
     {
         $document = new TextDocument(Uuid::v4(), $this->getLongText());
 
-        $chunks = iterator_to_array(($this->transformer)([$document], [
+        $chunks = iterator_to_array($this->transformer->transform([$document], [
             TextSplitTransformer::OPTION_CHUNK_SIZE => 1000,
             TextSplitTransformer::OPTION_OVERLAP => 200,
         ]));
@@ -141,7 +141,7 @@ final class TextSplitTransformerTest extends TestCase
             'foo' => 'bar',
         ]));
 
-        $chunks = iterator_to_array(($this->transformer)([$document]));
+        $chunks = iterator_to_array($this->transformer->transform([$document]));
 
         $this->assertCount(2, $chunks);
         $this->assertSame('value', $chunks[0]->metadata['key']);
@@ -154,7 +154,7 @@ final class TextSplitTransformerTest extends TestCase
     {
         $document = new TextDocument(Uuid::v4(), 'tiny');
 
-        $chunks = iterator_to_array(($this->transformer)([$document]));
+        $chunks = iterator_to_array($this->transformer->transform([$document]));
 
         $this->assertCount(1, $chunks);
         $this->assertSame('tiny', $chunks[0]->content);
@@ -166,7 +166,7 @@ final class TextSplitTransformerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Overlap must be non-negative and less than chunk size.');
 
-        iterator_to_array(($this->transformer)([$document], [
+        iterator_to_array($this->transformer->transform([$document], [
             TextSplitTransformer::OPTION_CHUNK_SIZE => 10,
             TextSplitTransformer::OPTION_OVERLAP => 20,
         ]));
@@ -178,7 +178,7 @@ final class TextSplitTransformerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Overlap must be non-negative and less than chunk size.');
 
-        iterator_to_array(($this->transformer)([$document], [
+        iterator_to_array($this->transformer->transform([$document], [
             TextSplitTransformer::OPTION_CHUNK_SIZE => 10,
             TextSplitTransformer::OPTION_OVERLAP => -1,
         ]));

@@ -26,5 +26,5 @@ interface TransformerInterface
      *
      * @return iterable<TextDocument>
      */
-    public function __invoke(iterable $documents, array $options = []): iterable;
+    public function transform(iterable $documents, array $options = []): iterable;
 }

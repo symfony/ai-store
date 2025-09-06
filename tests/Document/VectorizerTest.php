@@ -67,7 +67,7 @@ final class VectorizerTest extends TestCase
         $model = new Embeddings();
 
         $vectorizer = new Vectorizer($platform, $model);
-        $vectorDocuments = $vectorizer($documents);
+        $vectorDocuments = $vectorizer->vectorize($documents);
 
         $this->assertCount(3, $vectorDocuments);
 
@@ -88,7 +88,7 @@ final class VectorizerTest extends TestCase
         $model = new Embeddings();
 
         $vectorizer = new Vectorizer($platform, $model);
-        $vectorDocuments = $vectorizer([$document]);
+        $vectorDocuments = $vectorizer->vectorize([$document]);
 
         $this->assertCount(1, $vectorDocuments);
         $this->assertInstanceOf(VectorDocument::class, $vectorDocuments[0]);
@@ -103,7 +103,7 @@ final class VectorizerTest extends TestCase
         $model = new Embeddings();
 
         $vectorizer = new Vectorizer($platform, $model);
-        $vectorDocuments = $vectorizer([]);
+        $vectorDocuments = $vectorizer->vectorize([]);
 
         $this->assertSame([], $vectorDocuments);
     }
@@ -127,7 +127,7 @@ final class VectorizerTest extends TestCase
         $model = new Embeddings();
 
         $vectorizer = new Vectorizer($platform, $model);
-        $vectorDocuments = $vectorizer($documents);
+        $vectorDocuments = $vectorizer->vectorize($documents);
 
         $this->assertCount(2, $vectorDocuments);
         $this->assertSame($metadata1, $vectorDocuments[0]->metadata);
@@ -158,7 +158,7 @@ final class VectorizerTest extends TestCase
         $model = new Embeddings();
 
         $vectorizer = new Vectorizer($platform, $model);
-        $vectorDocuments = $vectorizer($documents);
+        $vectorDocuments = $vectorizer->vectorize($documents);
 
         $this->assertCount(3, $vectorDocuments);
         $this->assertSame($id1, $vectorDocuments[0]->id);
@@ -187,7 +187,7 @@ final class VectorizerTest extends TestCase
         $model = new Embeddings();
 
         $vectorizer = new Vectorizer($platform, $model);
-        $vectorDocuments = $vectorizer($documents);
+        $vectorDocuments = $vectorizer->vectorize($documents);
 
         $this->assertCount($count, $vectorDocuments);
 
@@ -226,7 +226,7 @@ final class VectorizerTest extends TestCase
         $model = new Embeddings();
 
         $vectorizer = new Vectorizer($platform, $model);
-        $vectorDocuments = $vectorizer([$document]);
+        $vectorDocuments = $vectorizer->vectorize([$document]);
 
         $this->assertCount(1, $vectorDocuments);
         $this->assertEquals($vector, $vectorDocuments[0]->vector);
@@ -250,7 +250,7 @@ final class VectorizerTest extends TestCase
         $model = new Embeddings();
 
         $vectorizer = new Vectorizer($platform, $model);
-        $vectorDocuments = $vectorizer($documents);
+        $vectorDocuments = $vectorizer->vectorize($documents);
 
         $this->assertCount(3, $vectorDocuments);
 
@@ -313,7 +313,7 @@ final class VectorizerTest extends TestCase
         $platform = new Platform([$handler], [$handler]);
 
         $vectorizer = new Vectorizer($platform, $model);
-        $vectorDocuments = $vectorizer($documents);
+        $vectorDocuments = $vectorizer->vectorize($documents);
 
         $this->assertCount(2, $vectorDocuments);
         $this->assertEquals($vectors[0], $vectorDocuments[0]->vector);

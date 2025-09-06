@@ -23,5 +23,5 @@ interface VectorizerInterface
      *
      * @return VectorDocument[]
      */
-    public function __invoke(array $documents): array;
+    public function vectorize(array $documents): array;
 }

@@ -22,5 +22,5 @@ interface LoaderInterface
      *
      * @return iterable<TextDocument> iterable of TextDocuments loaded from the source
      */
-    public function __invoke(string $source, array $options = []): iterable;
+    public function load(string $source, array $options = []): iterable;
 }

@@ -22,7 +22,7 @@ use Symfony\Component\Uid\Uuid;
  */
 final readonly class TextFileLoader implements LoaderInterface
 {
-    public function __invoke(string $source, array $options = []): iterable
+    public function load(string $source, array $options = []): iterable
     {
         if (!is_file($source)) {
             throw new RuntimeException(\sprintf('File "%s" does not exist.', $source));

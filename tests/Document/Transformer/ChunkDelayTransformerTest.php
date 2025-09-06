@@ -35,7 +35,7 @@ final class ChunkDelayTransformerTest extends TestCase
             $documents[] = new TextDocument(Uuid::v4(), 'content-'.$i);
         }
 
-        $result = iterator_to_array($transformer($documents));
+        $result = iterator_to_array($transformer->transform($documents));
 
         $this->assertCount(30, $result);
         for ($i = 0; $i < 30; ++$i) {
@@ -57,7 +57,7 @@ final class ChunkDelayTransformerTest extends TestCase
             $documents[] = new TextDocument(Uuid::v4(), 'content-'.$i);
         }
 
-        $result = iterator_to_array($transformer($documents, [
+        $result = iterator_to_array($transformer->transform($documents, [
             ChunkDelayTransformer::OPTION_CHUNK_SIZE => 50,
             ChunkDelayTransformer::OPTION_DELAY => 5,
         ]));
@@ -79,7 +79,7 @@ final class ChunkDelayTransformerTest extends TestCase
             $documents[] = new TextDocument(Uuid::v4(), 'content-'.$i);
         }
 
-        $result = iterator_to_array($transformer($documents, [
+        $result = iterator_to_array($transformer->transform($documents, [
             ChunkDelayTransformer::OPTION_CHUNK_SIZE => 10,
             ChunkDelayTransformer::OPTION_DELAY => 2,
         ]));
@@ -100,7 +100,7 @@ final class ChunkDelayTransformerTest extends TestCase
             $documents[] = new TextDocument(Uuid::v4(), 'content-'.$i);
         }
 
-        $result = iterator_to_array($transformer($documents, [
+        $result = iterator_to_array($transformer->transform($documents, [
             ChunkDelayTransformer::OPTION_CHUNK_SIZE => 5,
             ChunkDelayTransformer::OPTION_DELAY => 0,
         ]));
@@ -119,7 +119,7 @@ final class ChunkDelayTransformerTest extends TestCase
             new TextDocument(Uuid::v4(), 'third'),
         ];
 
-        $result = iterator_to_array($transformer($documents, [
+        $result = iterator_to_array($transformer->transform($documents, [
             ChunkDelayTransformer::OPTION_CHUNK_SIZE => 2,
             ChunkDelayTransformer::OPTION_DELAY => 1,
         ]));
@@ -137,7 +137,7 @@ final class ChunkDelayTransformerTest extends TestCase
 
         $transformer = new ChunkDelayTransformer($clock);
 
-        $result = iterator_to_array($transformer([]));
+        $result = iterator_to_array($transformer->transform([]));
 
         $this->assertCount(0, $result);
     }
@@ -153,7 +153,7 @@ final class ChunkDelayTransformerTest extends TestCase
 
         $documents = [new TextDocument(Uuid::v4(), 'single')];
 
-        $result = iterator_to_array($transformer($documents, [
+        $result = iterator_to_array($transformer->transform($documents, [
             ChunkDelayTransformer::OPTION_CHUNK_SIZE => 1,
             ChunkDelayTransformer::OPTION_DELAY => 5,
         ]));
@@ -176,7 +176,7 @@ final class ChunkDelayTransformerTest extends TestCase
             $documents[] = new TextDocument(Uuid::v4(), 'content-'.$i);
         }
 
-        $result = iterator_to_array($transformer($documents, [
+        $result = iterator_to_array($transformer->transform($documents, [
             ChunkDelayTransformer::OPTION_CHUNK_SIZE => 10,
             ChunkDelayTransformer::OPTION_DELAY => 3,
         ]));
@@ -198,7 +198,7 @@ final class ChunkDelayTransformerTest extends TestCase
             $documents[] = new TextDocument(Uuid::v4(), 'content-'.$i);
         }
 
-        $result = iterator_to_array($transformer($documents, [
+        $result = iterator_to_array($transformer->transform($documents, [
             ChunkDelayTransformer::OPTION_CHUNK_SIZE => 5,
             ChunkDelayTransformer::OPTION_DELAY => 1,
         ]));
@@ -220,7 +220,7 @@ final class ChunkDelayTransformerTest extends TestCase
             $documents[] = new TextDocument(Uuid::v4(), 'content-'.$i);
         }
 
-        $generator = $transformer($documents, [
+        $generator = $transformer->transform($documents, [
             ChunkDelayTransformer::OPTION_CHUNK_SIZE => 3,
             ChunkDelayTransformer::OPTION_DELAY => 1,
         ]);
@@ -248,7 +248,7 @@ final class ChunkDelayTransformerTest extends TestCase
 
         $startTime = $clock->now();
 
-        iterator_to_array($transformer($documents, [
+        iterator_to_array($transformer->transform($documents, [
             ChunkDelayTransformer::OPTION_CHUNK_SIZE => 5,
             ChunkDelayTransformer::OPTION_DELAY => 30,
         ]));
