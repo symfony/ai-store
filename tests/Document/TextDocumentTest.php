@@ -247,4 +247,22 @@ final class TextDocumentTest extends TestCase
 
         new TextDocument(Uuid::v4(), '   ');
     }
+
+    #[TestDox('withContent creates new instance with updated content')]
+    public function testWithContent()
+    {
+        $id = Uuid::v4();
+        $originalContent = 'Original content';
+        $newContent = 'Updated content';
+        $metadata = new Metadata(['title' => 'Test Document']);
+
+        $originalDocument = new TextDocument($id, $originalContent, $metadata);
+        $updatedDocument = $originalDocument->withContent($newContent);
+
+        $this->assertNotSame($originalDocument, $updatedDocument);
+        $this->assertSame($id, $updatedDocument->id);
+        $this->assertSame($newContent, $updatedDocument->content);
+        $this->assertSame($metadata, $updatedDocument->metadata);
+        $this->assertSame($originalContent, $originalDocument->content);
+    }
 }
