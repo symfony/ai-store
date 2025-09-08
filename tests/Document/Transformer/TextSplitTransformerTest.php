@@ -184,6 +184,63 @@ final class TextSplitTransformerTest extends TestCase
         ]));
     }
 
+    public function testConstructorWithValidParameters()
+    {
+        $transformer = new TextSplitTransformer(500, 100);
+        $document = new TextDocument(Uuid::v4(), 'short text');
+
+        $chunks = iterator_to_array($transformer->transform([$document]));
+
+        $this->assertCount(1, $chunks);
+        $this->assertSame('short text', $chunks[0]->content);
+    }
+
+    public function testConstructorWithDefaultParameters()
+    {
+        $transformer = new TextSplitTransformer();
+        $document = new TextDocument(Uuid::v4(), 'short text');
+
+        $chunks = iterator_to_array($transformer->transform([$document]));
+
+        $this->assertCount(1, $chunks);
+        $this->assertSame('short text', $chunks[0]->content);
+    }
+
+    public function testConstructorWithNegativeOverlap()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Overlap must be non-negative and less than chunk size. Got chunk size: 1000, overlap: -1');
+
+        new TextSplitTransformer(1000, -1);
+    }
+
+    public function testConstructorWithOverlapEqualToChunkSize()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Overlap must be non-negative and less than chunk size. Got chunk size: 500, overlap: 500');
+
+        new TextSplitTransformer(500, 500);
+    }
+
+    public function testConstructorWithOverlapGreaterThanChunkSize()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Overlap must be non-negative and less than chunk size. Got chunk size: 100, overlap: 200');
+
+        new TextSplitTransformer(100, 200);
+    }
+
+    public function testConstructorParametersAreUsedAsDefaults()
+    {
+        $transformer = new TextSplitTransformer(150, 25);
+        $document = new TextDocument(Uuid::v4(), $this->getLongText());
+
+        $chunks = iterator_to_array($transformer->transform([$document]));
+
+        $this->assertCount(12, $chunks);
+        $this->assertSame(150, mb_strlen($chunks[0]->content));
+    }
+
     private function getLongText(): string
     {
         return trim(file_get_contents(\dirname(__DIR__, 5).'/fixtures/lorem.txt'));
