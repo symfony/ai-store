@@ -265,4 +265,15 @@ final class TextDocumentTest extends TestCase
         $this->assertSame($metadata, $updatedDocument->metadata);
         $this->assertSame($originalContent, $originalDocument->content);
     }
+
+    #[TestDox('withContent validates new content')]
+    public function testWithContentValidatesContent()
+    {
+        $document = new TextDocument(Uuid::v4(), 'Valid content');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The content shall not be an empty string.');
+
+        $document->withContent('   ');
+    }
 }
