@@ -15,11 +15,22 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Store\Document\Loader\TextFileLoader;
 use Symfony\AI\Store\Document\TextDocument;
+use Symfony\AI\Store\Exception\InvalidArgumentException;
 use Symfony\AI\Store\Exception\RuntimeException;
 
 #[CoversClass(TextFileLoader::class)]
 final class TextFileLoaderTest extends TestCase
 {
+    public function testLoadWithNullSource()
+    {
+        $loader = new TextFileLoader();
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('TextFileLoader requires a file path as source, null given.');
+
+        iterator_to_array($loader->load(null));
+    }
+
     public function testLoadWithInvalidSource()
     {
         $loader = new TextFileLoader();

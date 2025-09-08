@@ -11,18 +11,24 @@
 
 namespace Symfony\AI\Store;
 
-use Symfony\AI\Store\Document\TextDocument;
-
 /**
- * Converts a collection of TextDocuments into VectorDocuments and pushes them to a store implementation.
+ * Handles the complete document processing pipeline: load → transform → vectorize → store.
  *
  * @author Oskar Stark <oskarstark@googlemail.com>
  */
 interface IndexerInterface
 {
     /**
-     * @param TextDocument|iterable<TextDocument> $documents
-     * @param int                                 $chunkSize number of documents to vectorize and store in one batch
+     * Process sources through the complete document pipeline: load → transform → vectorize → store.
+     *
+     * @param array{chunk_size?: int} $options Processing options
      */
-    public function index(TextDocument|iterable $documents, int $chunkSize = 50): void;
+    public function index(array $options = []): void;
+
+    /**
+     * Create a new instance with a different source.
+     *
+     * @param string|array<string> $source Source identifier (file path, URL, etc.) or array of sources
+     */
+    public function withSource(string|array $source): self;
 }

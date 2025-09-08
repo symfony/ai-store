@@ -15,7 +15,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Symfony\AI\Platform\Bridge\OpenAi\Embeddings;
 use Symfony\AI\Platform\Message\ToolCallMessage;
 use Symfony\AI\Platform\Platform;
@@ -23,6 +22,7 @@ use Symfony\AI\Platform\Result\ResultPromise;
 use Symfony\AI\Platform\Result\ToolCall;
 use Symfony\AI\Platform\Result\VectorResult;
 use Symfony\AI\Platform\Vector\Vector;
+use Symfony\AI\Store\Document\Loader\InMemoryLoader;
 use Symfony\AI\Store\Document\Metadata;
 use Symfony\AI\Store\Document\TextDocument;
 use Symfony\AI\Store\Document\VectorDocument;
@@ -34,6 +34,7 @@ use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(Indexer::class)]
 #[Medium]
+#[UsesClass(InMemoryLoader::class)]
 #[UsesClass(TextDocument::class)]
 #[UsesClass(Vector::class)]
 #[UsesClass(VectorDocument::class)]
@@ -49,10 +50,11 @@ final class IndexerTest extends TestCase
     {
         $document = new TextDocument($id = Uuid::v4(), 'Test content');
         $vector = new Vector([0.1, 0.2, 0.3]);
+        $loader = new InMemoryLoader([$document]);
         $vectorizer = new Vectorizer(PlatformTestHandler::createPlatform(new VectorResult($vector)), new Embeddings());
 
-        $indexer = new Indexer($vectorizer, $store = new TestStore());
-        $indexer->index($document);
+        $indexer = new Indexer($loader, $vectorizer, $store = new TestStore());
+        $indexer->index();
 
         $this->assertCount(1, $store->documents);
         $this->assertInstanceOf(VectorDocument::class, $store->documents[0]);
@@ -62,12 +64,11 @@ final class IndexerTest extends TestCase
 
     public function testIndexEmptyDocumentList()
     {
-        $logger = self::createMock(LoggerInterface::class);
-        $logger->expects($this->once())->method('debug')->with('No documents to index');
+        $loader = new InMemoryLoader([]);
         $vectorizer = new Vectorizer(PlatformTestHandler::createPlatform(), new Embeddings());
 
-        $indexer = new Indexer($vectorizer, $store = new TestStore(), $logger);
-        $indexer->index([]);
+        $indexer = new Indexer($loader, $vectorizer, $store = new TestStore());
+        $indexer->index();
 
         $this->assertSame([], $store->documents);
     }
@@ -77,10 +78,11 @@ final class IndexerTest extends TestCase
         $metadata = new Metadata(['key' => 'value']);
         $document = new TextDocument($id = Uuid::v4(), 'Test content', $metadata);
         $vector = new Vector([0.1, 0.2, 0.3]);
+        $loader = new InMemoryLoader([$document]);
         $vectorizer = new Vectorizer(PlatformTestHandler::createPlatform(new VectorResult($vector)), new Embeddings());
 
-        $indexer = new Indexer($vectorizer, $store = new TestStore());
-        $indexer->index($document);
+        $indexer = new Indexer($loader, $vectorizer, $store = new TestStore());
+        $indexer->index();
 
         $this->assertSame(1, $store->addCalls);
         $this->assertCount(1, $store->documents);
@@ -88,5 +90,65 @@ final class IndexerTest extends TestCase
         $this->assertSame($id, $store->documents[0]->id);
         $this->assertSame($vector, $store->documents[0]->vector);
         $this->assertSame(['key' => 'value'], $store->documents[0]->metadata->getArrayCopy());
+    }
+
+    public function testWithSource()
+    {
+        $document1 = new TextDocument(Uuid::v4(), 'Document 1');
+        $vector = new Vector([0.1, 0.2, 0.3]);
+
+        // InMemoryLoader doesn't use source parameter, so we'll test withSource method's immutability
+        $loader = new InMemoryLoader([$document1]);
+        $vectorizer = new Vectorizer(PlatformTestHandler::createPlatform(new VectorResult($vector)), new Embeddings());
+
+        // Create indexer with initial source
+        $indexer = new Indexer($loader, $vectorizer, $store = new TestStore(), 'source1');
+
+        // Create new indexer with different source
+        $indexerWithNewSource = $indexer->withSource('source2');
+
+        // Verify it returns a new instance (immutability)
+        $this->assertNotSame($indexer, $indexerWithNewSource);
+
+        // Both can index successfully
+        $indexer->index();
+        $this->assertCount(1, $store->documents);
+
+        $store2 = new TestStore();
+        $indexer2 = new Indexer($loader, $vectorizer, $store2, 'source2');
+        $indexer2->index();
+        $this->assertCount(1, $store2->documents);
+    }
+
+    public function testWithSourceArray()
+    {
+        $document1 = new TextDocument(Uuid::v4(), 'Document 1');
+        $document2 = new TextDocument(Uuid::v4(), 'Document 2');
+        $vector = new Vector([0.1, 0.2, 0.3]);
+
+        // InMemoryLoader returns all documents regardless of source
+        $loader = new InMemoryLoader([$document1, $document2]);
+        $vectorizer = new Vectorizer(PlatformTestHandler::createPlatform(new VectorResult($vector)), new Embeddings());
+
+        // Create indexer with single source
+        $indexer = new Indexer($loader, $vectorizer, $store1 = new TestStore(), 'source1');
+
+        // Create new indexer with array of sources
+        $indexerWithMultipleSources = $indexer->withSource(['source2', 'source3']);
+
+        // Verify it returns a new instance (immutability)
+        $this->assertNotSame($indexer, $indexerWithMultipleSources);
+
+        // Since InMemoryLoader ignores source, both will index all documents
+        $indexer->index();
+        $this->assertCount(2, $store1->documents);
+
+        $store2 = new TestStore();
+        $indexer2 = new Indexer($loader, $vectorizer, $store2, ['source2', 'source3']);
+        $indexer2->index();
+        // With array sources, loadSource is called for each source
+        // Since InMemoryLoader ignores source, it returns all docs each time
+        // So with 2 sources and 2 docs each time = 4 documents total
+        $this->assertCount(4, $store2->documents);
     }
 }
