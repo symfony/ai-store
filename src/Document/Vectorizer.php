@@ -16,6 +16,8 @@ use Psr\Log\NullLogger;
 use Symfony\AI\Platform\Capability;
 use Symfony\AI\Platform\Model;
 use Symfony\AI\Platform\PlatformInterface;
+use Symfony\AI\Platform\Vector\Vector;
+use Symfony\AI\Store\Exception\RuntimeException;
 
 final readonly class Vectorizer implements VectorizerInterface
 {
@@ -26,7 +28,7 @@ final readonly class Vectorizer implements VectorizerInterface
     ) {
     }
 
-    public function vectorize(array $documents): array
+    public function vectorizeTextDocuments(array $documents): array
     {
         $documentCount = \count($documents);
         $this->logger->info('Starting vectorization process', ['document_count' => $documentCount]);
@@ -63,5 +65,19 @@ final readonly class Vectorizer implements VectorizerInterface
         ]);
 
         return $vectorDocuments;
+    }
+
+    public function vectorize(string $string): Vector
+    {
+        $this->logger->debug('Vectorizing string', ['string' => $string]);
+
+        $result = $this->platform->invoke($this->model, $string);
+        $vectors = $result->asVectors();
+
+        if (!isset($vectors[0])) {
+            throw new RuntimeException('No vector returned for string vectorization.');
+        }
+
+        return $vectors[0];
     }
 }
