@@ -13,31 +13,69 @@ namespace Symfony\AI\Store;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Symfony\AI\Store\Document\LoaderInterface;
 use Symfony\AI\Store\Document\TextDocument;
+use Symfony\AI\Store\Document\TransformerInterface;
 use Symfony\AI\Store\Document\VectorizerInterface;
 
 /**
  * @author Christopher Hertel <mail@christopher-hertel.de>
+ * @author Oskar Stark <oskarstark@googlemail.com>
  */
-final readonly class Indexer implements IndexerInterface
+class Indexer implements IndexerInterface
 {
-    public function __construct(
-        private VectorizerInterface $vectorizer,
-        private StoreInterface $store,
-        private LoggerInterface $logger = new NullLogger(),
-    ) {
-    }
+    /**
+     * @var array<string|null>
+     */
+    private array $sources = [];
 
     /**
-     * @param TextDocument|iterable<TextDocument> $documents
-     * @param int                                 $chunkSize number of documents to vectorize and store in one batch
+     * @param string|array<string>|null $source
+     * @param TransformerInterface[]    $transformers
      */
-    public function index(TextDocument|iterable $documents, int $chunkSize = 50): void
+    public function __construct(
+        private LoaderInterface $loader,
+        private VectorizerInterface $vectorizer,
+        private StoreInterface $store,
+        string|array|null $source = null,
+        private array $transformers = [],
+        private LoggerInterface $logger = new NullLogger(),
+    ) {
+        $this->sources = null === $source ? [] : (array) $source;
+    }
+
+    public function withSource(string|array $source): self
     {
-        if ($documents instanceof TextDocument) {
-            $documents = [$documents];
+        return new self($this->loader, $this->vectorizer, $this->store, $source, $this->transformers, $this->logger);
+    }
+
+    public function index(array $options = []): void
+    {
+        $this->logger->debug('Starting document processing', ['sources' => $this->sources, 'options' => $options]);
+
+        $documents = [];
+        if ([] === $this->sources) {
+            // No specific source provided, load with null
+            $documents = $this->loadSource(null);
+        } else {
+            foreach ($this->sources as $singleSource) {
+                $documents = array_merge($documents, $this->loadSource($singleSource));
+            }
         }
 
+        if ([] === $documents) {
+            $this->logger->debug('No documents to process', ['sources' => $this->sources]);
+
+            return;
+        }
+
+        // Transform documents through all transformers
+        foreach ($this->transformers as $transformer) {
+            $documents = $transformer->transform($documents);
+        }
+
+        // Vectorize and store documents in chunks
+        $chunkSize = $options['chunk_size'] ?? 50;
         $counter = 0;
         $chunk = [];
         foreach ($documents as $document) {
@@ -50,10 +88,24 @@ final readonly class Indexer implements IndexerInterface
             }
         }
 
-        if (\count($chunk) > 0) {
+        // Handle remaining documents
+        if ([] !== $chunk) {
             $this->store->add(...$this->vectorizer->vectorizeTextDocuments($chunk));
         }
 
-        $this->logger->debug(0 === $counter ? 'No documents to index' : \sprintf('Indexed %d documents', $counter));
+        $this->logger->debug('Document processing completed', ['total_documents' => $counter]);
+    }
+
+    /**
+     * @return TextDocument[]
+     */
+    private function loadSource(?string $source): array
+    {
+        $documents = [];
+        foreach ($this->loader->load($source) as $document) {
+            $documents[] = $document;
+        }
+
+        return $documents;
     }
 }

@@ -27,9 +27,9 @@ final class InMemoryLoaderTest extends TestCase
     public function testLoadWithEmptyDocuments()
     {
         $loader = new InMemoryLoader();
-        $documents = iterator_to_array($loader->load('ignored-source'));
+        $documents = iterator_to_array($loader->load(null));
 
-        $this->assertEmpty($documents);
+        $this->assertSame([], $documents);
     }
 
     public function testLoadWithSingleDocument()
@@ -37,7 +37,7 @@ final class InMemoryLoaderTest extends TestCase
         $document = new TextDocument(Uuid::v4(), 'This is test content');
         $loader = new InMemoryLoader([$document]);
 
-        $documents = iterator_to_array($loader->load('ignored-source'));
+        $documents = iterator_to_array($loader->load(null));
 
         $this->assertCount(1, $documents);
         $this->assertSame($document, $documents[0]);
@@ -50,7 +50,7 @@ final class InMemoryLoaderTest extends TestCase
         $document2 = new TextDocument(Uuid::v4(), 'Second document', new Metadata(['type' => 'test']));
         $loader = new InMemoryLoader([$document1, $document2]);
 
-        $documents = iterator_to_array($loader->load('ignored-source'));
+        $documents = iterator_to_array($loader->load(null));
 
         $this->assertCount(2, $documents);
         $this->assertSame($document1, $documents[0]);
@@ -62,18 +62,14 @@ final class InMemoryLoaderTest extends TestCase
 
     public function testLoadIgnoresSourceParameter()
     {
-        $document = new TextDocument(Uuid::v4(), 'test content');
+        $document = new TextDocument(Uuid::v4(), 'Test content');
         $loader = new InMemoryLoader([$document]);
 
-        $documents1 = iterator_to_array($loader->load('source1'));
-        $documents2 = iterator_to_array($loader->load('source2'));
-        $documents3 = iterator_to_array($loader->load('any-source'));
+        // Source parameter should be ignored - same result regardless of value
+        $documentsWithNull = iterator_to_array($loader->load(null));
+        $documentsWithString = iterator_to_array($loader->load('ignored-source'));
 
-        $this->assertCount(1, $documents1);
-        $this->assertCount(1, $documents2);
-        $this->assertCount(1, $documents3);
-        $this->assertSame($document, $documents1[0]);
-        $this->assertSame($document, $documents2[0]);
-        $this->assertSame($document, $documents3[0]);
+        $this->assertSame($documentsWithNull, $documentsWithString);
+        $this->assertSame($document, $documentsWithNull[0]);
     }
 }

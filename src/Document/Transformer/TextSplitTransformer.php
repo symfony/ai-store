@@ -34,7 +34,7 @@ final readonly class TextSplitTransformer implements TransformerInterface
         private int $overlap = 200,
     ) {
         if ($this->overlap < 0 || $this->overlap >= $this->chunkSize) {
-            throw new InvalidArgumentException(\sprintf('Overlap must be non-negative and less than chunk size. Got chunk size: %d, overlap: %d', $this->chunkSize, $this->overlap));
+            throw new InvalidArgumentException(\sprintf('Overlap must be non-negative and less than chunk size. Got chunk size: %d, overlap: %d.', $this->chunkSize, $this->overlap));
         }
     }
 
