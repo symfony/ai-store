@@ -15,12 +15,15 @@ use Symfony\AI\Store\Document\LoaderInterface;
 use Symfony\AI\Store\Document\TextDocument;
 
 /**
+ * Loader that returns pre-loaded TextDocuments from memory.
+ * Useful for testing or when documents are already available as objects.
+ *
  * @author Oskar Stark <oskarstark@googlemail.com>
  */
 final readonly class InMemoryLoader implements LoaderInterface
 {
     /**
-     * @param array<TextDocument> $documents
+     * @param TextDocument[] $documents
      */
     public function __construct(
         private array $documents = [],
