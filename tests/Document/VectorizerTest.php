@@ -67,7 +67,7 @@ final class VectorizerTest extends TestCase
         $model = new Embeddings();
 
         $vectorizer = new Vectorizer($platform, $model);
-        $vectorDocuments = $vectorizer->vectorize($documents);
+        $vectorDocuments = $vectorizer->vectorizeTextDocuments($documents);
 
         $this->assertCount(3, $vectorDocuments);
 
@@ -88,7 +88,7 @@ final class VectorizerTest extends TestCase
         $model = new Embeddings();
 
         $vectorizer = new Vectorizer($platform, $model);
-        $vectorDocuments = $vectorizer->vectorize([$document]);
+        $vectorDocuments = $vectorizer->vectorizeTextDocuments([$document]);
 
         $this->assertCount(1, $vectorDocuments);
         $this->assertInstanceOf(VectorDocument::class, $vectorDocuments[0]);
@@ -103,7 +103,7 @@ final class VectorizerTest extends TestCase
         $model = new Embeddings();
 
         $vectorizer = new Vectorizer($platform, $model);
-        $vectorDocuments = $vectorizer->vectorize([]);
+        $vectorDocuments = $vectorizer->vectorizeTextDocuments([]);
 
         $this->assertSame([], $vectorDocuments);
     }
@@ -127,7 +127,7 @@ final class VectorizerTest extends TestCase
         $model = new Embeddings();
 
         $vectorizer = new Vectorizer($platform, $model);
-        $vectorDocuments = $vectorizer->vectorize($documents);
+        $vectorDocuments = $vectorizer->vectorizeTextDocuments($documents);
 
         $this->assertCount(2, $vectorDocuments);
         $this->assertSame($metadata1, $vectorDocuments[0]->metadata);
@@ -158,7 +158,7 @@ final class VectorizerTest extends TestCase
         $model = new Embeddings();
 
         $vectorizer = new Vectorizer($platform, $model);
-        $vectorDocuments = $vectorizer->vectorize($documents);
+        $vectorDocuments = $vectorizer->vectorizeTextDocuments($documents);
 
         $this->assertCount(3, $vectorDocuments);
         $this->assertSame($id1, $vectorDocuments[0]->id);
@@ -187,7 +187,7 @@ final class VectorizerTest extends TestCase
         $model = new Embeddings();
 
         $vectorizer = new Vectorizer($platform, $model);
-        $vectorDocuments = $vectorizer->vectorize($documents);
+        $vectorDocuments = $vectorizer->vectorizeTextDocuments($documents);
 
         $this->assertCount($count, $vectorDocuments);
 
@@ -226,7 +226,7 @@ final class VectorizerTest extends TestCase
         $model = new Embeddings();
 
         $vectorizer = new Vectorizer($platform, $model);
-        $vectorDocuments = $vectorizer->vectorize([$document]);
+        $vectorDocuments = $vectorizer->vectorizeTextDocuments([$document]);
 
         $this->assertCount(1, $vectorDocuments);
         $this->assertEquals($vector, $vectorDocuments[0]->vector);
@@ -250,7 +250,7 @@ final class VectorizerTest extends TestCase
         $model = new Embeddings();
 
         $vectorizer = new Vectorizer($platform, $model);
-        $vectorDocuments = $vectorizer->vectorize($documents);
+        $vectorDocuments = $vectorizer->vectorizeTextDocuments($documents);
 
         $this->assertCount(3, $vectorDocuments);
 
@@ -313,10 +313,70 @@ final class VectorizerTest extends TestCase
         $platform = new Platform([$handler], [$handler]);
 
         $vectorizer = new Vectorizer($platform, $model);
-        $vectorDocuments = $vectorizer->vectorize($documents);
+        $vectorDocuments = $vectorizer->vectorizeTextDocuments($documents);
 
         $this->assertCount(2, $vectorDocuments);
         $this->assertEquals($vectors[0], $vectorDocuments[0]->vector);
         $this->assertEquals($vectors[1], $vectorDocuments[1]->vector);
+    }
+
+    public function testVectorizeString()
+    {
+        $text = 'This is a test string to vectorize';
+        $vector = new Vector([0.1, 0.2, 0.3]);
+
+        $platform = PlatformTestHandler::createPlatform(new VectorResult($vector));
+        $model = new Embeddings();
+
+        $vectorizer = new Vectorizer($platform, $model);
+        $result = $vectorizer->vectorize($text);
+
+        $this->assertInstanceOf(Vector::class, $result);
+        $this->assertEquals($vector, $result);
+    }
+
+    public function testVectorizeStringWithSpecialCharacters()
+    {
+        $text = 'Test with émojis 🚀 and ünïcödé characters';
+        $vector = new Vector([0.5, 0.6, 0.7]);
+
+        $platform = PlatformTestHandler::createPlatform(new VectorResult($vector));
+        $model = new Embeddings();
+
+        $vectorizer = new Vectorizer($platform, $model);
+        $result = $vectorizer->vectorize($text);
+
+        $this->assertInstanceOf(Vector::class, $result);
+        $this->assertEquals($vector, $result);
+    }
+
+    public function testVectorizeEmptyString()
+    {
+        $text = '';
+        $vector = new Vector([0.0, 0.0, 0.0]);
+
+        $platform = PlatformTestHandler::createPlatform(new VectorResult($vector));
+        $model = new Embeddings();
+
+        $vectorizer = new Vectorizer($platform, $model);
+        $result = $vectorizer->vectorize($text);
+
+        $this->assertInstanceOf(Vector::class, $result);
+        $this->assertEquals($vector, $result);
+    }
+
+    public function testVectorizeStringThrowsExceptionWhenNoVectorReturned()
+    {
+        $text = 'Test string';
+
+        $platform = PlatformTestHandler::createPlatform(new VectorResult());
+        $model = new Embeddings();
+
+        $vectorizer = new Vectorizer($platform, $model);
+
+        $this->expectException(\Symfony\AI\Store\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('No vector returned for string vectorization.');
+
+        $vectorizer->vectorize($text);
     }
 }

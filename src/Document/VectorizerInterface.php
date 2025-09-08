@@ -11,8 +11,11 @@
 
 namespace Symfony\AI\Store\Document;
 
+use Symfony\AI\Platform\Vector\Vector;
+
 /**
- * Interface for converting a collection of TextDocuments into VectorDocuments.
+ * Interface for converting a collection of TextDocuments into VectorDocuments
+ * and for vectorizing individual strings.
  *
  * @author Oskar Stark <oskarstark@googlemail.com>
  */
@@ -23,5 +26,10 @@ interface VectorizerInterface
      *
      * @return VectorDocument[]
      */
-    public function vectorize(array $documents): array;
+    public function vectorizeTextDocuments(array $documents): array;
+
+    /**
+     * Vectorizes a single string into a Vector.
+     */
+    public function vectorize(string $string): Vector;
 }
