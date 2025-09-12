@@ -67,11 +67,11 @@ final readonly class Vectorizer implements VectorizerInterface
         return $vectorDocuments;
     }
 
-    public function vectorize(string $string): Vector
+    public function vectorize(string|\Stringable $string): Vector
     {
-        $this->logger->debug('Vectorizing string', ['string' => $string]);
+        $this->logger->debug('Vectorizing string', ['string' => (string) $string]);
 
-        $result = $this->platform->invoke($this->model, $string);
+        $result = $this->platform->invoke($this->model, (string) $string);
         $vectors = $result->asVectors();
 
         if (!isset($vectors[0])) {

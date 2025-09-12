@@ -29,7 +29,7 @@ interface VectorizerInterface
     public function vectorizeTextDocuments(array $documents): array;
 
     /**
-     * Vectorizes a single string into a Vector.
+     * Vectorizes a single string or Stringable object into a Vector.
      */
-    public function vectorize(string $string): Vector;
+    public function vectorize(string|\Stringable $string): Vector;
 }
