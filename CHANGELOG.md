@@ -46,6 +46,7 @@ CHANGELOG
    - PostgreSQL with pgvector extension
    - Qdrant
    - Redis
+   - Supabase
    - SurrealDB
    - Typesense
    - Weaviate
