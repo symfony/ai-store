@@ -51,7 +51,7 @@ final class IndexerTest extends TestCase
         $document = new TextDocument($id = Uuid::v4(), 'Test content');
         $vector = new Vector([0.1, 0.2, 0.3]);
         $loader = new InMemoryLoader([$document]);
-        $vectorizer = new Vectorizer(PlatformTestHandler::createPlatform(new VectorResult($vector)), new Embeddings());
+        $vectorizer = new Vectorizer(PlatformTestHandler::createPlatform(new VectorResult($vector)), new Embeddings(Embeddings::TEXT_3_SMALL));
 
         $indexer = new Indexer($loader, $vectorizer, $store = new TestStore());
         $indexer->index();
@@ -65,7 +65,7 @@ final class IndexerTest extends TestCase
     public function testIndexEmptyDocumentList()
     {
         $loader = new InMemoryLoader([]);
-        $vectorizer = new Vectorizer(PlatformTestHandler::createPlatform(), new Embeddings());
+        $vectorizer = new Vectorizer(PlatformTestHandler::createPlatform(), new Embeddings(Embeddings::TEXT_3_SMALL));
 
         $indexer = new Indexer($loader, $vectorizer, $store = new TestStore());
         $indexer->index();
@@ -79,7 +79,7 @@ final class IndexerTest extends TestCase
         $document = new TextDocument($id = Uuid::v4(), 'Test content', $metadata);
         $vector = new Vector([0.1, 0.2, 0.3]);
         $loader = new InMemoryLoader([$document]);
-        $vectorizer = new Vectorizer(PlatformTestHandler::createPlatform(new VectorResult($vector)), new Embeddings());
+        $vectorizer = new Vectorizer(PlatformTestHandler::createPlatform(new VectorResult($vector)), new Embeddings(Embeddings::TEXT_3_SMALL));
 
         $indexer = new Indexer($loader, $vectorizer, $store = new TestStore());
         $indexer->index();
@@ -99,7 +99,7 @@ final class IndexerTest extends TestCase
 
         // InMemoryLoader doesn't use source parameter, so we'll test withSource method's immutability
         $loader = new InMemoryLoader([$document1]);
-        $vectorizer = new Vectorizer(PlatformTestHandler::createPlatform(new VectorResult($vector)), new Embeddings());
+        $vectorizer = new Vectorizer(PlatformTestHandler::createPlatform(new VectorResult($vector)), new Embeddings(Embeddings::TEXT_3_SMALL));
 
         // Create indexer with initial source
         $indexer = new Indexer($loader, $vectorizer, $store = new TestStore(), 'source1');
@@ -128,7 +128,7 @@ final class IndexerTest extends TestCase
 
         // InMemoryLoader returns all documents regardless of source
         $loader = new InMemoryLoader([$document1, $document2]);
-        $vectorizer = new Vectorizer(PlatformTestHandler::createPlatform(new VectorResult($vector)), new Embeddings());
+        $vectorizer = new Vectorizer(PlatformTestHandler::createPlatform(new VectorResult($vector)), new Embeddings(Embeddings::TEXT_3_SMALL));
 
         // Create indexer with single source
         $indexer = new Indexer($loader, $vectorizer, $store1 = new TestStore(), 'source1');

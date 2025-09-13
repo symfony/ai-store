@@ -65,7 +65,7 @@ final class VectorizerTest extends TestCase
 
         $platform = PlatformTestHandler::createPlatform(new VectorResult(...$vectors));
 
-        $model = new Embeddings();
+        $model = new Embeddings(Embeddings::TEXT_3_SMALL);
 
         $vectorizer = new Vectorizer($platform, $model);
         $vectorDocuments = $vectorizer->vectorizeTextDocuments($documents);
@@ -86,7 +86,7 @@ final class VectorizerTest extends TestCase
         $vector = new Vector([0.1, 0.2, 0.3]);
 
         $platform = PlatformTestHandler::createPlatform(new VectorResult($vector));
-        $model = new Embeddings();
+        $model = new Embeddings(Embeddings::TEXT_3_SMALL);
 
         $vectorizer = new Vectorizer($platform, $model);
         $vectorDocuments = $vectorizer->vectorizeTextDocuments([$document]);
@@ -101,7 +101,7 @@ final class VectorizerTest extends TestCase
     public function testVectorizeEmptyDocumentsArray()
     {
         $platform = PlatformTestHandler::createPlatform(new VectorResult());
-        $model = new Embeddings();
+        $model = new Embeddings(Embeddings::TEXT_3_SMALL);
 
         $vectorizer = new Vectorizer($platform, $model);
         $vectorDocuments = $vectorizer->vectorizeTextDocuments([]);
@@ -125,7 +125,7 @@ final class VectorizerTest extends TestCase
         ];
 
         $platform = PlatformTestHandler::createPlatform(new VectorResult(...$vectors));
-        $model = new Embeddings();
+        $model = new Embeddings(Embeddings::TEXT_3_SMALL);
 
         $vectorizer = new Vectorizer($platform, $model);
         $vectorDocuments = $vectorizer->vectorizeTextDocuments($documents);
@@ -156,7 +156,7 @@ final class VectorizerTest extends TestCase
         ];
 
         $platform = PlatformTestHandler::createPlatform(new VectorResult(...$vectors));
-        $model = new Embeddings();
+        $model = new Embeddings(Embeddings::TEXT_3_SMALL);
 
         $vectorizer = new Vectorizer($platform, $model);
         $vectorDocuments = $vectorizer->vectorizeTextDocuments($documents);
@@ -185,7 +185,7 @@ final class VectorizerTest extends TestCase
         $platform = PlatformTestHandler::createPlatform(
             $count > 0 ? new VectorResult(...$vectors) : new VectorResult()
         );
-        $model = new Embeddings();
+        $model = new Embeddings(Embeddings::TEXT_3_SMALL);
 
         $vectorizer = new Vectorizer($platform, $model);
         $vectorDocuments = $vectorizer->vectorizeTextDocuments($documents);
@@ -224,7 +224,7 @@ final class VectorizerTest extends TestCase
         $vector = new Vector($dimensions);
 
         $platform = PlatformTestHandler::createPlatform(new VectorResult($vector));
-        $model = new Embeddings();
+        $model = new Embeddings(Embeddings::TEXT_3_SMALL);
 
         $vectorizer = new Vectorizer($platform, $model);
         $vectorDocuments = $vectorizer->vectorizeTextDocuments([$document]);
@@ -248,7 +248,7 @@ final class VectorizerTest extends TestCase
         ];
 
         $platform = PlatformTestHandler::createPlatform(new VectorResult(...$vectors));
-        $model = new Embeddings();
+        $model = new Embeddings(Embeddings::TEXT_3_SMALL);
 
         $vectorizer = new Vectorizer($platform, $model);
         $vectorDocuments = $vectorizer->vectorizeTextDocuments($documents);
@@ -327,7 +327,7 @@ final class VectorizerTest extends TestCase
         $vector = new Vector([0.1, 0.2, 0.3]);
 
         $platform = PlatformTestHandler::createPlatform(new VectorResult($vector));
-        $model = new Embeddings();
+        $model = new Embeddings(Embeddings::TEXT_3_SMALL);
 
         $vectorizer = new Vectorizer($platform, $model);
         $result = $vectorizer->vectorize($text);
@@ -342,7 +342,7 @@ final class VectorizerTest extends TestCase
         $vector = new Vector([0.5, 0.6, 0.7]);
 
         $platform = PlatformTestHandler::createPlatform(new VectorResult($vector));
-        $model = new Embeddings();
+        $model = new Embeddings(Embeddings::TEXT_3_SMALL);
 
         $vectorizer = new Vectorizer($platform, $model);
         $result = $vectorizer->vectorize($text);
@@ -357,7 +357,7 @@ final class VectorizerTest extends TestCase
         $vector = new Vector([0.0, 0.0, 0.0]);
 
         $platform = PlatformTestHandler::createPlatform(new VectorResult($vector));
-        $model = new Embeddings();
+        $model = new Embeddings(Embeddings::TEXT_3_SMALL);
 
         $vectorizer = new Vectorizer($platform, $model);
         $result = $vectorizer->vectorize($text);
@@ -371,7 +371,7 @@ final class VectorizerTest extends TestCase
         $text = 'Test string';
 
         $platform = PlatformTestHandler::createPlatform(new VectorResult());
-        $model = new Embeddings();
+        $model = new Embeddings(Embeddings::TEXT_3_SMALL);
 
         $vectorizer = new Vectorizer($platform, $model);
 
@@ -400,7 +400,7 @@ final class VectorizerTest extends TestCase
             )
             ->willReturn(new ResultPromise(fn () => new VectorResult($vector), $this->createMock(RawResultInterface::class)));
 
-        $model = new Embeddings();
+        $model = new Embeddings(Embeddings::TEXT_3_SMALL);
 
         $vectorizer = new Vectorizer($platform, $model);
         $result = $vectorizer->vectorizeTextDocuments($documents, $options);
@@ -427,7 +427,7 @@ final class VectorizerTest extends TestCase
             )
             ->willReturn(new ResultPromise(fn () => new VectorResult($vector), $this->createMock(RawResultInterface::class)));
 
-        $model = new Embeddings();
+        $model = new Embeddings(Embeddings::TEXT_3_SMALL);
 
         $vectorizer = new Vectorizer($platform, $model);
         $result = $vectorizer->vectorizeTextDocuments($documents);
@@ -452,7 +452,7 @@ final class VectorizerTest extends TestCase
             )
             ->willReturn(new ResultPromise(fn () => new VectorResult($vector), $this->createMock(RawResultInterface::class)));
 
-        $model = new Embeddings();
+        $model = new Embeddings(Embeddings::TEXT_3_SMALL);
 
         $vectorizer = new Vectorizer($platform, $model);
         $result = $vectorizer->vectorize($text, $options);
@@ -475,7 +475,7 @@ final class VectorizerTest extends TestCase
             )
             ->willReturn(new ResultPromise(fn () => new VectorResult($vector), $this->createMock(RawResultInterface::class)));
 
-        $model = new Embeddings();
+        $model = new Embeddings(Embeddings::TEXT_3_SMALL);
 
         $vectorizer = new Vectorizer($platform, $model);
         $result = $vectorizer->vectorize($text);
