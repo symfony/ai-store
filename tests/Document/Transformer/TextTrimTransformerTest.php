@@ -11,7 +11,6 @@
 
 namespace Symfony\AI\Store\Tests\Document\Transformer;
 
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Store\Document\Metadata;
@@ -23,7 +22,6 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @author Oskar Stark <oskarstark@googlemail.com>
  */
-#[CoversClass(TextTrimTransformer::class)]
 final class TextTrimTransformerTest extends TestCase
 {
     #[TestWith(['  text with spaces  ', 'text with spaces'])]

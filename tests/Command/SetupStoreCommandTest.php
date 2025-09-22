@@ -11,8 +11,6 @@
 
 namespace Symfony\AI\Store\Tests\Command;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Store\Command\SetupStoreCommand;
 use Symfony\AI\Store\Exception\RuntimeException;
@@ -21,9 +19,6 @@ use Symfony\AI\Store\StoreInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
-#[CoversClass(SetupStoreCommand::class)]
-#[UsesClass(ManagedStoreInterface::class)]
-#[UsesClass(StoreInterface::class)]
 final class SetupStoreCommandTest extends TestCase
 {
     public function testCommandIsConfigured()

@@ -11,7 +11,6 @@
 
 namespace Symfony\AI\Store\Tests\Document;
 
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -21,7 +20,6 @@ use Symfony\AI\Store\Document\TextDocument;
 use Symfony\AI\Store\Exception\InvalidArgumentException;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(TextDocument::class)]
 final class TextDocumentTest extends TestCase
 {
     #[TestDox('Creates document with valid content and metadata')]
