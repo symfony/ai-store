@@ -33,6 +33,7 @@ use Symfony\AI\Store\Document\Metadata;
 use Symfony\AI\Store\Document\TextDocument;
 use Symfony\AI\Store\Document\VectorDocument;
 use Symfony\AI\Store\Document\Vectorizer;
+use Symfony\AI\Store\Exception\RuntimeException;
 use Symfony\AI\Store\Tests\Double\PlatformTestHandler;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Uid\Uuid;
@@ -375,7 +376,7 @@ final class VectorizerTest extends TestCase
 
         $vectorizer = new Vectorizer($platform, $model);
 
-        $this->expectException(\Symfony\AI\Store\Exception\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No vector returned for string vectorization.');
 
         $vectorizer->vectorize($text);
