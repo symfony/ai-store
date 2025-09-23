@@ -46,7 +46,6 @@ final class RssFeedLoaderTest extends TestCase
         $documents = iterator_to_array($loader->load('https://feeds.feedburner.com/symfony/blog'));
         $this->assertCount(10, $documents);
 
-        // Test first document
         $firstDocument = $documents[0];
         $this->assertInstanceOf(TextDocument::class, $firstDocument);
         $this->assertStringStartsWith('Title: Save the date, SymfonyDay Montreal 2026!', $firstDocument->content);

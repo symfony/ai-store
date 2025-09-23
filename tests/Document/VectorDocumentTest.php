@@ -101,13 +101,11 @@ final class VectorDocumentTest extends TestCase
 
         $document = new VectorDocument($id, $vector, $metadata, $score);
 
-        // Verify all properties are accessible
         $this->assertSame($id, $document->id);
         $this->assertSame($vector, $document->vector);
         $this->assertSame($metadata, $document->metadata);
         $this->assertSame($score, $document->score);
 
-        // Verify the class is marked as readonly
         $reflection = new \ReflectionClass(VectorDocument::class);
         $this->assertTrue($reflection->isReadOnly());
     }

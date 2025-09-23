@@ -58,7 +58,6 @@ class Indexer implements IndexerInterface
 
         $documents = [];
         if ([] === $this->sources) {
-            // No specific source provided, load with null
             $documents = $this->loadSource(null);
         } else {
             foreach ($this->sources as $singleSource) {
@@ -72,17 +71,14 @@ class Indexer implements IndexerInterface
             return;
         }
 
-        // Filter documents through all filters
         foreach ($this->filters as $filter) {
             $documents = $filter->filter($documents);
         }
 
-        // Transform documents through all transformers
         foreach ($this->transformers as $transformer) {
             $documents = $transformer->transform($documents);
         }
 
-        // Vectorize and store documents in chunks
         $chunkSize = $options['chunk_size'] ?? 50;
         $counter = 0;
         $chunk = [];
@@ -96,7 +92,6 @@ class Indexer implements IndexerInterface
             }
         }
 
-        // Handle remaining documents
         if ([] !== $chunk) {
             $this->store->add(...$this->vectorizer->vectorizeTextDocuments($chunk));
         }

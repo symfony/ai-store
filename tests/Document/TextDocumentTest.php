@@ -112,7 +112,6 @@ final class TextDocumentTest extends TestCase
 
         $document = new TextDocument($id, $content, $metadata);
 
-        // Test that properties are publicly accessible
         $this->assertSame($id, $document->id);
         $this->assertSame($content, $document->content);
         $this->assertSame($metadata, $document->metadata);

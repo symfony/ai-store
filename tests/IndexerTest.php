@@ -104,13 +104,10 @@ final class IndexerTest extends TestCase
         $loader = new InMemoryLoader([$document1]);
         $vectorizer = new Vectorizer(PlatformTestHandler::createPlatform(new VectorResult($vector)), new Embeddings(Embeddings::TEXT_3_SMALL));
 
-        // Create indexer with initial source
         $indexer = new Indexer($loader, $vectorizer, $store = new TestStore(), 'source1');
 
-        // Create new indexer with different source
         $indexerWithNewSource = $indexer->withSource('source2');
 
-        // Verify it returns a new instance (immutability)
         $this->assertNotSame($indexer, $indexerWithNewSource);
 
         // Both can index successfully
@@ -136,10 +133,8 @@ final class IndexerTest extends TestCase
         // Create indexer with single source
         $indexer = new Indexer($loader, $vectorizer, $store1 = new TestStore(), 'source1');
 
-        // Create new indexer with array of sources
         $indexerWithMultipleSources = $indexer->withSource(['source2', 'source3']);
 
-        // Verify it returns a new instance (immutability)
         $this->assertNotSame($indexer, $indexerWithMultipleSources);
 
         // Since InMemoryLoader ignores source, both will index all documents
@@ -233,7 +228,6 @@ final class IndexerTest extends TestCase
 
     public function testIndexWithFiltersAndTransformersAppliesBoth()
     {
-        // Test that both filters and transformers are applied correctly
         $documents = [
             new TextDocument(Uuid::v4(), 'Keep this document'),
             new TextDocument(Uuid::v4(), 'Remove this content'),  // Will be filtered out
@@ -243,7 +237,6 @@ final class IndexerTest extends TestCase
         $loader = new InMemoryLoader($documents);
         $vectorizer = new Vectorizer(PlatformTestHandler::createPlatform(new VectorResult($vector)), new Embeddings(Embeddings::TEXT_3_SMALL));
 
-        // Filter that removes documents containing "Remove"
         $filter = new class implements FilterInterface {
             public function filter(iterable $documents, array $options = []): iterable
             {
@@ -255,7 +248,6 @@ final class IndexerTest extends TestCase
             }
         };
 
-        // Transformer that adds metadata
         $transformer = new class implements TransformerInterface {
             public function transform(iterable $documents, array $options = []): iterable
             {
@@ -281,7 +273,6 @@ final class IndexerTest extends TestCase
 
     public function testIndexWithNoFilters()
     {
-        // Test that indexer works with empty filters array (backward compatibility)
         $document = new TextDocument(Uuid::v4(), 'Test content');
         $vector = new Vector([0.1, 0.2, 0.3]);
         $loader = new InMemoryLoader([$document]);
@@ -304,7 +295,6 @@ final class IndexerTest extends TestCase
         $indexer = new Indexer($loader, $vectorizer, $store = new TestStore(), 'source1', [$filter]);
         $indexerWithNewSource = $indexer->withSource('source2');
 
-        // Verify that the new indexer preserves filters
         $this->assertNotSame($indexer, $indexerWithNewSource);
 
         $indexerWithNewSource->index();

@@ -76,7 +76,6 @@ EOF
 
         $indexer = $input->getArgument('indexer');
         $sources = $input->getOption('source');
-        // Convert array of sources to single source or null
         $source = match (true) {
             [] === $sources => null,
             1 === \count($sources) => $sources[0],
@@ -89,7 +88,6 @@ EOF
 
         $indexerService = $this->indexers->get($indexer);
 
-        // If source override is provided, use withSource to create a new indexer instance
         if (null !== $source) {
             $indexerService = $indexerService->withSource($source);
         }
