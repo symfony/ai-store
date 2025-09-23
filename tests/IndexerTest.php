@@ -11,15 +11,8 @@
 
 namespace Symfony\AI\Store\Tests;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Medium;
-use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Bridge\OpenAi\Embeddings;
-use Symfony\AI\Platform\Message\ToolCallMessage;
-use Symfony\AI\Platform\Platform;
-use Symfony\AI\Platform\Result\ResultPromise;
-use Symfony\AI\Platform\Result\ToolCall;
 use Symfony\AI\Platform\Result\VectorResult;
 use Symfony\AI\Platform\Vector\Vector;
 use Symfony\AI\Store\Document\Filter\TextContainsFilter;
@@ -35,18 +28,6 @@ use Symfony\AI\Store\Tests\Double\PlatformTestHandler;
 use Symfony\AI\Store\Tests\Double\TestStore;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(Indexer::class)]
-#[Medium]
-#[UsesClass(InMemoryLoader::class)]
-#[UsesClass(TextDocument::class)]
-#[UsesClass(Vector::class)]
-#[UsesClass(VectorDocument::class)]
-#[UsesClass(ToolCallMessage::class)]
-#[UsesClass(ToolCall::class)]
-#[UsesClass(Embeddings::class)]
-#[UsesClass(Platform::class)]
-#[UsesClass(ResultPromise::class)]
-#[UsesClass(VectorResult::class)]
 final class IndexerTest extends TestCase
 {
     public function testIndexSingleDocument()

@@ -11,7 +11,6 @@
 
 namespace Symfony\AI\Store\Tests\Document\Filter;
 
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Store\Document\Filter\TextContainsFilter;
@@ -23,7 +22,6 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @author Oskar Stark <oskarstark@googlemail.com>
  */
-#[CoversClass(TextContainsFilter::class)]
 final class TextContainsFilterTest extends TestCase
 {
     public function testFilterWithConstructorParameters()

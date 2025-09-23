@@ -11,10 +11,8 @@
 
 namespace Symfony\AI\Store\Tests\Bridge\Local;
 
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
 use Symfony\AI\Store\Bridge\Local\DistanceCalculator;
@@ -23,11 +21,6 @@ use Symfony\AI\Store\Document\Metadata;
 use Symfony\AI\Store\Document\VectorDocument;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(DistanceCalculator::class)]
-#[UsesClass(VectorDocument::class)]
-#[UsesClass(Vector::class)]
-#[UsesClass(Metadata::class)]
-#[UsesClass(DistanceStrategy::class)]
 final class DistanceCalculatorTest extends TestCase
 {
     /**

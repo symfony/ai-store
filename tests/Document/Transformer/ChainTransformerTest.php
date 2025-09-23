@@ -11,14 +11,12 @@
 
 namespace Symfony\AI\Store\Tests\Document\Transformer;
 
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Store\Document\TextDocument;
 use Symfony\AI\Store\Document\Transformer\ChainTransformer;
 use Symfony\AI\Store\Document\TransformerInterface;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(TransformerInterface::class)]
 final class ChainTransformerTest extends TestCase
 {
     public function testChainTransformerAppliesAllTransformersInOrder()

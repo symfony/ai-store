@@ -11,10 +11,8 @@
 
 namespace Symfony\AI\Store\Tests\Document;
 
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Bridge\OpenAi\Embeddings;
 use Symfony\AI\Platform\Capability;
@@ -38,15 +36,6 @@ use Symfony\AI\Store\Tests\Double\PlatformTestHandler;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(Vectorizer::class)]
-#[UsesClass(TextDocument::class)]
-#[UsesClass(VectorDocument::class)]
-#[UsesClass(Metadata::class)]
-#[UsesClass(Vector::class)]
-#[UsesClass(VectorResult::class)]
-#[UsesClass(Platform::class)]
-#[UsesClass(ResultPromise::class)]
-#[UsesClass(Embeddings::class)]
 #[TestDox('Tests for the Vectorizer class')]
 final class VectorizerTest extends TestCase
 {

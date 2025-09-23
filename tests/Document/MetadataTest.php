@@ -11,12 +11,10 @@
 
 namespace Symfony\AI\Store\Tests\Document;
 
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Store\Document\Metadata;
 
-#[CoversClass(Metadata::class)]
 final class MetadataTest extends TestCase
 {
     public function testMetadataExtendsArrayObject()

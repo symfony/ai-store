@@ -11,7 +11,6 @@
 
 namespace Symfony\AI\Store\Tests\Document\Transformer;
 
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Store\Document\TextDocument;
 use Symfony\AI\Store\Document\Transformer\ChunkDelayTransformer;
@@ -19,7 +18,6 @@ use Symfony\Component\Clock\ClockInterface;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(ChunkDelayTransformer::class)]
 final class ChunkDelayTransformerTest extends TestCase
 {
     public function testDefaultChunkSizeAndDelay()

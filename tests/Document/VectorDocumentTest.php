@@ -11,7 +11,6 @@
 
 namespace Symfony\AI\Store\Tests\Document;
 
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -24,7 +23,6 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @author Oskar Stark <oskarstark@googlemail.com>
  */
-#[CoversClass(VectorDocument::class)]
 final class VectorDocumentTest extends TestCase
 {
     #[TestDox('Creates document with required parameters only')]

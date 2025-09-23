@@ -11,7 +11,6 @@
 
 namespace Symfony\AI\Store\Tests\Document\Loader;
 
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Store\Document\Loader\InMemoryLoader;
 use Symfony\AI\Store\Document\Metadata;
@@ -21,7 +20,6 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @author Oskar Stark <oskarstark@googlemail.com>
  */
-#[CoversClass(InMemoryLoader::class)]
 final class InMemoryLoaderTest extends TestCase
 {
     public function testLoadWithEmptyDocuments()

@@ -11,7 +11,6 @@
 
 namespace Symfony\AI\Store\Tests\Document\Loader;
 
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Store\Document\Loader\RssFeedLoader;
 use Symfony\AI\Store\Document\TextDocument;
@@ -24,7 +23,6 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @author Niklas Grießer <niklas@griesser.me>
  */
-#[CoversClass(RssFeedLoader::class)]
 final class RssFeedLoaderTest extends TestCase
 {
     public function testLoadWithNullSource()

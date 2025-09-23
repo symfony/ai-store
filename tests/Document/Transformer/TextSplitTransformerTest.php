@@ -11,7 +11,6 @@
 
 namespace Symfony\AI\Store\Tests\Document\Transformer;
 
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Store\Document\Metadata;
 use Symfony\AI\Store\Document\TextDocument;
@@ -19,7 +18,6 @@ use Symfony\AI\Store\Document\Transformer\TextSplitTransformer;
 use Symfony\AI\Store\Exception\InvalidArgumentException;
 use Symfony\Component\Uid\Uuid;
 
-#[CoversClass(TextSplitTransformer::class)]
 final class TextSplitTransformerTest extends TestCase
 {
     private TextSplitTransformer $transformer;
