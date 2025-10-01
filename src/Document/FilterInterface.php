@@ -20,10 +20,10 @@ namespace Symfony\AI\Store\Document;
 interface FilterInterface
 {
     /**
-     * @param iterable<TextDocument> $documents
-     * @param array<string, mixed>   $options
+     * @param iterable<EmbeddableDocumentInterface> $documents
+     * @param array<string, mixed>                  $options
      *
-     * @return iterable<TextDocument>
+     * @return iterable<EmbeddableDocumentInterface>
      */
     public function filter(iterable $documents, array $options = []): iterable;
 }

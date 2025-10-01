@@ -11,6 +11,7 @@
 
 namespace Symfony\AI\Store\Document\Transformer;
 
+use Symfony\AI\Store\Document\TextDocument;
 use Symfony\AI\Store\Document\TransformerInterface;
 
 /**
@@ -20,10 +21,13 @@ use Symfony\AI\Store\Document\TransformerInterface;
  */
 final readonly class TextTrimTransformer implements TransformerInterface
 {
+    /**
+     * @param iterable<TextDocument> $documents
+     */
     public function transform(iterable $documents, array $options = []): iterable
     {
         foreach ($documents as $document) {
-            yield $document->withContent(trim($document->content));
+            yield $document->withContent(trim($document->getContent()));
         }
     }
 }

@@ -11,6 +11,7 @@
 
 namespace Symfony\AI\Store\Document\Transformer;
 
+use Symfony\AI\Store\Document\TextDocument;
 use Symfony\AI\Store\Document\TransformerInterface;
 use Symfony\AI\Store\Exception\InvalidArgumentException;
 
@@ -32,6 +33,7 @@ final readonly class TextReplaceTransformer implements TransformerInterface
     }
 
     /**
+     * @param iterable<TextDocument>                   $documents
      * @param array{search?: string, replace?: string} $options
      */
     public function transform(iterable $documents, array $options = []): iterable
@@ -42,7 +44,7 @@ final readonly class TextReplaceTransformer implements TransformerInterface
         self::validate($search, $replace);
 
         foreach ($documents as $document) {
-            yield $document->withContent(str_replace($search, $replace, $document->content));
+            yield $document->withContent(str_replace($search, $replace, $document->getContent()));
         }
     }
 
