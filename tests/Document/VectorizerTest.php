@@ -20,9 +20,10 @@ use Symfony\AI\Platform\Model;
 use Symfony\AI\Platform\ModelCatalog\AbstractModelCatalog;
 use Symfony\AI\Platform\ModelCatalog\DynamicModelCatalog;
 use Symfony\AI\Platform\PlatformInterface;
+use Symfony\AI\Platform\Result\DeferredResult;
 use Symfony\AI\Platform\Result\RawResultInterface;
-use Symfony\AI\Platform\Result\ResultPromise;
 use Symfony\AI\Platform\Result\VectorResult;
+use Symfony\AI\Platform\Test\PlainConverter;
 use Symfony\AI\Platform\Vector\Vector;
 use Symfony\AI\Store\Document\Metadata;
 use Symfony\AI\Store\Document\TextDocument;
@@ -487,7 +488,7 @@ final class VectorizerTest extends TestCase
                 $this->equalTo($text),
                 $this->equalTo($options)
             )
-            ->willReturn(new ResultPromise(fn () => new VectorResult($vector), $this->createMock(RawResultInterface::class)));
+            ->willReturn(new DeferredResult(new PlainConverter(new VectorResult($vector)), $this->createMock(RawResultInterface::class)));
 
         $vectorizer = new Vectorizer($platform, 'text-embedding-3-small');
         $result = $vectorizer->vectorize($text, $options);
@@ -508,7 +509,7 @@ final class VectorizerTest extends TestCase
                 $this->equalTo($text),
                 $this->equalTo([])
             )
-            ->willReturn(new ResultPromise(fn () => new VectorResult($vector), $this->createMock(RawResultInterface::class)));
+            ->willReturn(new DeferredResult(new PlainConverter(new VectorResult($vector)), $this->createMock(RawResultInterface::class)));
 
         $vectorizer = new Vectorizer($platform, 'text-embedding-3-small');
         $result = $vectorizer->vectorize($text);
