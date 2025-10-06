@@ -87,13 +87,13 @@ class Indexer implements IndexerInterface
             ++$counter;
 
             if ($chunkSize === \count($chunk)) {
-                $this->store->add(...$this->vectorizer->vectorizeEmbeddableDocuments($chunk));
+                $this->store->add(...$this->vectorizer->vectorize($chunk));
                 $chunk = [];
             }
         }
 
         if ([] !== $chunk) {
-            $this->store->add(...$this->vectorizer->vectorizeEmbeddableDocuments($chunk));
+            $this->store->add(...$this->vectorizer->vectorize($chunk));
         }
 
         $this->logger->debug('Document processing completed', ['total_documents' => $counter]);

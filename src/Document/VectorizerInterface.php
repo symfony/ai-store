@@ -14,25 +14,27 @@ namespace Symfony\AI\Store\Document;
 use Symfony\AI\Platform\Vector\Vector;
 
 /**
- * Interface for converting a collection of Embeddable documents into VectorDocuments
- * and for vectorizing individual strings.
+ * Interface for vectorizing strings and EmbeddableDocuments into Vectors and VectorDocuments.
  *
  * @author Oskar Stark <oskarstark@googlemail.com>
  */
 interface VectorizerInterface
 {
     /**
-     * @param EmbeddableDocumentInterface[] $documents
-     * @param array<string, mixed>          $options   Options to pass to the underlying platform
+     * Vectorizes strings or EmbeddableDocuments into Vectors or VectorDocuments.
      *
-     * @return VectorDocument[]
-     */
-    public function vectorizeEmbeddableDocuments(array $documents, array $options = []): array;
-
-    /**
-     * Vectorizes a single string or Stringable object into a Vector.
+     * @param string|\Stringable|EmbeddableDocumentInterface|array<string|\Stringable>|array<EmbeddableDocumentInterface> $values  The values to vectorize
+     * @param array<string, mixed>                                                                                        $options Options to pass to the underlying platform
      *
-     * @param array<string, mixed> $options Options to pass to the underlying platform
+     * @return Vector|VectorDocument|array<Vector>|array<VectorDocument>
+     *
+     * @phpstan-return (
+     *     $values is string|\Stringable ? Vector : (
+     *         $values is EmbeddableDocumentInterface ? VectorDocument : (
+     *             $values is array<string|\Stringable> ? array<Vector> : array<VectorDocument>
+     *         )
+     *     )
+     * )
      */
-    public function vectorize(string|\Stringable $string, array $options = []): Vector;
+    public function vectorize(string|\Stringable|EmbeddableDocumentInterface|array $values, array $options = []): Vector|VectorDocument|array;
 }

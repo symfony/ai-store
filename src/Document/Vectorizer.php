@@ -27,7 +27,129 @@ final readonly class Vectorizer implements VectorizerInterface
     ) {
     }
 
-    public function vectorizeEmbeddableDocuments(array $documents, array $options = []): array
+    public function vectorize(string|\Stringable|EmbeddableDocumentInterface|array $values, array $options = []): Vector|VectorDocument|array
+    {
+        if (\is_string($values) || $values instanceof \Stringable) {
+            return $this->vectorizeString($values, $options);
+        }
+
+        if ($values instanceof EmbeddableDocumentInterface) {
+            return $this->vectorizeEmbeddableDocument($values, $options);
+        }
+
+        if ([] === $values) {
+            return [];
+        }
+
+        $firstElement = reset($values);
+        if ($firstElement instanceof EmbeddableDocumentInterface) {
+            $this->validateArray($values, EmbeddableDocumentInterface::class);
+
+            return $this->vectorizeEmbeddableDocuments($values, $options);
+        }
+
+        if (\is_string($firstElement) || $firstElement instanceof \Stringable) {
+            $this->validateArray($values, 'string|stringable');
+
+            return $this->vectorizeStrings($values, $options);
+        }
+
+        throw new RuntimeException('Array must contain only strings, Stringable objects, or EmbeddableDocumentInterface instances.');
+    }
+
+    /**
+     * @param array<mixed> $values
+     */
+    private function validateArray(array $values, string $expectedType): void
+    {
+        foreach ($values as $value) {
+            if ('string|stringable' === $expectedType) {
+                if (!\is_string($value) && !$value instanceof \Stringable) {
+                    throw new RuntimeException('Array must contain only strings or Stringable objects.');
+                }
+            } elseif (!$value instanceof $expectedType) {
+                throw new RuntimeException(\sprintf('Array must contain only "%s" instances.', $expectedType));
+            }
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    private function vectorizeString(string|\Stringable $string, array $options = []): Vector
+    {
+        $stringValue = (string) $string;
+        $this->logger->debug('Vectorizing string', ['string' => $stringValue]);
+
+        $result = $this->platform->invoke($this->model, $stringValue, $options);
+        $vectors = $result->asVectors();
+
+        if (!isset($vectors[0])) {
+            throw new RuntimeException('No vector returned for string vectorization.');
+        }
+
+        return $vectors[0];
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    private function vectorizeEmbeddableDocument(EmbeddableDocumentInterface $document, array $options = []): VectorDocument
+    {
+        $this->logger->debug('Vectorizing embeddable document', ['document_id' => $document->getId()]);
+
+        $vector = $this->vectorizeString($document->getContent(), $options);
+
+        return new VectorDocument($document->getId(), $vector, $document->getMetadata());
+    }
+
+    /**
+     * @param array<string|\Stringable> $strings
+     * @param array<string, mixed>      $options
+     *
+     * @return array<Vector>
+     */
+    private function vectorizeStrings(array $strings, array $options = []): array
+    {
+        $stringCount = \count($strings);
+        $this->logger->info('Starting vectorization of strings', ['string_count' => $stringCount]);
+
+        // Convert all values to strings
+        $stringValues = array_map(fn (string|\Stringable $s) => (string) $s, $strings);
+
+        if ($this->platform->getModelCatalog()->getModel($this->model)->supports(Capability::INPUT_MULTIPLE)) {
+            $this->logger->debug('Using batch vectorization with model that supports multiple inputs');
+            $result = $this->platform->invoke($this->model, $stringValues, $options);
+
+            $vectors = $result->asVectors();
+            $this->logger->debug('Batch vectorization completed', ['vector_count' => \count($vectors)]);
+        } else {
+            $this->logger->debug('Using sequential vectorization for model without multiple input support');
+            $results = [];
+            foreach ($stringValues as $i => $string) {
+                $this->logger->debug('Vectorizing string', ['string_index' => $i]);
+                $results[] = $this->platform->invoke($this->model, $string, $options);
+            }
+
+            $vectors = [];
+            foreach ($results as $result) {
+                $vectors = array_merge($vectors, $result->asVectors());
+            }
+            $this->logger->debug('Sequential vectorization completed', ['vector_count' => \count($vectors)]);
+        }
+
+        $this->logger->info('Vectorization process completed', ['string_count' => $stringCount, 'vector_count' => \count($vectors)]);
+
+        return $vectors;
+    }
+
+    /**
+     * @param array<EmbeddableDocumentInterface> $documents
+     * @param array<string, mixed>               $options
+     *
+     * @return array<VectorDocument>
+     */
+    private function vectorizeEmbeddableDocuments(array $documents, array $options = []): array
     {
         $documentCount = \count($documents);
         $this->logger->info('Starting vectorization process', ['document_count' => $documentCount]);
@@ -64,19 +186,5 @@ final readonly class Vectorizer implements VectorizerInterface
         ]);
 
         return $vectorDocuments;
-    }
-
-    public function vectorize(string|\Stringable $string, array $options = []): Vector
-    {
-        $this->logger->debug('Vectorizing string', ['string' => (string) $string]);
-
-        $result = $this->platform->invoke($this->model, (string) $string, $options);
-        $vectors = $result->asVectors();
-
-        if (!isset($vectors[0])) {
-            throw new RuntimeException('No vector returned for string vectorization.');
-        }
-
-        return $vectors[0];
     }
 }
