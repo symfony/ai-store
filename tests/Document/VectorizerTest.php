@@ -18,7 +18,7 @@ use Symfony\AI\Platform\Bridge\OpenAi\Embeddings;
 use Symfony\AI\Platform\Capability;
 use Symfony\AI\Platform\Model;
 use Symfony\AI\Platform\ModelCatalog\AbstractModelCatalog;
-use Symfony\AI\Platform\ModelCatalog\DynamicModelCatalog;
+use Symfony\AI\Platform\ModelCatalog\FallbackModelCatalog;
 use Symfony\AI\Platform\PlatformInterface;
 use Symfony\AI\Platform\Result\DeferredResult;
 use Symfony\AI\Platform\Result\RawResultInterface;
@@ -446,7 +446,7 @@ final class VectorizerTest extends TestCase
         $vector = new Vector([0.1, 0.2, 0.3]);
         $options = ['max_tokens' => 1000, 'temperature' => 0.5];
 
-        // Use DynamicModelCatalog which provides all capabilities including INPUT_MULTIPLE
+        // Use FallbackModelCatalog which provides all capabilities including INPUT_MULTIPLE
         // This ensures batch mode is used and the test expectation matches the behavior
         $platform = PlatformTestHandler::createPlatform(new VectorResult($vector));
         $vectorizer = new Vectorizer($platform, 'test-embedding-with-batch');
@@ -464,7 +464,7 @@ final class VectorizerTest extends TestCase
 
         $vector = new Vector([0.1, 0.2, 0.3]);
 
-        // Use DynamicModelCatalog which provides all capabilities including INPUT_MULTIPLE
+        // Use FallbackModelCatalog which provides all capabilities including INPUT_MULTIPLE
         // This ensures batch mode is used and the test expectation matches the behavior
         $platform = PlatformTestHandler::createPlatform(new VectorResult($vector));
         $vectorizer = new Vectorizer($platform, 'test-embedding-with-batch');
