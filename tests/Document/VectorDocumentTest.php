@@ -89,25 +89,6 @@ final class VectorDocumentTest extends TestCase
         $this->assertSame($score, $document->score);
     }
 
-    #[TestDox('Ensures all properties are readonly')]
-    public function testReadonlyProperties()
-    {
-        $id = Uuid::v4();
-        $vector = new Vector([0.1, 0.2, 0.3]);
-        $metadata = new Metadata(['key' => 'value']);
-        $score = 0.85;
-
-        $document = new VectorDocument($id, $vector, $metadata, $score);
-
-        $this->assertSame($id, $document->id);
-        $this->assertSame($vector, $document->vector);
-        $this->assertSame($metadata, $document->metadata);
-        $this->assertSame($score, $document->score);
-
-        $reflection = new \ReflectionClass(VectorDocument::class);
-        $this->assertTrue($reflection->isReadOnly());
-    }
-
     #[TestDox('Handles metadata with special keys')]
     public function testMetadataWithSpecialKeys()
     {

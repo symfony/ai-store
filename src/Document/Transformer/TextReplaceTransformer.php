@@ -20,14 +20,14 @@ use Symfony\AI\Store\Exception\InvalidArgumentException;
  *
  * @author Oskar Stark <oskarstark@googlemail.com>
  */
-final readonly class TextReplaceTransformer implements TransformerInterface
+final class TextReplaceTransformer implements TransformerInterface
 {
     public const OPTION_SEARCH = 'search';
     public const OPTION_REPLACE = 'replace';
 
     public function __construct(
-        private string $search = '',
-        private string $replace = '',
+        private readonly string $search = '',
+        private readonly string $replace = '',
     ) {
         self::validate($search, $replace);
     }

@@ -25,7 +25,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 /**
  * @author Niklas Grießer <niklas@griesser.me>
  */
-final readonly class RssFeedLoader implements LoaderInterface
+final class RssFeedLoader implements LoaderInterface
 {
     public const OPTION_UUID_NAMESPACE = 'uuid_namespace';
 
@@ -33,8 +33,8 @@ final readonly class RssFeedLoader implements LoaderInterface
      * @param string $uuidNamespace The namespace used to generate stable identifiers using UUIDv5
      */
     public function __construct(
-        private HttpClientInterface $httpClient,
-        private string $uuidNamespace = '6ba7b810-9dad-11d1-80b4-00c04fd430c8',
+        private readonly HttpClientInterface $httpClient,
+        private readonly string $uuidNamespace = '6ba7b810-9dad-11d1-80b4-00c04fd430c8',
     ) {
     }
 

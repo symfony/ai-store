@@ -21,7 +21,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @author Christopher Hertel <mail@christopher-hertel.de>
  */
-final readonly class TextFileLoader implements LoaderInterface
+final class TextFileLoader implements LoaderInterface
 {
     public function load(?string $source, array $options = []): iterable
     {

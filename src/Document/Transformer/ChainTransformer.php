@@ -13,12 +13,12 @@ namespace Symfony\AI\Store\Document\Transformer;
 
 use Symfony\AI\Store\Document\TransformerInterface;
 
-final readonly class ChainTransformer implements TransformerInterface
+final class ChainTransformer implements TransformerInterface
 {
     /**
      * @var TransformerInterface[]
      */
-    private array $transformers;
+    private readonly array $transformers;
 
     /**
      * @param iterable<TransformerInterface> $transformers

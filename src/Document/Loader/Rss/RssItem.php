@@ -16,16 +16,16 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @author Niklas Grießer <niklas@griesser.me>
  */
-final readonly class RssItem
+final class RssItem
 {
     public function __construct(
-        public Uuid $id,
-        public string $title,
-        public string $link,
-        public \DateTimeImmutable $date,
-        public string $description,
-        public ?string $author,
-        public ?string $content,
+        public readonly Uuid $id,
+        public readonly string $title,
+        public readonly string $link,
+        public readonly \DateTimeImmutable $date,
+        public readonly string $description,
+        public readonly ?string $author,
+        public readonly ?string $content,
     ) {
     }
 

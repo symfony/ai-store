@@ -19,7 +19,7 @@ use Symfony\AI\Store\Document\TransformerInterface;
  *
  * @author Oskar Stark <oskarstark@googlemail.com>
  */
-final readonly class TextTrimTransformer implements TransformerInterface
+final class TextTrimTransformer implements TransformerInterface
 {
     /**
      * @param iterable<TextDocument> $documents

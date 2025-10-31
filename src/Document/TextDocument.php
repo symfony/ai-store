@@ -17,12 +17,12 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @author Christopher Hertel <mail@christopher-hertel.de>
  */
-final readonly class TextDocument implements EmbeddableDocumentInterface
+final class TextDocument implements EmbeddableDocumentInterface
 {
     public function __construct(
-        private Uuid $id,
-        private string $content,
-        private Metadata $metadata = new Metadata(),
+        private readonly Uuid $id,
+        private readonly string $content,
+        private readonly Metadata $metadata = new Metadata(),
     ) {
         if ('' === trim($this->content)) {
             throw new InvalidArgumentException('The content shall not be an empty string.');

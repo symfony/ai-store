@@ -18,12 +18,12 @@ use Symfony\AI\Platform\PlatformInterface;
 use Symfony\AI\Platform\Vector\Vector;
 use Symfony\AI\Store\Exception\RuntimeException;
 
-final readonly class Vectorizer implements VectorizerInterface
+final class Vectorizer implements VectorizerInterface
 {
     public function __construct(
-        private PlatformInterface $platform,
-        private string $model,
-        private LoggerInterface $logger = new NullLogger(),
+        private readonly PlatformInterface $platform,
+        private readonly string $model,
+        private readonly LoggerInterface $logger = new NullLogger(),
     ) {
     }
 

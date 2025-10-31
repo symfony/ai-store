@@ -20,13 +20,13 @@ use Symfony\AI\Store\Document\LoaderInterface;
  *
  * @author Oskar Stark <oskarstark@googlemail.com>
  */
-final readonly class InMemoryLoader implements LoaderInterface
+final class InMemoryLoader implements LoaderInterface
 {
     /**
      * @param EmbeddableDocumentInterface[] $documents
      */
     public function __construct(
-        private array $documents = [],
+        private readonly array $documents = [],
     ) {
     }
 
