@@ -145,15 +145,52 @@ final class StoreTest extends TestCase
         $store = new Store($httpClient, 'http://127.0.0.1:6333', 'test', 'test');
 
         $this->expectException(ClientException::class);
-        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:6333/collections/test/points".');
+        $this->expectExceptionMessage('HTTP 400 returned for "http://127.0.0.1:6333/collections/test/points?wait=true".');
         $this->expectExceptionCode(400);
         $store->add(new VectorDocument(Uuid::v4(), new Vector([0.1, 0.2, 0.3])));
     }
 
     public function testStoreCanAdd()
     {
-        $httpClient = new MockHttpClient([
-            new JsonMockResponse([
+        $document = new VectorDocument(Uuid::v4(), new Vector([0.1, 0.2, 0.3]));
+
+        $httpClient = new MockHttpClient(static function (string $method, string $url, array $options) use ($document): JsonMockResponse {
+            self::assertArrayHasKey('wait', $options['query']);
+            self::assertEquals('true', $options['query']['wait']);
+
+            return new JsonMockResponse([
+                'time' => 0.002,
+                'status' => 'ok',
+                'result' => [
+                    'points' => [
+                        [
+                            'id' => (string) $document->id,
+                            'payload' => (array) $document->metadata,
+                            'vector' => $document->vector->getData(),
+                        ],
+                    ],
+                ],
+            ], [
+                'http_code' => 200,
+            ]);
+        }, 'http://127.0.0.1:6333');
+
+        $store = new Store($httpClient, 'http://127.0.0.1:6333', 'test', 'test');
+
+        $store->add($document);
+
+        $this->assertSame(1, $httpClient->getRequestsCount());
+    }
+
+    public function testStoreCanAddAsynchronously()
+    {
+        $document = new VectorDocument(Uuid::v4(), new Vector([0.1, 0.2, 0.3]));
+
+        $httpClient = new MockHttpClient(static function (string $method, string $url, array $options): JsonMockResponse {
+            self::assertArrayHasKey('wait', $options['query']);
+            self::assertEquals('false', $options['query']['wait']);
+
+            return new JsonMockResponse([
                 'time' => 0.002,
                 'status' => 'ok',
                 'result' => [
@@ -162,12 +199,12 @@ final class StoreTest extends TestCase
                 ],
             ], [
                 'http_code' => 200,
-            ]),
-        ], 'http://127.0.0.1:6333');
+            ]);
+        }, 'http://127.0.0.1:6333');
 
-        $store = new Store($httpClient, 'http://127.0.0.1:6333', 'test', 'test');
+        $store = new Store($httpClient, 'http://127.0.0.1:6333', 'test', 'test', async: true);
 
-        $store->add(new VectorDocument(Uuid::v4(), new Vector([0.1, 0.2, 0.3])));
+        $store->add($document);
 
         $this->assertSame(1, $httpClient->getRequestsCount());
     }
