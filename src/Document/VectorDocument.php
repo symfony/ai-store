@@ -26,4 +26,17 @@ final class VectorDocument
         public readonly ?float $score = null,
     ) {
     }
+
+    /**
+     * Returns a new instance with the given score.
+     */
+    public function withScore(float $score): self
+    {
+        return new self(
+            id: $this->id,
+            vector: $this->vector,
+            metadata: $this->metadata,
+            score: $score,
+        );
+    }
 }
