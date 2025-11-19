@@ -28,7 +28,7 @@ final class StoreTest extends TestCase
 
         // Expected SQL query with max score
         $expectedQuery = <<<'SQL'
-            SELECT id, VEC_ToText(embedding) embedding, metadata, VEC_DISTANCE_EUCLIDEAN(embedding, VEC_FromText(:embedding)) AS score
+            SELECT id, VEC_ToText(`embedding`) embedding, metadata, VEC_DISTANCE_EUCLIDEAN(`embedding`, VEC_FromText(:embedding)) AS score
             FROM embeddings_table
             WHERE VEC_DISTANCE_EUCLIDEAN(embedding, VEC_FromText(:embedding)) <= :maxScore
             ORDER BY score ASC
@@ -80,7 +80,7 @@ final class StoreTest extends TestCase
 
         // Expected SQL query without maxScore
         $expectedQuery = <<<'SQL'
-            SELECT id, VEC_ToText(embedding) embedding, metadata, VEC_DISTANCE_EUCLIDEAN(embedding, VEC_FromText(:embedding)) AS score
+            SELECT id, VEC_ToText(`embedding`) embedding, metadata, VEC_DISTANCE_EUCLIDEAN(`embedding`, VEC_FromText(:embedding)) AS score
             FROM embeddings_table
 
             ORDER BY score ASC
@@ -127,7 +127,7 @@ final class StoreTest extends TestCase
 
         // Expected SQL query with custom limit
         $expectedQuery = <<<'SQL'
-            SELECT id, VEC_ToText(embedding) embedding, metadata, VEC_DISTANCE_EUCLIDEAN(embedding, VEC_FromText(:embedding)) AS score
+            SELECT id, VEC_ToText(`embedding`) embedding, metadata, VEC_DISTANCE_EUCLIDEAN(`embedding`, VEC_FromText(:embedding)) AS score
             FROM embeddings_table
 
             ORDER BY score ASC
