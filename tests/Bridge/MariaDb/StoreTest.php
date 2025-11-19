@@ -56,7 +56,7 @@ final class StoreTest extends TestCase
             ->with(\PDO::FETCH_ASSOC)
             ->willReturn([
                 [
-                    'id' => $uuid->toBinary(),
+                    'id' => $uuid->toRfc4122(),
                     'embedding' => json_encode($vectorData),
                     'metadata' => json_encode(['title' => 'Test Document']),
                     'score' => 0.85,
@@ -104,7 +104,7 @@ final class StoreTest extends TestCase
             ->with(\PDO::FETCH_ASSOC)
             ->willReturn([
                 [
-                    'id' => $uuid->toBinary(),
+                    'id' => $uuid->toRfc4122(),
                     'embedding' => json_encode($vectorData),
                     'metadata' => json_encode(['title' => 'Test Document']),
                     'score' => 0.95,
