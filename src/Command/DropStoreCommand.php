@@ -42,14 +42,14 @@ final class DropStoreCommand extends Command
     public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
     {
         if ($input->mustSuggestArgumentValuesFor('store')) {
-            $suggestions->suggestValues(array_keys($this->stores->getProvidedServices()));
+            $suggestions->suggestValues($this->getStoreNames());
         }
     }
 
     protected function configure(): void
     {
         $this
-            ->addArgument('store', InputArgument::REQUIRED, 'Name of the store to drop')
+            ->addArgument('store', InputArgument::REQUIRED, 'Service name of the store to drop')
             ->addOption('force', 'f', InputOption::VALUE_NONE, 'Force dropping the store even if it contains messages')
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command drops the stores:
@@ -66,9 +66,13 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        if (0 === \count($this->getStoreNames())) {
+            throw new RuntimeException('No store is configured to be dropped.');
+        }
+
         $storeName = $input->getArgument('store');
         if (!$this->stores->has($storeName)) {
-            throw new RuntimeException(\sprintf('The "%s" store does not exist.', $storeName));
+            throw new RuntimeException(\sprintf('The "%s" store does not exist, use "%s".', $storeName, implode('", "', $this->getStoreNames())));
         }
 
         $store = $this->stores->get($storeName);
@@ -96,5 +100,13 @@ EOF
         }
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getStoreNames(): array
+    {
+        return array_keys($this->stores->getProvidedServices());
     }
 }

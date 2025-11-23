@@ -32,7 +32,7 @@ final class SetupStoreCommandTest extends TestCase
         $this->assertTrue($definition->hasArgument('store'));
 
         $storeArgument = $definition->getArgument('store');
-        $this->assertSame('Name of the store to setup', $storeArgument->getDescription());
+        $this->assertSame('Service name of the store to setup', $storeArgument->getDescription());
         $this->assertTrue($storeArgument->isRequired());
     }
 
@@ -43,7 +43,23 @@ final class SetupStoreCommandTest extends TestCase
         $tester = new CommandTester($command);
 
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('The "foo" store does not exist.');
+        $this->expectExceptionMessage('No store is configured to be set up.');
+        $this->expectExceptionCode(0);
+        $tester->execute([
+            'store' => 'foo',
+        ]);
+    }
+
+    public function testCommandCannotSetupWithoutStores()
+    {
+        $command = new SetupStoreCommand(new ServiceLocator([
+            'bar' => fn (): object => $this->createMock(ManagedStoreInterface::class),
+        ]));
+
+        $tester = new CommandTester($command);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The "foo" store does not exist, use "bar".');
         $this->expectExceptionCode(0);
         $tester->execute([
             'store' => 'foo',
