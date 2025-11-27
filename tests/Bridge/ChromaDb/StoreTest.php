@@ -168,7 +168,7 @@ final class StoreTest extends TestCase
             ->willReturn($queryResponse);
 
         $store = new Store($client, 'test-collection');
-        $documents = $store->query($queryVector);
+        $documents = iterator_to_array($store->query($queryVector));
 
         $this->assertCount(2, $documents);
         $this->assertSame('01234567-89ab-cdef-0123-456789abcdef', (string) $documents[0]->id);
@@ -213,7 +213,7 @@ final class StoreTest extends TestCase
             ->willReturn($queryResponse);
 
         $store = new Store($client, 'test-collection');
-        $documents = $store->query($queryVector, ['where' => $whereFilter]);
+        $documents = iterator_to_array($store->query($queryVector, ['where' => $whereFilter]));
 
         $this->assertCount(1, $documents);
         $this->assertSame('01234567-89ab-cdef-0123-456789abcdef', (string) $documents[0]->id);
@@ -257,7 +257,7 @@ final class StoreTest extends TestCase
             ->willReturn($queryResponse);
 
         $store = new Store($client, 'test-collection');
-        $documents = $store->query($queryVector, ['whereDocument' => $whereDocumentFilter]);
+        $documents = iterator_to_array($store->query($queryVector, ['whereDocument' => $whereDocumentFilter]));
 
         $this->assertCount(2, $documents);
         $this->assertSame('01234567-89ab-cdef-0123-456789abcdef', (string) $documents[0]->id);
@@ -302,10 +302,10 @@ final class StoreTest extends TestCase
             ->willReturn($queryResponse);
 
         $store = new Store($client, 'test-collection');
-        $documents = $store->query($queryVector, [
+        $documents = iterator_to_array($store->query($queryVector, [
             'where' => $whereFilter,
             'whereDocument' => $whereDocumentFilter,
-        ]);
+        ]));
 
         $this->assertCount(1, $documents);
         $this->assertSame('01234567-89ab-cdef-0123-456789abcdef', (string) $documents[0]->id);
@@ -349,7 +349,7 @@ final class StoreTest extends TestCase
             ->willReturn($queryResponse);
 
         $store = new Store($client, 'test-collection');
-        $documents = $store->query($queryVector, ['where' => $whereFilter]);
+        $documents = iterator_to_array($store->query($queryVector, ['where' => $whereFilter]));
 
         $this->assertCount(0, $documents);
     }
@@ -399,7 +399,7 @@ final class StoreTest extends TestCase
             ->willReturn($queryResponse);
 
         $store = new Store($client, 'test-collection');
-        $documents = $store->query($queryVector, $options);
+        $documents = iterator_to_array($store->query($queryVector, $options));
 
         $this->assertCount(1, $documents);
     }
