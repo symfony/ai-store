@@ -31,7 +31,7 @@ final class TestStore implements StoreInterface
         $this->documents = array_merge($this->documents, $documents);
     }
 
-    public function query(Vector $vector, array $options = []): array
+    public function query(Vector $vector, array $options = []): iterable
     {
         throw new RuntimeException('Not yet implemented.');
     }
