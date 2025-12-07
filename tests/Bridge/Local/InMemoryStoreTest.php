@@ -13,9 +13,9 @@ namespace Symfony\AI\Store\Tests\Bridge\Local;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
-use Symfony\AI\Store\Bridge\Local\DistanceCalculator;
-use Symfony\AI\Store\Bridge\Local\DistanceStrategy;
 use Symfony\AI\Store\Bridge\Local\InMemoryStore;
+use Symfony\AI\Store\Distance\DistanceCalculator;
+use Symfony\AI\Store\Distance\DistanceStrategy;
 use Symfony\AI\Store\Document\Metadata;
 use Symfony\AI\Store\Document\VectorDocument;
 use Symfony\Component\Uid\Uuid;
