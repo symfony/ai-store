@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\AI\Store\Tests\Bridge\Azure;
+namespace Symfony\AI\Store\Tests\Bridge\AzureSearch;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\NullVector;
 use Symfony\AI\Platform\Vector\Vector;
-use Symfony\AI\Store\Bridge\Azure\SearchStore;
+use Symfony\AI\Store\Bridge\AzureSearch\SearchStore;
 use Symfony\AI\Store\Document\Metadata;
 use Symfony\AI\Store\Document\VectorDocument;
 use Symfony\Component\HttpClient\Exception\ClientException;
