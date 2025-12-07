@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\AI\Store\Tests\Bridge\Local;
+namespace Symfony\AI\Store\Tests\Bridge\Cache;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
-use Symfony\AI\Store\Bridge\Local\CacheStore;
+use Symfony\AI\Store\Bridge\Cache\Store;
 use Symfony\AI\Store\Distance\DistanceCalculator;
 use Symfony\AI\Store\Distance\DistanceStrategy;
 use Symfony\AI\Store\Document\Metadata;
@@ -21,11 +21,11 @@ use Symfony\AI\Store\Document\VectorDocument;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Uid\Uuid;
 
-final class CacheStoreTest extends TestCase
+final class StoreTest extends TestCase
 {
     public function testStoreCannotSetup()
     {
-        $store = new CacheStore(new ArrayAdapter());
+        $store = new Store(new ArrayAdapter());
         $store->setup();
 
         $result = iterator_to_array($store->query(new Vector([0.0, 0.1, 0.6])));
@@ -34,7 +34,7 @@ final class CacheStoreTest extends TestCase
 
     public function testStoreCanDrop()
     {
-        $store = new CacheStore(new ArrayAdapter());
+        $store = new Store(new ArrayAdapter());
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0])),
@@ -52,7 +52,7 @@ final class CacheStoreTest extends TestCase
 
     public function testStoreCanSearchUsingCosineDistance()
     {
-        $store = new CacheStore(new ArrayAdapter());
+        $store = new Store(new ArrayAdapter());
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0])),
@@ -76,7 +76,7 @@ final class CacheStoreTest extends TestCase
 
     public function testStoreCanSearchUsingCosineDistanceAndReturnCorrectOrder()
     {
-        $store = new CacheStore(new ArrayAdapter());
+        $store = new Store(new ArrayAdapter());
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0])),
@@ -96,7 +96,7 @@ final class CacheStoreTest extends TestCase
 
     public function testStoreCanSearchUsingCosineDistanceWithMaxItems()
     {
-        $store = new CacheStore(new ArrayAdapter());
+        $store = new Store(new ArrayAdapter());
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0])),
@@ -110,7 +110,7 @@ final class CacheStoreTest extends TestCase
 
     public function testStoreCanSearchUsingAngularDistance()
     {
-        $store = new CacheStore(new ArrayAdapter(), new DistanceCalculator(DistanceStrategy::ANGULAR_DISTANCE));
+        $store = new Store(new ArrayAdapter(), new DistanceCalculator(DistanceStrategy::ANGULAR_DISTANCE));
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([1.0, 2.0, 3.0])),
             new VectorDocument(Uuid::v4(), new Vector([1.0, 5.0, 7.0])),
@@ -124,7 +124,7 @@ final class CacheStoreTest extends TestCase
 
     public function testStoreCanSearchUsingEuclideanDistance()
     {
-        $store = new CacheStore(new ArrayAdapter(), new DistanceCalculator(DistanceStrategy::EUCLIDEAN_DISTANCE));
+        $store = new Store(new ArrayAdapter(), new DistanceCalculator(DistanceStrategy::EUCLIDEAN_DISTANCE));
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([1.0, 5.0, 7.0])),
             new VectorDocument(Uuid::v4(), new Vector([1.0, 2.0, 3.0])),
@@ -138,7 +138,7 @@ final class CacheStoreTest extends TestCase
 
     public function testStoreCanSearchUsingManhattanDistance()
     {
-        $store = new CacheStore(new ArrayAdapter(), new DistanceCalculator(DistanceStrategy::MANHATTAN_DISTANCE));
+        $store = new Store(new ArrayAdapter(), new DistanceCalculator(DistanceStrategy::MANHATTAN_DISTANCE));
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([1.0, 2.0, 3.0])),
             new VectorDocument(Uuid::v4(), new Vector([1.0, 5.0, 7.0])),
@@ -152,7 +152,7 @@ final class CacheStoreTest extends TestCase
 
     public function testStoreCanSearchUsingChebyshevDistance()
     {
-        $store = new CacheStore(new ArrayAdapter(), new DistanceCalculator(DistanceStrategy::CHEBYSHEV_DISTANCE));
+        $store = new Store(new ArrayAdapter(), new DistanceCalculator(DistanceStrategy::CHEBYSHEV_DISTANCE));
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([1.0, 2.0, 3.0])),
             new VectorDocument(Uuid::v4(), new Vector([1.0, 5.0, 7.0])),
@@ -166,7 +166,7 @@ final class CacheStoreTest extends TestCase
 
     public function testStoreCanSearchWithFilter()
     {
-        $store = new CacheStore(new ArrayAdapter());
+        $store = new Store(new ArrayAdapter());
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5]), new Metadata(['category' => 'products', 'enabled' => true])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0]), new Metadata(['category' => 'articles', 'enabled' => true])),
@@ -184,7 +184,7 @@ final class CacheStoreTest extends TestCase
 
     public function testStoreCanSearchWithFilterAndMaxItems()
     {
-        $store = new CacheStore(new ArrayAdapter());
+        $store = new Store(new ArrayAdapter());
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5]), new Metadata(['category' => 'products'])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0]), new Metadata(['category' => 'articles'])),
@@ -204,7 +204,7 @@ final class CacheStoreTest extends TestCase
 
     public function testStoreCanSearchWithComplexFilter()
     {
-        $store = new CacheStore(new ArrayAdapter());
+        $store = new Store(new ArrayAdapter());
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5]), new Metadata(['price' => 100, 'stock' => 5])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0]), new Metadata(['price' => 200, 'stock' => 0])),
@@ -220,7 +220,7 @@ final class CacheStoreTest extends TestCase
 
     public function testStoreCanSearchWithNestedMetadataFilter()
     {
-        $store = new CacheStore(new ArrayAdapter());
+        $store = new Store(new ArrayAdapter());
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5]), new Metadata(['options' => ['size' => 'S', 'color' => 'blue']])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0]), new Metadata(['options' => ['size' => 'M', 'color' => 'blue']])),
@@ -238,7 +238,7 @@ final class CacheStoreTest extends TestCase
 
     public function testStoreCanSearchWithInArrayFilter()
     {
-        $store = new CacheStore(new ArrayAdapter());
+        $store = new Store(new ArrayAdapter());
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5]), new Metadata(['brand' => 'Nike'])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0]), new Metadata(['brand' => 'Adidas'])),

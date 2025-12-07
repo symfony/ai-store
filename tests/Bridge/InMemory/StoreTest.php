@@ -9,22 +9,22 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\AI\Store\Tests\Bridge\Local;
+namespace Symfony\AI\Store\Tests\Bridge\InMemory;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
-use Symfony\AI\Store\Bridge\Local\InMemoryStore;
+use Symfony\AI\Store\Bridge\InMemory\Store;
 use Symfony\AI\Store\Distance\DistanceCalculator;
 use Symfony\AI\Store\Distance\DistanceStrategy;
 use Symfony\AI\Store\Document\Metadata;
 use Symfony\AI\Store\Document\VectorDocument;
 use Symfony\Component\Uid\Uuid;
 
-final class InMemoryStoreTest extends TestCase
+final class StoreTest extends TestCase
 {
     public function testStoreCannotSetup()
     {
-        $store = new InMemoryStore();
+        $store = new Store();
         $store->setup();
 
         $result = iterator_to_array($store->query(new Vector([0.0, 0.1, 0.6])));
@@ -33,7 +33,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanDrop()
     {
-        $store = new InMemoryStore();
+        $store = new Store();
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0])),
@@ -51,7 +51,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanSearchUsingCosineDistance()
     {
-        $store = new InMemoryStore();
+        $store = new Store();
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0])),
@@ -75,7 +75,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanSearchUsingCosineDistanceAndReturnCorrectOrder()
     {
-        $store = new InMemoryStore();
+        $store = new Store();
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0])),
@@ -95,7 +95,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanSearchUsingCosineDistanceWithMaxItems()
     {
-        $store = new InMemoryStore();
+        $store = new Store();
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0])),
@@ -109,7 +109,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanSearchUsingAngularDistance()
     {
-        $store = new InMemoryStore(new DistanceCalculator(DistanceStrategy::ANGULAR_DISTANCE));
+        $store = new Store(new DistanceCalculator(DistanceStrategy::ANGULAR_DISTANCE));
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([1.0, 2.0, 3.0])),
             new VectorDocument(Uuid::v4(), new Vector([1.0, 5.0, 7.0])),
@@ -123,7 +123,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanSearchUsingEuclideanDistance()
     {
-        $store = new InMemoryStore(new DistanceCalculator(DistanceStrategy::EUCLIDEAN_DISTANCE));
+        $store = new Store(new DistanceCalculator(DistanceStrategy::EUCLIDEAN_DISTANCE));
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([1.0, 5.0, 7.0])),
             new VectorDocument(Uuid::v4(), new Vector([1.0, 2.0, 3.0])),
@@ -137,7 +137,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanSearchUsingManhattanDistance()
     {
-        $store = new InMemoryStore(new DistanceCalculator(DistanceStrategy::MANHATTAN_DISTANCE));
+        $store = new Store(new DistanceCalculator(DistanceStrategy::MANHATTAN_DISTANCE));
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([1.0, 2.0, 3.0])),
             new VectorDocument(Uuid::v4(), new Vector([1.0, 5.0, 7.0])),
@@ -151,7 +151,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanSearchUsingChebyshevDistance()
     {
-        $store = new InMemoryStore(new DistanceCalculator(DistanceStrategy::CHEBYSHEV_DISTANCE));
+        $store = new Store(new DistanceCalculator(DistanceStrategy::CHEBYSHEV_DISTANCE));
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([1.0, 2.0, 3.0])),
             new VectorDocument(Uuid::v4(), new Vector([1.0, 5.0, 7.0])),
@@ -165,7 +165,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanSearchWithFilter()
     {
-        $store = new InMemoryStore();
+        $store = new Store();
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5]), new Metadata(['category' => 'products', 'enabled' => true])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0]), new Metadata(['category' => 'articles', 'enabled' => true])),
@@ -183,7 +183,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanSearchWithFilterAndMaxItems()
     {
-        $store = new InMemoryStore();
+        $store = new Store();
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5]), new Metadata(['category' => 'products'])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0]), new Metadata(['category' => 'articles'])),
@@ -203,7 +203,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanSearchWithComplexFilter()
     {
-        $store = new InMemoryStore();
+        $store = new Store();
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5]), new Metadata(['price' => 100, 'stock' => 5])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0]), new Metadata(['price' => 200, 'stock' => 0])),
@@ -219,7 +219,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanSearchWithNestedMetadataFilter()
     {
-        $store = new InMemoryStore();
+        $store = new Store();
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5]), new Metadata(['options' => ['size' => 'S', 'color' => 'blue']])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0]), new Metadata(['options' => ['size' => 'M', 'color' => 'blue']])),
@@ -237,7 +237,7 @@ final class InMemoryStoreTest extends TestCase
 
     public function testStoreCanSearchWithInArrayFilter()
     {
-        $store = new InMemoryStore();
+        $store = new Store();
         $store->add(
             new VectorDocument(Uuid::v4(), new Vector([0.1, 0.1, 0.5]), new Metadata(['brand' => 'Nike'])),
             new VectorDocument(Uuid::v4(), new Vector([0.7, -0.3, 0.0]), new Metadata(['brand' => 'Adidas'])),
