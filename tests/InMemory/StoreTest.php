@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\AI\Store\Tests\Bridge\InMemory;
+namespace Symfony\AI\Store\Tests\InMemory;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
-use Symfony\AI\Store\Bridge\InMemory\Store;
 use Symfony\AI\Store\Distance\DistanceCalculator;
 use Symfony\AI\Store\Distance\DistanceStrategy;
 use Symfony\AI\Store\Document\Metadata;
 use Symfony\AI\Store\Document\VectorDocument;
+use Symfony\AI\Store\InMemory\Store;
 use Symfony\Component\Uid\Uuid;
 
 final class StoreTest extends TestCase
