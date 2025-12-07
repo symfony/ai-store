@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\AI\Store\Tests\Bridge\Manticore;
+namespace Symfony\AI\Store\Tests\Bridge\ManticoreSearch;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\AI\Platform\Vector\Vector;
-use Symfony\AI\Store\Bridge\Manticore\Store;
+use Symfony\AI\Store\Bridge\ManticoreSearch\Store;
 use Symfony\AI\Store\Document\VectorDocument;
 use Symfony\AI\Store\Exception\InvalidArgumentException;
 use Symfony\Component\HttpClient\Exception\ClientException;

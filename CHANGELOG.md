@@ -38,7 +38,7 @@ CHANGELOG
    - ChromaDB
    - ClickHouse
    - Cloudflare
-   - Manticore
+   - Manticore Search
    - MariaDB
    - Meilisearch
    - MongoDB
