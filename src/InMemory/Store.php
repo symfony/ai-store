@@ -26,7 +26,7 @@ use Symfony\Contracts\Service\ResetInterface;
 /**
  * @author Guillaume Loulier <personal@guillaumeloulier.fr>
  */
-class Store implements ManagedStoreInterface, StoreInterface, ResetInterface
+final class Store implements ManagedStoreInterface, StoreInterface, ResetInterface
 {
     /**
      * @var VectorDocument[]
