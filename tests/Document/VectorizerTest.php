@@ -14,11 +14,6 @@ namespace Symfony\AI\Store\Tests\Document;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Symfony\AI\Platform\Bridge\OpenAi\Embeddings;
-use Symfony\AI\Platform\Capability;
-use Symfony\AI\Platform\Model;
-use Symfony\AI\Platform\ModelCatalog\AbstractModelCatalog;
-use Symfony\AI\Platform\ModelCatalog\FallbackModelCatalog;
 use Symfony\AI\Platform\PlainConverter;
 use Symfony\AI\Platform\PlatformInterface;
 use Symfony\AI\Platform\Result\DeferredResult;
@@ -36,7 +31,7 @@ use Symfony\Component\Uid\Uuid;
 #[TestDox('Tests for the Vectorizer class')]
 final class VectorizerTest extends TestCase
 {
-    public function testVectorizeDocumentsWithBatchSupport()
+    public function testVectorizeDocumentsUsesSingleBatchedInvoke()
     {
         $documents = [
             new TextDocument(Uuid::v4()->toString(), 'First document content', new Metadata(['source' => 'test1'])),
@@ -50,22 +45,19 @@ final class VectorizerTest extends TestCase
             new Vector([0.7, 0.8, 0.9]),
         ];
 
-        // Create a test model catalog WITH INPUT_MULTIPLE capability
-        $modelCatalog = new class extends AbstractModelCatalog {
-            protected array $models = [
-                'test-embedding-with-batch' => [
-                    'class' => Model::class,
-                    'capabilities' => [
-                        Capability::INPUT_TEXT,
-                        Capability::INPUT_MULTIPLE,  // Explicitly including batch support
-                    ],
-                ],
-            ];
-        };
+        // All embedding models batch multiple texts into a single API call, so the
+        // Vectorizer must invoke the platform exactly once with the full array of contents.
+        $platform = $this->createMock(PlatformInterface::class);
+        $platform->expects($this->once())
+            ->method('invoke')
+            ->with(
+                $this->equalTo('text-embedding-3-small'),
+                $this->equalTo(['First document content', 'Second document content', 'Third document content']),
+                $this->equalTo([])
+            )
+            ->willReturn(new DeferredResult(new PlainConverter(new VectorResult($vectors)), $this->createMock(RawResultInterface::class)));
 
-        $platform = PlatformTestHandler::createPlatform(new VectorResult($vectors), $modelCatalog);
-
-        $vectorizer = new Vectorizer($platform, 'test-embedding-with-batch');
+        $vectorizer = new Vectorizer($platform, 'text-embedding-3-small');
         $vectorDocuments = $vectorizer->vectorize($documents);
 
         $this->assertCount(3, $vectorDocuments);
@@ -245,41 +237,6 @@ final class VectorizerTest extends TestCase
         }
     }
 
-    public function testVectorizeDocumentsWithoutBatchSupportUsesNonBatchMode()
-    {
-        $documents = [
-            new TextDocument(Uuid::v4()->toString(), 'Document 1'),
-            new TextDocument(Uuid::v4()->toString(), 'Document 2'),
-        ];
-
-        $vectors = [
-            new Vector([0.1, 0.2]),
-            new Vector([0.3, 0.4]),
-        ];
-
-        // Create a test model catalog that explicitly does NOT have INPUT_MULTIPLE capability
-        $modelCatalog = new class extends AbstractModelCatalog {
-            protected array $models = [
-                'test-embedding-no-batch' => [
-                    'class' => Model::class,
-                    'capabilities' => [
-                        Capability::INPUT_TEXT,
-                        // Explicitly excluding INPUT_MULTIPLE capability
-                    ],
-                ],
-            ];
-        };
-
-        $platform = PlatformTestHandler::createPlatform(new VectorResult($vectors), $modelCatalog);
-
-        $vectorizer = new Vectorizer($platform, 'test-embedding-no-batch');
-        $vectorDocuments = $vectorizer->vectorize($documents);
-
-        $this->assertCount(2, $vectorDocuments);
-        $this->assertEquals($vectors[0], $vectorDocuments[0]->getVector());
-        $this->assertEquals($vectors[1], $vectorDocuments[1]->getVector());
-    }
-
     public function testVectorizeString()
     {
         $text = 'This is a test string to vectorize';
@@ -446,10 +403,8 @@ final class VectorizerTest extends TestCase
         $vector = new Vector([0.1, 0.2, 0.3]);
         $options = ['max_tokens' => 1000, 'temperature' => 0.5];
 
-        // Use FallbackModelCatalog which provides all capabilities including INPUT_MULTIPLE
-        // This ensures batch mode is used and the test expectation matches the behavior
         $platform = PlatformTestHandler::createPlatform(new VectorResult([$vector]));
-        $vectorizer = new Vectorizer($platform, 'test-embedding-with-batch');
+        $vectorizer = new Vectorizer($platform, 'text-embedding-3-small');
         $result = $vectorizer->vectorize($documents, $options);
 
         $this->assertCount(1, $result);
@@ -464,10 +419,8 @@ final class VectorizerTest extends TestCase
 
         $vector = new Vector([0.1, 0.2, 0.3]);
 
-        // Use FallbackModelCatalog which provides all capabilities including INPUT_MULTIPLE
-        // This ensures batch mode is used and the test expectation matches the behavior
         $platform = PlatformTestHandler::createPlatform(new VectorResult([$vector]));
-        $vectorizer = new Vectorizer($platform, 'test-embedding-with-batch');
+        $vectorizer = new Vectorizer($platform, 'text-embedding-3-small');
         $result = $vectorizer->vectorize($documents);
 
         $this->assertCount(1, $result);
@@ -589,42 +542,5 @@ final class VectorizerTest extends TestCase
         $this->assertTrue($result[1]->getMetadata()->hasText());
         $this->assertSame('First content', $result[0]->getMetadata()->getText());
         $this->assertSame('Second content', $result[1]->getMetadata()->getText());
-    }
-
-    public function testVectorizeTextDocumentsWithoutBatchSupportPassesOptions()
-    {
-        $documents = [
-            new TextDocument(Uuid::v4()->toString(), 'Document 1'),
-            new TextDocument(Uuid::v4()->toString(), 'Document 2'),
-        ];
-
-        $vectors = [
-            new Vector([0.1, 0.2]),
-            new Vector([0.3, 0.4]),
-        ];
-
-        $options = ['max_tokens' => 2000];
-
-        // Create a test model catalog without INPUT_MULTIPLE capability
-        $modelCatalog = new class extends AbstractModelCatalog {
-            protected array $models = [
-                'test-embedding-no-batch-with-options' => [
-                    'class' => Model::class,
-                    'capabilities' => [
-                        Capability::INPUT_TEXT,
-                        // No INPUT_MULTIPLE capability
-                    ],
-                ],
-            ];
-        };
-
-        $platform = PlatformTestHandler::createPlatform(new VectorResult($vectors), $modelCatalog);
-
-        $vectorizer = new Vectorizer($platform, 'test-embedding-no-batch-with-options');
-        $result = $vectorizer->vectorize($documents, $options);
-
-        $this->assertCount(2, $result);
-        $this->assertEquals($vectors[0], $result[0]->getVector());
-        $this->assertEquals($vectors[1], $result[1]->getVector());
     }
 }
