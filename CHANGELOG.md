@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+0.11
+----
+
+ * `Vectorizer` now always sends a single batched `Platform::invoke()` call when vectorizing multiple strings or documents, instead of consulting the model catalog and falling back to one call per item
+
 0.9
 ---
 
