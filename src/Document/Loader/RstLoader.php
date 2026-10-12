@@ -157,6 +157,10 @@ final class RstLoader implements LoaderInterface
 
     private function isHeading(string $line, string $nextLine): bool
     {
+        if (ltrim($nextLine) !== $nextLine) {
+            return false;
+        }
+
         $trimmedLine = trim($line);
         $trimmedNext = trim($nextLine);
 
